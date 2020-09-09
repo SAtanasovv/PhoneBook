@@ -7,35 +7,35 @@
     tools:context=".View.MainActivity">
 
     <Button
-        android:id="@+id/add_button_main_activity_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_contact_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.401" />
+        android:id                                                                  ="@+id/add_button_main_activity_id"
+        android:layout_width                                                        ="wrap_content"
+        android:layout_height                                                       ="wrap_content"
+        android:text                                                                ="@string/add_contact_button"
+        app:layout_constraintBottom_toBottomOf                                      ="parent"
+        app:layout_constraintEnd_toEndOf                                            ="parent"
+        app:layout_constraintStart_toStartOf                                        ="parent"
+        app:layout_constraintTop_toTopOf                                            ="parent"
+        app:layout_constraintVertical_bias                                          ="0.401" />
 
     <Button
-        android:id="@+id/edit_button_main_activity_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_contact_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        android:id                                                                  ="@+id/edit_button_main_activity_id"
+        android:layout_width                                                        ="wrap_content"
+        android:layout_height                                                       ="wrap_content"
+        android:text                                                                ="@string/edit_contact_button"
+        app:layout_constraintBottom_toBottomOf                                      ="parent"
+        app:layout_constraintEnd_toEndOf                                            ="parent"
+        app:layout_constraintStart_toStartOf                                        ="parent"
+        app:layout_constraintTop_toTopOf                                            ="parent"
+        app:layout_constraintVertical_bias                                          ="0.499" />
 
     <Button
-        android:id="@+id/view_button_main_activity_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/view_contact_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.585" />
+        android:id                                                                  ="@+id/view_button_main_activity_id"
+        android:layout_width                                                        ="wrap_content"
+        android:layout_height                                                       ="wrap_content"
+        android:text                                                                ="@string/view_contact_button"
+        app:layout_constraintBottom_toBottomOf                                      ="parent"
+        app:layout_constraintEnd_toEndOf                                            ="parent"
+        app:layout_constraintStart_toStartOf                                        ="parent"
+        app:layout_constraintTop_toTopOf                                            ="parent"
+        app:layout_constraintVertical_bias                                          ="0.585" />
 </androidx.constraintlayout.widget.ConstraintLayout>

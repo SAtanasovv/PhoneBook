@@ -1,7 +1,5 @@
 package com.satanasov.phonebook.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,209 +8,131 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.satanasov.phonebook.GlobalData.Utils;
+import com.satanasov.phonebook.GlobalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.Model.User;
 import com.satanasov.phonebook.R;
-import com.satanasov.phonebook.Utils.ChangeOptions;
 
-public class ContactsActivity extends BaseActivity {
+public class ContactsActivity extends BaseActivity implements View.OnClickListener {
 
-    private                         TextView        firstNameTextView;
-    private                         TextView        lastNameTextView;
-    private                         TextView        phoneNumberTextView;
-    private                         TextView        emailTextView;
+    private TextView        mFirstNameTextView;
+    private TextView        mLastNameTextView;
+    private TextView        mPhoneNumberTextView;
+    private TextView        mEmailTextView;
 
-    private                         Button          saveBtn;
-    private                         Button          cancelBtn;
+    private Button          mSaveBtn;
+    private Button          mCancelBtn;
 
-    private                         User            user;
-    private                         int             option;
+    private User            mUser;
+    private ChangeOptions   mOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
-        firstNameTextView = findViewById(R.id.first_name_edit_text_contacts_id);
-        lastNameTextView = findViewById(R.id.last_name_edit_text_contacts_id);
-        phoneNumberTextView = findViewById(R.id.phone_number_edit_text_contacts_id);
-        emailTextView = findViewById(R.id.email_edit_text_contacts_id);
+        init();
+    }
 
-        saveBtn = findViewById(R.id.save_button_contacts_id);
-        cancelBtn = findViewById(R.id.cancel_button_contacts_id);
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.cancel_button_contacts_id:
+                startActivity(new Intent(ContactsActivity.this,MainActivity.class));
+                break;
+            case R.id.save_button_contacts_id:
+                break;
+        }
+    }
 
+    private TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            checkFields();
+
+        }
+    };
+
+    private void init(){
+        mFirstNameTextView   = findViewById(R.id.first_name_edit_text_contacts_id);
+        mLastNameTextView    = findViewById(R.id.last_name_edit_text_contacts_id);
+        mPhoneNumberTextView = findViewById(R.id.phone_number_edit_text_contacts_id);
+        mEmailTextView       = findViewById(R.id.email_edit_text_contacts_id);
+
+        mSaveBtn             = findViewById(R.id.save_button_contacts_id);
+        mCancelBtn           = findViewById(R.id.cancel_button_contacts_id);
+
+        mSaveBtn.setOnClickListener(this);
+        mCancelBtn.setOnClickListener(this);
+
+        mFirstNameTextView.addTextChangedListener(watcher);
+        mLastNameTextView.addTextChangedListener(watcher);
+        mPhoneNumberTextView.addTextChangedListener(watcher);
+        mEmailTextView.addTextChangedListener(watcher);
 
         Bundle bundle = getIntent().getExtras();
 
         if(bundle!= null){
-            option = bundle.getInt("changeOption");
-            user = bundle.getParcelable("contact");
-            changeOptions(option);
+            mOption = (ChangeOptions) bundle.getSerializable(Utils.IntentKeys.OPTION.name());
+            mUser   = bundle.getParcelable(Utils.IntentKeys.CONTACT.name());
+            changeOptions(mOption);
         }
-
-
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ContactsActivity.this, MainActivity.class));
-            }
-        });
-
-        firstNameTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!areFieldsEmpty() && option == 1 ){
-                    enableButtons();
-                }
-                else
-                    disableButtons();
-
-            }
-        });
-
-        lastNameTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!areFieldsEmpty() && option == 1 ){
-                    enableButtons();
-                }
-                else
-                    disableButtons();
-
-            }
-        });
-
-        emailTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!areFieldsEmpty() && option == 1 ){
-                    enableButtons();
-                }
-                else
-                    disableButtons();
-            }
-        });
-
-        phoneNumberTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!areFieldsEmpty() && option == 1 ){
-                    enableButtons();
-                }
-                else
-                    disableButtons();
-            }
-        });
-
-    }
-
-
-    private void changeOptions(int option){
-
-
+    private void changeOptions(ChangeOptions option){
         switch(option){
-            case 1:
-                disableButtons();
+            case ADD_CONTACT:
+                mSaveBtn.setEnabled(false);
                 break;
-            case 2:
+            case EDIT_CONTACT:
                 setUser();
+                mSaveBtn.setEnabled(false);
                 break;
-            case 3:
+            case VIEW_CONTACT:
                 setUser();
                 disableFields();
-                disableButtons();
+                mSaveBtn.setEnabled(false);
                 break;
-
         }
-
     }
 
-    private boolean areFieldsEmpty(){
-        if(firstNameTextView.getText().toString().isEmpty())
-            return true;
-        else if (lastNameTextView.getText().toString().isEmpty())
-            return true;
-        else if (emailTextView.getText().toString().isEmpty())
-            return true;
-        else if (phoneNumberTextView.getText().toString().isEmpty())
-            return true;
+    private void checkFields(){
+        if(mFirstNameTextView.getText().toString().isEmpty()||mLastNameTextView.getText().toString().isEmpty()
+                ||mEmailTextView.getText().toString().isEmpty()||mPhoneNumberTextView.getText().toString().isEmpty()){
+
+            mSaveBtn.setEnabled(false);
+        }
+        else if(mUser.getFirstName().equals(mFirstNameTextView.getText().toString())&&mUser.getLastName().equals(mLastNameTextView.getText().toString())
+                &&mUser.getEmail().equals(mEmailTextView.getText().toString())&&mUser.getPhoneNumber().equals(mPhoneNumberTextView.getText().toString())
+                &&mOption.equals(ChangeOptions.EDIT_CONTACT)){
+
+            mSaveBtn.setEnabled(false);
+        }
         else
-
-        return false;
-    }
-
-
-    private void disableButtons(){
-        saveBtn.setVisibility(View.GONE);
-       // cancelBtn.setVisibility(View.GONE);
-
-    }
-
-    private void enableButtons(){
-        saveBtn.setVisibility(View.VISIBLE);
-        cancelBtn.setVisibility(View.VISIBLE);
-
+            mSaveBtn.setEnabled(true);
     }
 
     private void disableFields(){
-        firstNameTextView.setEnabled(false);
-        lastNameTextView.setEnabled(false);
-        phoneNumberTextView.setEnabled(false);
-        emailTextView.setEnabled(false);
+        mFirstNameTextView.setEnabled(false);
+        mLastNameTextView.setEnabled(false);
+        mPhoneNumberTextView.setEnabled(false);
+        mEmailTextView.setEnabled(false);
     }
     private void setUser(){
-        firstNameTextView.setText(user.getFirstName());
-        lastNameTextView.setText(user.getLastName());
-        phoneNumberTextView.setText(user.getPhoneNumber());
-        emailTextView.setText(user.getEmail());
+        mFirstNameTextView.setText(mUser.getFirstName());
+        mLastNameTextView.setText(mUser.getLastName());
+        mPhoneNumberTextView.setText(mUser.getPhoneNumber());
+        mEmailTextView.setText(mUser.getEmail());
     }
-
 
 }

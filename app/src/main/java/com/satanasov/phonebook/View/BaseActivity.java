@@ -1,9 +1,7 @@
 package com.satanasov.phonebook.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
 import com.satanasov.phonebook.R;
 
 public class BaseActivity extends AppCompatActivity {

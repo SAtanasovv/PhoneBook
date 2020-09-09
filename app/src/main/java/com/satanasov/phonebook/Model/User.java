@@ -5,26 +5,26 @@ import android.os.Parcelable;
 
 public class User implements Parcelable {
 
-    private             String      firstName;
-    private             String      lastName;
-    private             String      phoneNumber;
-    private             String      email;
+    private             String      mFirstName;
+    private             String      mLastName;
+    private             String      mPhoneNumber;
+    private             String      mEmail;
 
 
     protected User(Parcel in) {
-        firstName = in.readString();
-        lastName = in.readString();
-        phoneNumber = in.readString();
-        email = in.readString();
+        mFirstName = in.readString();
+        mLastName = in.readString();
+        mPhoneNumber = in.readString();
+        mEmail = in.readString();
 
 
     }
 
     public User(String firstName, String lastName, String phoneNumber, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
+        this.mFirstName = firstName;
+        this.mLastName = lastName;
+        this.mPhoneNumber = phoneNumber;
+        this.mEmail = email;
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -47,43 +47,43 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 
-        parcel.writeString(firstName);
-        parcel.writeString(lastName);
-        parcel.writeString(phoneNumber);
-        parcel.writeString(email);
+        parcel.writeString(mFirstName);
+        parcel.writeString(mLastName);
+        parcel.writeString(mPhoneNumber);
+        parcel.writeString(mEmail);
 
 
     }
 
     public String getFirstName() {
-        return firstName;
+        return mFirstName;
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.mFirstName = firstName;
     }
 
     public String getLastName() {
-        return lastName;
+        return mLastName;
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.mLastName = lastName;
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return mPhoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.mPhoneNumber = phoneNumber;
     }
 
     public String getEmail() {
-        return email;
+        return mEmail;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.mEmail = email;
     }
 }
