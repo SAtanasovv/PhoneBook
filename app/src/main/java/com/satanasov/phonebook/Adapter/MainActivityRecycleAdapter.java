@@ -40,6 +40,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MainActivit
         User user  = mDummyUserList.get(position);
         holder.mFirstName.setText(user.getFirstName());
         holder.mLastName.setText(user.getLastName());
+        holder.mProfilePicture.setImageResource(user.getImageId());
     }
 
     @Override

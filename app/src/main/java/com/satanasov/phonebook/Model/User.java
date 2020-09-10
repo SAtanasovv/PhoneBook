@@ -9,19 +9,22 @@ public class User implements Parcelable {
     private             String      mLastName;
     private             String      mPhoneNumber;
     private             String      mEmail;
+    private             int         mImageId;
 
     protected User(Parcel in) {
-        mFirstName = in.readString();
-        mLastName = in.readString();
+        mFirstName   = in.readString();
+        mLastName    = in.readString();
         mPhoneNumber = in.readString();
-        mEmail = in.readString();
+        mEmail       = in.readString();
+        mImageId     = in.readInt();
     }
 
-    public User(String firstName, String lastName, String phoneNumber, String email) {
-        this.mFirstName = firstName;
-        this.mLastName = lastName;
+    public User(String firstName, String lastName, String phoneNumber, String email,int imageId) {
+        this.mFirstName   = firstName;
+        this.mLastName    = lastName;
         this.mPhoneNumber = phoneNumber;
-        this.mEmail = email;
+        this.mEmail       = email;
+        this.mImageId     = imageId;
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -47,6 +50,7 @@ public class User implements Parcelable {
         parcel.writeString(mLastName);
         parcel.writeString(mPhoneNumber);
         parcel.writeString(mEmail);
+        parcel.writeInt(mImageId);
     }
 
     public String getFirstName() {
@@ -79,5 +83,8 @@ public class User implements Parcelable {
 
     public void setEmail(String email) {
         this.mEmail = email;
+    }
+    public int getImageId() {
+        return mImageId;
     }
 }

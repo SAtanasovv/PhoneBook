@@ -56,11 +56,11 @@ public class MainActivity extends BaseActivity {
     }
 
     private void dummyUsers(){
-        User user  = new User("Ivan","Petrov","1","a");
-        User user1 = new User("Slav","Atanasov","2","b");
-        User user2 = new User("Dragan","Lazarov","3","c");
-        User user3 = new User("Petkan","Petkov","4","d");
-        User user4 = new User("Ala","Bala","5","e");
+        User user  = new User("Ivan","Petrov","1","a",R.drawable.png1);
+        User user1 = new User("Slav","Atanasov","2","b",R.drawable.png2);
+        User user2 = new User("Dragan","Lazarov","3","c",R.drawable.png2);
+        User user3 = new User("Petkan","Petkov","4","d",R.drawable.png1);
+        User user4 = new User("Ala","Bala","5","e",R.drawable.png1);
 
         mDummyUsersList.add(user);
         mDummyUsersList.add(user1);
