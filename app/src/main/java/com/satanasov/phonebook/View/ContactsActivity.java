@@ -7,7 +7,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.satanasov.phonebook.GlobalData.Utils;
 import com.satanasov.phonebook.GlobalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.Model.User;
@@ -30,7 +29,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
-
         init();
     }
 
@@ -93,29 +91,31 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         switch(option){
             case ADD_CONTACT:
                 mSaveBtn.setEnabled(false);
-                break;
+            break;
             case EDIT_CONTACT:
                 setUser();
                 mSaveBtn.setEnabled(false);
-                break;
+            break;
             case VIEW_CONTACT:
                 setUser();
                 disableFields();
-                mSaveBtn.setEnabled(false);
-                break;
+                mSaveBtn.setVisibility(View.GONE);
+            break;
         }
     }
 
     private void checkFields(){
-        if(mFirstNameTextView.getText().toString().isEmpty()||mLastNameTextView.getText().toString().isEmpty()
-                ||mEmailTextView.getText().toString().isEmpty()||mPhoneNumberTextView.getText().toString().isEmpty()){
-
+        if(         mFirstNameTextView.getText().toString().isEmpty()                           ||
+                    mLastNameTextView.getText().toString().isEmpty()                            ||
+                    mEmailTextView.getText().toString().isEmpty()                               ||
+                    mPhoneNumberTextView.getText().toString().isEmpty()){
             mSaveBtn.setEnabled(false);
         }
-        else if(mUser.getFirstName().equals(mFirstNameTextView.getText().toString())&&mUser.getLastName().equals(mLastNameTextView.getText().toString())
-                &&mUser.getEmail().equals(mEmailTextView.getText().toString())&&mUser.getPhoneNumber().equals(mPhoneNumberTextView.getText().toString())
-                &&mOption.equals(ChangeOptions.EDIT_CONTACT)){
-
+        else if(    mUser.getFirstName().equals(mFirstNameTextView.getText().toString())        &&
+                    mUser.getLastName().equals(mLastNameTextView.getText().toString())          &&
+                    mUser.getEmail().equals(mEmailTextView.getText().toString())                &&
+                    mUser.getPhoneNumber().equals(mPhoneNumberTextView.getText().toString())    &&
+                    mOption.equals(ChangeOptions.EDIT_CONTACT)){
             mSaveBtn.setEnabled(false);
         }
         else
@@ -128,11 +128,11 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         mPhoneNumberTextView.setEnabled(false);
         mEmailTextView.setEnabled(false);
     }
+
     private void setUser(){
         mFirstNameTextView.setText(mUser.getFirstName());
         mLastNameTextView.setText(mUser.getLastName());
         mPhoneNumberTextView.setText(mUser.getPhoneNumber());
         mEmailTextView.setText(mUser.getEmail());
     }
-
 }

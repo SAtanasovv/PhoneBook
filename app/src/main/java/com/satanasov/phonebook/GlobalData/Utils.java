@@ -12,5 +12,4 @@ public class Utils {
         OPTION,
         CONTACT
     }
-
 }

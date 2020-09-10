@@ -10,14 +10,11 @@ public class User implements Parcelable {
     private             String      mPhoneNumber;
     private             String      mEmail;
 
-
     protected User(Parcel in) {
         mFirstName = in.readString();
         mLastName = in.readString();
         mPhoneNumber = in.readString();
         mEmail = in.readString();
-
-
     }
 
     public User(String firstName, String lastName, String phoneNumber, String email) {
@@ -46,13 +43,10 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
         parcel.writeString(mFirstName);
         parcel.writeString(mLastName);
         parcel.writeString(mPhoneNumber);
         parcel.writeString(mEmail);
-
-
     }
 
     public String getFirstName() {
