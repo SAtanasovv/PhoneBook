@@ -74,8 +74,8 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         Bundle bundle = getIntent().getExtras();
 
         if(bundle!= null){
-            mOption = (ChangeOptions) bundle.getSerializable(Utils.IntentKeys.OPTION.name());
-            mUser   = bundle.getParcelable(Utils.IntentKeys.CONTACT.name());
+            mOption = (ChangeOptions) bundle.getSerializable(Utils.INTENT_EXTRA_OPTION);
+            mUser   = bundle.getParcelable(Utils.INTENT_USER_DETAILS);
             changeOptions(mOption);
         }
     }
@@ -128,4 +128,5 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         mPhoneNumberTextView.setText(mUser.getPhoneNumber());
         mEmailTextView.setText(mUser.getEmail());
     }
+
 }

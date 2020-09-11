@@ -10,7 +10,7 @@ import com.satanasov.phonebook.Adapter.MainActivityRecycleAdapter;
 import com.satanasov.phonebook.Model.User;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.GlobalData.Utils.ChangeOptions;
-import com.satanasov.phonebook.GlobalData.Utils.IntentKeys;
+import com.satanasov.phonebook.GlobalData.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,17 +41,17 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mRecyclerView   = findViewById(R.id.recycler_view_main_activity_id);
+        mRecyclerView    = findViewById(R.id.recycler_view_main_activity_id);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter        = new MainActivityRecycleAdapter(mDummyUsersList,this);
         Collections.sort(mDummyUsersList, compareByName);
+        mAdapter         = new MainActivityRecycleAdapter(mDummyUsersList,this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
     private void goToContactsActivity(ChangeOptions option){
         Intent intent = new Intent(MainActivity.this,ContactsActivity.class);
-        intent.putExtra(IntentKeys.OPTION.name(),option);
+        intent.putExtra(Utils.INTENT_EXTRA_OPTION,option);
         startActivity(intent);
     }
 
