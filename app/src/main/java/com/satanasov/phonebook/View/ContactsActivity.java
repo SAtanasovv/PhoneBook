@@ -6,10 +6,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.satanasov.phonebook.GlobalData.Utils;
 import com.satanasov.phonebook.GlobalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.Model.User;
@@ -17,16 +18,21 @@ import com.satanasov.phonebook.R;
 
 public class ContactsActivity extends BaseActivity implements View.OnClickListener {
 
-    private TextView        mFirstNameTextView;
-    private TextView        mLastNameTextView;
-    private TextView        mPhoneNumberTextView;
-    private TextView        mEmailTextView;
+    private TextInputEditText    mFirstNameTextView;
+    private TextInputEditText    mLastNameTextView;
+    private TextInputEditText    mPhoneNumberTextView;
+    private TextInputEditText    mEmailTextView;
 
-    private Button          mSaveBtn;
-    private Button          mCancelBtn;
+    private TextInputLayout     mFirstNameTextInputLayout;
+    private TextInputLayout     mLastNameTextInputLayout;
+    private TextInputLayout     mPhoneNumberTextInputLayout;
+    private TextInputLayout     mEmailTextInputLayout;
 
-    private User            mUser;
-    private ChangeOptions   mOption;
+    private Button               mSaveBtn;
+    private Button               mCancelBtn;
+
+    private User                 mUser;
+    private ChangeOptions        mOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +59,28 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
         @Override
         public void afterTextChanged(Editable editable) {
-            checkFields();
+            if(mOption.equals(ChangeOptions.EDIT_CONTACT))
+                mSaveBtn.setEnabled(true);
+
+            //checkErrorsInFields(editable);
         }
     };
 
     private void init(){
-        mFirstNameTextView   = findViewById(R.id.first_name_edit_text_contacts_id);
-        mLastNameTextView    = findViewById(R.id.last_name_edit_text_contacts_id);
-        mPhoneNumberTextView = findViewById(R.id.phone_number_edit_text_contacts_id);
-        mEmailTextView       = findViewById(R.id.email_edit_text_contacts_id);
+        mFirstNameTextView           = findViewById(R.id.first_name_edit_text_contacts_id);
+        mLastNameTextView            = findViewById(R.id.last_name_edit_text_contacts_id);
+        mPhoneNumberTextView         = findViewById(R.id.phone_number_edit_text_contacts_id);
+        mEmailTextView               = findViewById(R.id.email_edit_text_contacts_id);
 
-        mSaveBtn             = findViewById(R.id.save_button_contacts_id);
-        mCancelBtn           = findViewById(R.id.cancel_button_contacts_id);
+        mFirstNameTextInputLayout    = findViewById(R.id.input_layout_first_name_contacts_id);
+        mLastNameTextInputLayout     = findViewById(R.id.input_layout_last_name_contacts_id);
+        mPhoneNumberTextInputLayout  = findViewById(R.id.input_layout_phone_number_contacts_id);
+        mEmailTextInputLayout        = findViewById(R.id.input_layout_email_contacts_id);
 
-        Toolbar toolbar      = findViewById(R.id.contacts_toolbar);
+        mSaveBtn                     = findViewById(R.id.save_button_contacts_id);
+        mCancelBtn                   = findViewById(R.id.cancel_button_contacts_id);
+
+        Toolbar toolbar              = findViewById(R.id.contacts_toolbar);
         setSupportActionBar(toolbar);
 
         mSaveBtn.setOnClickListener(this);
@@ -78,7 +92,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         mEmailTextView.addTextChangedListener(watcher);
 
         Bundle bundle = getIntent().getExtras();
-
         if(bundle!= null){
             mOption = (ChangeOptions) bundle.getSerializable(Utils.INTENT_EXTRA_OPTION);
             mUser   = bundle.getParcelable(Utils.INTENT_USER_DETAILS);
@@ -122,6 +135,36 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         }
         else
             mSaveBtn.setEnabled(true);
+    }
+
+    private void checkErrorsInFields(Editable editable){
+        if(
+            editable.length()>mFirstNameTextInputLayout.getCounterMaxLength()   &&
+            mFirstNameTextView.hasFocus() )
+        {
+            mFirstNameTextInputLayout.setError( getString(R.string.input_text_error_message)     +
+            mFirstNameTextInputLayout.getCounterMaxLength());
+        }
+        else
+            mFirstNameTextInputLayout.setError(null);
+        if(         editable.length()>mLastNameTextInputLayout.getCounterMaxLength()            &&
+                    mLastNameTextView.hasFocus()){
+            mLastNameTextInputLayout.setError( getString(R.string.input_text_error_message)      +
+            mLastNameTextInputLayout.getCounterMaxLength()); }
+        else
+            mLastNameTextInputLayout.setError(null);
+        if(         editable.length()>mPhoneNumberTextInputLayout.getCounterMaxLength()         &&
+                    mPhoneNumberTextView.hasFocus()){
+            mPhoneNumberTextInputLayout.setError( getString(R.string.input_text_error_message)   +
+            mPhoneNumberTextInputLayout.getCounterMaxLength()); }
+        else
+            mPhoneNumberTextInputLayout.setError(null);
+        if(         editable.length()>mEmailTextInputLayout.getCounterMaxLength()               &&
+                    mEmailTextInputLayout.hasFocus()){
+            mEmailTextInputLayout.setError( getString(R.string.input_text_error_message)         +
+            mEmailTextInputLayout.getCounterMaxLength()); }
+        else
+            mEmailTextInputLayout.setError(null);
     }
 
     private void disableFields(){

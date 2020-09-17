@@ -49,7 +49,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     }
 }
 
-class MyViewHolder extends RecyclerView.ViewHolder {
+ class MyViewHolder extends RecyclerView.ViewHolder {
 
     public TextView             mFirstName;
     public TextView             mLastName;
@@ -58,9 +58,6 @@ class MyViewHolder extends RecyclerView.ViewHolder {
 
     private ArrayList<User>     mDummyUserList;
     private Context             mContext;
-
-
-
 
     public MyViewHolder(@NonNull View view,Context context,ArrayList<User> mDummyUserList) {
         super(view);
