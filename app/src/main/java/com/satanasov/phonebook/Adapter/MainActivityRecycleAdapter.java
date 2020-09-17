@@ -32,8 +32,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.phone_book_row,parent,false);
-        MyViewHolder myViewHolder = new MyViewHolder(view,mContext,mDummyUserList);
-        return  myViewHolder;
+        return  new MyViewHolder(view,mContext,mDummyUserList);
     }
 
     @Override
@@ -67,10 +66,12 @@ class MyViewHolder extends RecyclerView.ViewHolder {
         super(view);
         this.mContext       = context;
         this.mDummyUserList = mDummyUserList;
+
         mFirstName          = view.findViewById(R.id.first_name_text_view_phone_book_row_id);
         mLastName           = view.findViewById(R.id.last_name_text_view_phone_book_row_id);
         mOptions            = view.findViewById(R.id.contact_settings_button_phone_book_row_id);
         mProfilePicture     = view.findViewById(R.id.image_view_phone_book_row_id);
+
         mOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

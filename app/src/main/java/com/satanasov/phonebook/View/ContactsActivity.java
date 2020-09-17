@@ -7,6 +7,9 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+
 import com.satanasov.phonebook.GlobalData.Utils;
 import com.satanasov.phonebook.GlobalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.Model.User;
@@ -63,6 +66,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         mSaveBtn             = findViewById(R.id.save_button_contacts_id);
         mCancelBtn           = findViewById(R.id.cancel_button_contacts_id);
 
+        Toolbar toolbar      = findViewById(R.id.contacts_toolbar);
+        setSupportActionBar(toolbar);
+
         mSaveBtn.setOnClickListener(this);
         mCancelBtn.setOnClickListener(this);
 
@@ -84,14 +90,17 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         switch(option){
             case ADD_CONTACT:
                 mSaveBtn.setEnabled(false);
+                getSupportActionBar().setTitle(R.string.add_contact);
             break;
             case EDIT_CONTACT:
                 setUser();
+                getSupportActionBar().setTitle(R.string.edit_contact);
                 mSaveBtn.setEnabled(false);
             break;
             case VIEW_CONTACT:
                 setUser();
                 disableFields();
+                getSupportActionBar().setTitle(R.string.view_contact);
                 mSaveBtn.setVisibility(View.GONE);
             break;
         }

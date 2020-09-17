@@ -3,6 +3,8 @@ package com.satanasov.phonebook.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,6 +26,7 @@ public class MainActivity extends BaseActivity {
 
     private FloatingActionButton        mFloatingButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void init(){
+
         mFloatingButton  = findViewById(R.id.add_floating_button_main_activity_id);
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +51,9 @@ public class MainActivity extends BaseActivity {
         Collections.sort(mDummyUsersList, compareByName);
         mAdapter         = new MainActivityRecycleAdapter(mDummyUsersList,this);
         mRecyclerView.setAdapter(mAdapter);
+
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
     }
 
     private void goToContactsActivity(ChangeOptions option){
