@@ -1,4 +1,4 @@
-package com.satanasov.phonebook.Adapter;
+package com.satanasov.phonebook.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,15 +7,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.satanasov.phonebook.GlobalData.Utils;
-import com.satanasov.phonebook.Model.User;
+import com.satanasov.phonebook.databinding.PhoneBookRowBinding;
+import com.satanasov.phonebook.globalData.Utils;
+import com.satanasov.phonebook.model.User;
 import com.satanasov.phonebook.R;
-import com.satanasov.phonebook.View.ContactsActivity;
+import com.satanasov.phonebook.view.ContactsActivity;
 import java.util.ArrayList;
 
 public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -31,16 +30,15 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.phone_book_row,parent,false);
-        return  new MyViewHolder(view,mContext,mDummyUserList);
+        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+        PhoneBookRowBinding phoneBookRowBinding = PhoneBookRowBinding.inflate(layoutInflater,parent,false);
+        return  new MyViewHolder(phoneBookRowBinding,mContext,mDummyUserList);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         User user  = mDummyUserList.get(position);
-        holder.mFirstName.setText(user.getFirstName());
-        holder.mLastName.setText(user.getLastName());
-        holder.mProfilePicture.setImageResource(user.getImageId());
+        holder.bind(user);
     }
 
     @Override
@@ -51,23 +49,18 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
  class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView             mFirstName;
-    public TextView             mLastName;
     public ImageButton          mOptions;
-    public ImageView            mProfilePicture;
-
     private ArrayList<User>     mDummyUserList;
     private Context             mContext;
+    private PhoneBookRowBinding mBinding;
 
-    public MyViewHolder(@NonNull View view,Context context,ArrayList<User> mDummyUserList) {
-        super(view);
+    public MyViewHolder(PhoneBookRowBinding binding,Context context,ArrayList<User> mDummyUserList) {
+        super(binding.getRoot());
+        this.mBinding       = binding;
         this.mContext       = context;
         this.mDummyUserList = mDummyUserList;
 
-        mFirstName          = view.findViewById(R.id.first_name_text_view_phone_book_row_id);
-        mLastName           = view.findViewById(R.id.last_name_text_view_phone_book_row_id);
-        mOptions            = view.findViewById(R.id.contact_settings_button_phone_book_row_id);
-        mProfilePicture     = view.findViewById(R.id.image_view_phone_book_row_id);
+        mOptions            = binding.contactSettingsButtonPhoneBookRowId;
 
         mOptions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,5 +98,9 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         intent.putExtra(Utils.INTENT_EXTRA_OPTION, option);
         intent.putExtra(Utils.INTENT_USER_DETAILS, user);
         mContext.startActivity(intent);
+    }
+    public void bind(User user){
+        mBinding.setUser(user);
+        mBinding.executePendingBindings();
     }
 }

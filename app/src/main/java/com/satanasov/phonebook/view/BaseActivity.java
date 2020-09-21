@@ -1,4 +1,4 @@
-package com.satanasov.phonebook.View;
+package com.satanasov.phonebook.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;

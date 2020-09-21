@@ -1,18 +1,20 @@
-package com.satanasov.phonebook.View;
+package com.satanasov.phonebook.view;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.satanasov.phonebook.Adapter.MainActivityRecycleAdapter;
-import com.satanasov.phonebook.Model.User;
+import com.satanasov.phonebook.adapter.MainActivityRecycleAdapter;
+import com.satanasov.phonebook.databinding.ActivityMainBinding;
+import com.satanasov.phonebook.model.User;
 import com.satanasov.phonebook.R;
-import com.satanasov.phonebook.GlobalData.Utils.ChangeOptions;
-import com.satanasov.phonebook.GlobalData.Utils;
+import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
+import com.satanasov.phonebook.globalData.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,23 +23,21 @@ import java.util.Comparator;
 public class MainActivity extends BaseActivity {
     private ArrayList<User>             mDummyUsersList = new ArrayList<>();
 
-    private RecyclerView                mRecyclerView;
-    private RecyclerView.Adapter        mAdapter;
+    private RecyclerView          mRecyclerView;
+    private RecyclerView.Adapter  mAdapter;
 
-    private FloatingActionButton        mFloatingButton;
-
-
+    private FloatingActionButton  mFloatingButton;
+    ActivityMainBinding           binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         dummyUsers();
         init();
     }
 
     private void init(){
-
-        mFloatingButton  = findViewById(R.id.add_floating_button_main_activity_id);
+        mFloatingButton = findViewById(R.id.add_floating_button_main_activity_id);
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,14 +45,14 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mRecyclerView    = findViewById(R.id.recycler_view_main_activity_id);
+        mRecyclerView  = binding.recyclerViewMainActivityId;
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         Collections.sort(mDummyUsersList, compareByName);
-        mAdapter         = new MainActivityRecycleAdapter(mDummyUsersList,this);
+        mAdapter       = new MainActivityRecycleAdapter(mDummyUsersList,this);
         mRecyclerView.setAdapter(mAdapter);
 
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        Toolbar toolbar  = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
     }
 

@@ -1,4 +1,4 @@
-package com.satanasov.phonebook.Model;
+package com.satanasov.phonebook.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -86,5 +86,9 @@ public class User implements Parcelable {
     }
     public int getImageId() {
         return mImageId;
+    }
+
+    public void setImageId(int mImageId) {
+        this.mImageId = mImageId;
     }
 }

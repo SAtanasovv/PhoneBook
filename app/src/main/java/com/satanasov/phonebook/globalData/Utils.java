@@ -1,4 +1,4 @@
-package com.satanasov.phonebook.GlobalData;
+package com.satanasov.phonebook.globalData;
 
 public class Utils {
     public enum ChangeOptions {
