@@ -3,23 +3,28 @@ package com.satanasov.phonebook.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class User implements Parcelable {
 
-    private             String      mFirstName;
-    private             String      mLastName;
-    private             String      mPhoneNumber;
-    private             String      mEmail;
-    private             int         mImageId;
+    private   String     mFirstName;
+    private   String     mLastName;
+    private   ArrayList  mPhoneNumber;
+    private   String     mEmail;
+    private   int        mImageId;
+
+    public User() {
+    }
 
     protected User(Parcel in) {
         mFirstName   = in.readString();
         mLastName    = in.readString();
-        mPhoneNumber = in.readString();
+        mPhoneNumber = in.readArrayList(String.class.getClassLoader());
         mEmail       = in.readString();
         mImageId     = in.readInt();
     }
 
-    public User(String firstName, String lastName, String phoneNumber, String email,int imageId) {
+    public User(String firstName, String lastName, ArrayList<String> phoneNumber, String email,int imageId) {
         this.mFirstName   = firstName;
         this.mLastName    = lastName;
         this.mPhoneNumber = phoneNumber;
@@ -48,7 +53,7 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(mFirstName);
         parcel.writeString(mLastName);
-        parcel.writeString(mPhoneNumber);
+        parcel.writeList(mPhoneNumber);
         parcel.writeString(mEmail);
         parcel.writeInt(mImageId);
     }
@@ -69,11 +74,11 @@ public class User implements Parcelable {
         this.mLastName = lastName;
     }
 
-    public String getPhoneNumber() {
+    public ArrayList<String> getPhoneNumber() {
         return mPhoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(ArrayList<String> phoneNumber) {
         this.mPhoneNumber = phoneNumber;
     }
 

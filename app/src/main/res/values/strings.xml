@@ -10,4 +10,8 @@
     <string name="enter_phone_number">Phone Number</string>
     <string name="enter_email">"Email Address "</string>
     <string name="input_text_error_message">"Maximum character length is "</string>
+    <string name="permission_title">Read contacts access needed</string>
+    <string name="permission_message">Please enable access to contacts.</string>
+    <string name="permission_success">You have contacts permission</string>
+    <string name="permission_unsuccessful">You have disabled a contacts permission.</string>
 </resources>

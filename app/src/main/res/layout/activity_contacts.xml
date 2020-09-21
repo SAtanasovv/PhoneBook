@@ -102,7 +102,6 @@
                     android:id              ="@+id/phone_number_edit_text_contacts_id"
                     android:layout_width    ="match_parent"
                     android:layout_height   ="wrap_content"
-                    android:text            ='@{user.phoneNumber}'
                     android:inputType       ="phone" />
             </com.google.android.material.textfield.TextInputLayout>
 
