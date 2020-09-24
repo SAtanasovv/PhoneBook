@@ -22,14 +22,14 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     private ArrayList<User>     mDummyUserList;
     private Context             mContext;
 
-    public MainActivityRecycleAdapter(ArrayList<User> mDummyUserList,Context context) {
-        this.mDummyUserList =   mDummyUserList;
-        this.mContext       =   context;
+    public MainActivityRecycleAdapter(ArrayList<User> mDummyUserList,Context context){
+        this.mDummyUserList  = mDummyUserList;
+        this.mContext        = context;
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         PhoneBookRowBinding phoneBookRowBinding = PhoneBookRowBinding.inflate(layoutInflater,parent,false);
         return  new MyViewHolder(phoneBookRowBinding,mContext,mDummyUserList);
@@ -92,13 +92,14 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         popup.show();
     }
 
-    private void goToContactsActivity(Utils.ChangeOptions option, int position) {
+    private void goToContactsActivity(Utils.ChangeOptions option, int position){
         User user     = mDummyUserList.get(position);
         Intent intent = new Intent(mContext, ContactsActivity.class);
         intent.putExtra(Utils.INTENT_EXTRA_OPTION, option);
         intent.putExtra(Utils.INTENT_USER_DETAILS, user);
         mContext.startActivity(intent);
     }
+
     public void bind(User user){
         mBinding.setUser(user);
         mBinding.executePendingBindings();

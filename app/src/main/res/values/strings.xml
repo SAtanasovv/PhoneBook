@@ -7,11 +7,18 @@
     <string name="cancel">Cancel</string>
     <string name="enter_first_name">First Name</string>
     <string name="enter_last_name">Last Name</string>
-    <string name="enter_phone_number">Phone Number</string>
+    <string name="enter_phone_number">Mobile Number</string>
+    <string name="enter_home_number">Home Number</string>
+    <string name="enter_work_number">Work Number</string>
+    <string name="enter_main_number">Main Number</string>
     <string name="enter_email">"Email Address "</string>
     <string name="input_text_error_message">"Maximum character length is "</string>
     <string name="permission_title">Read contacts access needed</string>
     <string name="permission_message">Please enable access to contacts.</string>
     <string name="permission_success">You have contacts permission</string>
     <string name="permission_unsuccessful">You have disabled a contacts permission.</string>
+    <string name="type_home">Home </string>
+    <string name="type_mobile">Mobile </string>
+    <string name="type_work">Work </string>
+    <string name="type_main">Main </string>
 </resources>

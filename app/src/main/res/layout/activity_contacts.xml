@@ -83,7 +83,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id                              ="@+id/input_layout_phone_number_contacts_id"
+                android:id                              ="@+id/input_layout_mobile_number_contacts_id"
                 android:layout_width                    ="match_parent"
                 android:layout_height                   ="wrap_content"
                 android:layout_marginLeft               ="16dp"
@@ -96,10 +96,79 @@
                 app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
                 app:layout_constraintStart_toStartOf    ="@id/center_constrain_layout"
                 app:layout_constraintTop_toBottomOf     ="@id/input_layout_last_name_contacts_id"
-                style                                   ="@style/Rounded">
+                style                                   ="@style/RoundedDropDown">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id              ="@+id/phone_number_edit_text_contacts_id"
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id              ="@+id/mobile_number_edit_text_contacts_id"
+                    android:layout_width    ="match_parent"
+                    android:layout_height   ="wrap_content"
+                    android:inputType       ="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+            android:id                              ="@+id/input_layout_home_number_contacts_id"
+            android:layout_width                    ="match_parent"
+            android:layout_height                   ="wrap_content"
+            android:layout_marginLeft               ="16dp"
+            android:layout_marginTop                ="16dp"
+            android:layout_marginRight              ="16dp"
+            android:hint                            ="@string/enter_home_number"
+            app:counterEnabled                      ="true"
+            app:counterMaxLength                    ="12"
+            app:errorEnabled                        ="true"
+            app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
+            app:layout_constraintStart_toStartOf    ="@id/center_constrain_layout"
+            app:layout_constraintTop_toBottomOf     ="@id/input_layout_mobile_number_contacts_id"
+            style                                   ="@style/RoundedDropDown">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id              ="@+id/home_number_edit_text_contacts_id"
+                android:layout_width    ="match_parent"
+                android:layout_height   ="wrap_content"
+                android:inputType       ="phone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id                              ="@+id/input_layout_work_number_contacts_id"
+                android:layout_width                    ="match_parent"
+                android:layout_height                   ="wrap_content"
+                android:layout_marginLeft               ="16dp"
+                android:layout_marginTop                ="16dp"
+                android:layout_marginRight              ="16dp"
+                android:hint                            ="@string/enter_work_number"
+                app:counterEnabled                      ="true"
+                app:counterMaxLength                    ="12"
+                app:errorEnabled                        ="true"
+                app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
+                app:layout_constraintStart_toStartOf    ="@id/center_constrain_layout"
+                app:layout_constraintTop_toBottomOf     ="@id/input_layout_home_number_contacts_id"
+                style                                   ="@style/RoundedDropDown">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id              ="@+id/work_number_edit_text_contacts_id"
+                    android:layout_width    ="match_parent"
+                    android:layout_height   ="wrap_content"
+                    android:inputType       ="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id                              ="@+id/input_layout_main_number_contacts_id"
+                android:layout_width                    ="match_parent"
+                android:layout_height                   ="wrap_content"
+                android:layout_marginLeft               ="16dp"
+                android:layout_marginTop                ="16dp"
+                android:layout_marginRight              ="16dp"
+                android:hint                            ="@string/enter_main_number"
+                app:counterEnabled                      ="true"
+                app:counterMaxLength                    ="12"
+                app:errorEnabled                        ="true"
+                app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
+                app:layout_constraintStart_toStartOf    ="@id/center_constrain_layout"
+                app:layout_constraintTop_toBottomOf     ="@id/input_layout_work_number_contacts_id"
+                style                                   ="@style/RoundedDropDown">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id              ="@+id/main_number_edit_text_contacts_id"
                     android:layout_width    ="match_parent"
                     android:layout_height   ="wrap_content"
                     android:inputType       ="phone" />
@@ -118,7 +187,7 @@
                 app:errorEnabled                        ="true"
                 app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
                 app:layout_constraintStart_toStartOf    ="@id/center_constrain_layout"
-                app:layout_constraintTop_toBottomOf     ="@id/input_layout_phone_number_contacts_id"
+                app:layout_constraintTop_toBottomOf     ="@+id/input_layout_main_number_contacts_id"
                 style                                   ="@style/Rounded">
 
                 <com.google.android.material.textfield.TextInputEditText

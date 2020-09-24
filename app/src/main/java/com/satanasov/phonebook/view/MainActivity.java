@@ -111,9 +111,9 @@ public class MainActivity extends BaseActivity {
                         new String[]{android.Manifest.permission.READ_CONTACTS},
                         PERMISSIONS_REQUEST_READ_CONTACTS);
             }
-        } else {
+        } else
            mDummyUsersList.addAll(mPhoneContacts.getContacts());
-        }
+
     }
 
     @Override
@@ -122,9 +122,8 @@ public class MainActivity extends BaseActivity {
             if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mDummyUsersList.addAll(mPhoneContacts.getContacts());
                 Toast.makeText(this, R.string.permission_success, Toast.LENGTH_LONG).show();
-            } else {
+            } else
                 Toast.makeText(this, R.string.permission_unsuccessful, Toast.LENGTH_LONG).show();
-            }
         }
     }
 }
