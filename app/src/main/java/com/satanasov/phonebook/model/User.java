@@ -32,6 +32,7 @@ public class User implements Parcelable {
         mImageId              = in.readParcelable(getClass().getClassLoader());
     }
 
+
     public User(String firstName, String lastName, ArrayList<String> phoneNumber, String email,Bitmap imageId) {
         this.mFirstName            = firstName;
         this.mLastName             = lastName;
