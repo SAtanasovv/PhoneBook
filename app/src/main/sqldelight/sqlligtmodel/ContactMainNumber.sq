@@ -1,0 +1,5 @@
+CREATE TABLE contactMainNumber(
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+contact_id INTEGER NOT NULL,
+main_number TEXT,
+FOREIGN KEY(contact_id) REFERENCES contact(id));
