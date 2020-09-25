@@ -1,5 +1,6 @@
 package com.satanasov.phonebook.model;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -15,7 +16,7 @@ public class User implements Parcelable {
     private   String     mFirstName;
     private   String     mLastName;
     private   String     mEmail;
-    private   int        mImageId;
+    private   Bitmap     mImageId;
 
     public User() {
     }
@@ -28,10 +29,10 @@ public class User implements Parcelable {
         mWorkNumberList       = in.readArrayList(String.class.getClassLoader());
         mMobileNumberList     = in.readArrayList(String.class.getClassLoader());
         mEmail                = in.readString();
-        mImageId              = in.readInt();
+        mImageId              = in.readParcelable(getClass().getClassLoader());
     }
 
-    public User(String firstName, String lastName, ArrayList<String> phoneNumber, String email,int imageId) {
+    public User(String firstName, String lastName, ArrayList<String> phoneNumber, String email,Bitmap imageId) {
         this.mFirstName            = firstName;
         this.mLastName             = lastName;
         this.mMainPhoneNumberList  = phoneNumber;
@@ -65,7 +66,7 @@ public class User implements Parcelable {
         parcel.writeList(mWorkNumberList);
         parcel.writeList(mMobileNumberList);
         parcel.writeString(mEmail);
-        parcel.writeInt(mImageId);
+        parcel.writeParcelable(mImageId,i);
     }
 
     public String getFirstName() {
@@ -124,11 +125,11 @@ public class User implements Parcelable {
         this.mEmail = email;
     }
 
-    public int getImageId() {
+    public Bitmap getImageId() {
         return mImageId;
     }
 
-    public void setImageId(int mImageId) {
+    public void setImageId(Bitmap mImageId) {
         this.mImageId = mImageId;
     }
 }

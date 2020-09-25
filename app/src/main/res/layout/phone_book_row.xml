@@ -16,7 +16,7 @@
         android:id                          ="@+id/first_name_text_view_phone_book_row_id"
         android:layout_height               ="wrap_content"
         android:layout_width                ="0dp"
-        android:layout_marginTop            ="8dp"
+        android:layout_marginTop            ="16dp"
         android:layout_marginLeft           ="16dp"
         android:layout_marginRight          ="16dp"
         android:text                        ='@{user.firstName}'
@@ -32,8 +32,7 @@
         android:layout_marginStart             ="16dp"
         app:layout_constraintBottom_toBottomOf ="parent"
         app:layout_constraintStart_toStartOf   ="parent"
-        app:layout_constraintTop_toTopOf       ="parent"
-        android:src                            ='@{user.imageId}'/>
+        app:layout_constraintTop_toTopOf       ="parent" />
 
     <TextView
         android:id                             ="@+id/last_name_text_view_phone_book_row_id"

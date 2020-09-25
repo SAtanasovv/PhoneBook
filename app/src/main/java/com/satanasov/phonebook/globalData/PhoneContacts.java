@@ -1,11 +1,16 @@
 package com.satanasov.phonebook.globalData;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
 
 import com.satanasov.phonebook.model.User;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE_HOME;
@@ -39,6 +44,8 @@ private static final String[] mPROJECTION =
                 String contactId;
                 String contactName;
                 String contactEmail;
+                Bitmap contactPhoto;
+                byte[] byteArray;
                 User user = new User();
 
                 contactId       = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
@@ -77,6 +84,15 @@ private static final String[] mPROJECTION =
                     user.setEmail(contactEmail);
                     phoneEmailCursor.close();
                 }
+
+                InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(mContext.getContentResolver(),
+                        ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,Long.parseLong(contactId)));
+
+                if (inputStream != null){
+                    contactPhoto = BitmapFactory.decodeStream(inputStream);
+                    user.setImageId(contactPhoto);
+                }
+
                 if(user.getFirstName() != null)
                 contactList.add(user);
             }

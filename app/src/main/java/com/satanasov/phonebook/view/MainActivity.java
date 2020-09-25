@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity {
 
         Toolbar toolbar  = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+
     }
 
     private void goToContactsActivity(ChangeOptions option){

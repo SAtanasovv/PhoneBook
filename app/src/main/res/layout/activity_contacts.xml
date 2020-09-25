@@ -25,13 +25,23 @@
             app:layout_constraintTop_toTopOf      ="parent"
             app:layout_constraintStart_toStartOf  ="parent" />
 
+        <ImageView
+            android:id                              ="@+id/contact_image_view"
+            android:layout_width                    ="150dp"
+            android:layout_height                   ="80dp"
+            android:layout_marginTop                ="8dp"
+            app:layout_constraintBottom_toTopOf     ="@id/center_constrain_layout"
+            app:layout_constraintEnd_toEndOf        ="parent"
+            app:layout_constraintStart_toStartOf    ="parent"
+            app:layout_constraintTop_toBottomOf     ="@id/contacts_toolbar" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id                              ="@+id/center_constrain_layout"
             android:layout_width                    ="match_parent"
             android:layout_height                   ="wrap_content"
-            android:layout_gravity                  ="center"
             app:layout_constraintTop_toBottomOf     ="@id/contacts_toolbar"
             app:layout_constraintBottom_toBottomOf  ="parent"
+            android:layout_marginTop                ="8dp"
             tools:context                           =".view.ContactsActivity">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -40,9 +50,7 @@
                 android:layout_height                   ="wrap_content"
                 android:layout_marginLeft               ="16dp"
                 android:layout_marginRight              ="16dp"
-                android:layout_marginTop                ="8dp"
                 android:hint                            ="@string/enter_first_name"
-                app:counterEnabled                      ="true"
                 app:counterMaxLength                    ="5"
                 app:errorEnabled                        ="true"
                 app:layout_constraintStart_toStartOf    ="@+id/center_constrain_layout"
@@ -63,10 +71,8 @@
                 android:layout_width                    ="match_parent"
                 android:layout_height                   ="wrap_content"
                 android:layout_marginLeft               ="16dp"
-                android:layout_marginTop                ="16dp"
                 android:layout_marginRight              ="16dp"
                 android:hint                            ="@string/enter_last_name"
-                app:counterEnabled                      ="true"
                 app:counterMaxLength                    ="5"
                 app:errorEnabled                        ="true"
                 app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
@@ -87,10 +93,8 @@
                 android:layout_width                    ="match_parent"
                 android:layout_height                   ="wrap_content"
                 android:layout_marginLeft               ="16dp"
-                android:layout_marginTop                ="16dp"
                 android:layout_marginRight              ="16dp"
                 android:hint                            ="@string/enter_phone_number"
-                app:counterEnabled                      ="true"
                 app:counterMaxLength                    ="12"
                 app:errorEnabled                        ="true"
                 app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
@@ -110,10 +114,8 @@
             android:layout_width                    ="match_parent"
             android:layout_height                   ="wrap_content"
             android:layout_marginLeft               ="16dp"
-            android:layout_marginTop                ="16dp"
             android:layout_marginRight              ="16dp"
             android:hint                            ="@string/enter_home_number"
-            app:counterEnabled                      ="true"
             app:counterMaxLength                    ="12"
             app:errorEnabled                        ="true"
             app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
@@ -133,10 +135,8 @@
                 android:layout_width                    ="match_parent"
                 android:layout_height                   ="wrap_content"
                 android:layout_marginLeft               ="16dp"
-                android:layout_marginTop                ="16dp"
                 android:layout_marginRight              ="16dp"
                 android:hint                            ="@string/enter_work_number"
-                app:counterEnabled                      ="true"
                 app:counterMaxLength                    ="12"
                 app:errorEnabled                        ="true"
                 app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
@@ -156,10 +156,8 @@
                 android:layout_width                    ="match_parent"
                 android:layout_height                   ="wrap_content"
                 android:layout_marginLeft               ="16dp"
-                android:layout_marginTop                ="16dp"
                 android:layout_marginRight              ="16dp"
                 android:hint                            ="@string/enter_main_number"
-                app:counterEnabled                      ="true"
                 app:counterMaxLength                    ="12"
                 app:errorEnabled                        ="true"
                 app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
@@ -179,10 +177,8 @@
                 android:layout_width                    ="match_parent"
                 android:layout_height                   ="wrap_content"
                 android:layout_marginLeft               ="16dp"
-                android:layout_marginTop                ="16dp"
                 android:layout_marginRight              ="16dp"
                 android:hint                            ="@string/enter_email"
-                app:counterEnabled                      ="true"
                 app:counterMaxLength                    ="32"
                 app:errorEnabled                        ="true"
                 app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
@@ -198,36 +194,34 @@
                     android:inputType       ="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id                                  ="@+id/cancel_button_contacts_id"
-                android:layout_width                        ="0dp"
-                android:layout_height                       ="wrap_content"
-                android:layout_marginLeft                   ="16dp"
-                android:layout_marginRight                  ="16dp"
-                android:layout_marginTop                    ="16dp"
-                android:text                                ="@string/cancel"
-                app:layout_constraintBaseline_toBaselineOf  ="@+id/save_button_contacts_id"
-                app:layout_constraintBottom_toBottomOf      ="parent"
-                app:layout_constraintEnd_toStartOf          ="@+id/save_button_contacts_id"
-                app:layout_constraintStart_toStartOf        ="parent"
-                app:layout_constraintTop_toBottomOf         ="@id/input_layout_email_contacts_id"
-                app:layout_constraintWidth_default          ="spread" />
-
-            <Button
-                android:id                              ="@+id/save_button_contacts_id"
-                android:layout_width                    ="0dp"
-                android:layout_height                   ="wrap_content"
-                android:layout_marginLeft               ="16dp"
-                android:layout_marginTop                ="16dp"
-                android:layout_marginRight              ="16dp"
-                android:text                            ="@string/save"
-                app:layout_constraintBottom_toBottomOf  ="parent"
-                app:layout_constraintEnd_toEndOf        ="parent"
-                app:layout_constraintStart_toEndOf      ="@+id/cancel_button_contacts_id"
-                app:layout_constraintTop_toBottomOf     ="@+id/input_layout_email_contacts_id"
-                app:layout_constraintWidth_default      ="spread" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id                                  ="@+id/cancel_button_contacts_id"
+            android:layout_width                        ="0dp"
+            android:layout_height                       ="wrap_content"
+            android:layout_marginLeft                   ="16dp"
+            android:layout_marginRight                  ="16dp"
+            android:layout_marginTop                    ="16dp"
+            android:text                                ="@string/cancel"
+            android:layout_marginBottom                 ="8dp"
+            app:layout_constraintBottom_toBottomOf      ="parent"
+            app:layout_constraintStart_toStartOf        ="parent"
+            app:layout_constraintEnd_toStartOf          ="@id/save_button_contacts_id"
+            app:layout_constraintWidth_default          ="spread" />
+
+        <Button
+            android:id                              ="@+id/save_button_contacts_id"
+            android:layout_width                    ="0dp"
+            android:layout_height                   ="wrap_content"
+            android:layout_marginLeft               ="16dp"
+            android:layout_marginTop                ="16dp"
+            android:layout_marginRight              ="16dp"
+            android:text                            ="@string/save"
+            android:layout_marginBottom             ="8dp"
+            app:layout_constraintStart_toEndOf      ="@id/cancel_button_contacts_id"
+            app:layout_constraintBottom_toBottomOf  ="parent"
+            app:layout_constraintEnd_toEndOf        ="parent"
+            app:layout_constraintWidth_default      ="spread" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

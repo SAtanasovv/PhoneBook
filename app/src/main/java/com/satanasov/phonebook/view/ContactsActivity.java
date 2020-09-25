@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 
@@ -23,6 +26,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
     ActivityContactsBinding mContactsBinding;
 
+    private ImageView                     mContactImage;
     private TextInputEditText             mFirstNameEditText;
     private TextInputEditText             mLastNameEditText;
     private MaterialAutoCompleteTextView  mMobileNumberAutoCompleteTextView;
@@ -56,7 +60,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.cancel_button_contacts_id:
-                startActivity(new Intent(ContactsActivity.this,MainActivity.class));
+                onBackPressed();
                 break;
             case R.id.save_button_contacts_id:
                 break;
@@ -75,7 +79,15 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         }
     };
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
+
     private void init(){
+        mContactImage                      = findViewById(R.id.contact_image_view);
         mFirstNameEditText                 = findViewById(R.id.first_name_edit_text_contacts_id);
         mLastNameEditText                  = findViewById(R.id.last_name_edit_text_contacts_id);
         mEmailEditText                     = findViewById(R.id.email_edit_text_contacts_id);
@@ -98,6 +110,11 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
         Toolbar toolbar                    = findViewById(R.id.contacts_toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
 
         mSaveBtn.setOnClickListener(this);
         mCancelBtn.setOnClickListener(this);
@@ -123,11 +140,13 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             break;
             case EDIT_CONTACT:
                 mContactsBinding.setUser(mUser);
+                mContactImage.setImageBitmap(mUser.getImageId());
                 setDifferentPhoneNumberTypes();
                 getSupportActionBar().setTitle(R.string.edit_contact);
             break;
             case VIEW_CONTACT:
                 mContactsBinding.setUser(mUser);
+                mContactImage.setImageBitmap(mUser.getImageId());
                 setDifferentPhoneNumberTypes();
                 disableFieldsWhenViewing();
                 getSupportActionBar().setTitle(R.string.view_contact);

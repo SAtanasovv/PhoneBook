@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +39,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         User user  = mDummyUserList.get(position);
+        holder.mContactImage.setImageBitmap(user.getImageId());
         holder.bind(user);
     }
 
@@ -49,6 +51,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
  class MyViewHolder extends RecyclerView.ViewHolder {
 
+    public ImageView            mContactImage;
     public ImageButton          mOptions;
     private ArrayList<User>     mDummyUserList;
     private Context             mContext;
@@ -61,6 +64,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         this.mDummyUserList = mDummyUserList;
 
         mOptions            = binding.contactSettingsButtonPhoneBookRowId;
+        mContactImage       = binding.imageViewPhoneBookRowId;
 
         mOptions.setOnClickListener(new View.OnClickListener() {
             @Override
