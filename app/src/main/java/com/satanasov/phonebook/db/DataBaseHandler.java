@@ -34,7 +34,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-       // SqlDriver driver = new AndroidSqliteDriver();
+        SqlDriver driver = new AndroidSqliteDriver(Database.Schema,mContext,mDB_NAME);
     }
 
     @Override
