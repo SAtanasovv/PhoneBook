@@ -22,14 +22,14 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     private Database               mDatabase;
     private Context                mContext;
 
-    public static DataBaseHandler getInstance(Context context){
-        if(mInstance == null){
+    public static synchronized DataBaseHandler getInstance(Context context){
+        if(null == mInstance){
             mInstance = new DataBaseHandler(context);
         }
         return mInstance;
     }
 
-    public DataBaseHandler(@Nullable Context context) {
+    private DataBaseHandler(@Nullable Context context) {
         super(context, mDB_NAME, null, mDB_VERSION);
         this.mContext=context;
     }
