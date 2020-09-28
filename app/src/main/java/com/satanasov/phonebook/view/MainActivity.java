@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.satanasov.phonebook.adapter.MainActivityRecycleAdapter;
 import com.satanasov.phonebook.databinding.ActivityMainBinding;
+import com.satanasov.phonebook.db.DataBaseHandler;
 import com.satanasov.phonebook.globalData.PhoneContacts;
 import com.satanasov.phonebook.model.User;
 import com.satanasov.phonebook.R;
@@ -43,6 +44,8 @@ public class MainActivity extends BaseActivity {
         requestContactPermission();
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         //dummyUsers();
+        DataBaseHandler dataBaseHandler = DataBaseHandler.getInstance(this);
+        dataBaseHandler.insertContact("slav","atanasov");
         init();
     }
 

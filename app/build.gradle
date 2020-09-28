@@ -16,6 +16,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    sqldelight {
+        Database {
+            packageName = "com.satanasov.phonebook"
+        }
+    }
 
     buildTypes {
         release {

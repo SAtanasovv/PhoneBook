@@ -11,6 +11,7 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver;
 import com.squareup.sqldelight.db.SqlDriver;
 
 import sqlligtmodel.Contact;
+import sqlligtmodel.ContactQueries;
 
 public class DataBaseHandler extends SQLiteOpenHelper {
     public static final String mDB_NAME = "contacts.db";
@@ -18,6 +19,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     private static DataBaseHandler mInstance;
 
+    private Database               mDatabase;
     private Context                mContext;
 
     public static DataBaseHandler getInstance(Context context){
@@ -34,11 +36,17 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        SqlDriver driver = new AndroidSqliteDriver(Database.Schema,mContext,mDB_NAME);
+        SqlDriver driver = new AndroidSqliteDriver(Database.Companion.getSchema(),mContext,mDB_NAME);
+        mDatabase=Database.Companion.invoke(driver);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
+
+    public void insertContact(String firstName, String lastName){
+        mDatabase.getContactQueries().InsertContact(firstName,lastName);
+    }
+
 }
