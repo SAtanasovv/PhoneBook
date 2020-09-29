@@ -44,8 +44,13 @@ public class MainActivity extends BaseActivity {
         requestContactPermission();
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         //dummyUsers();
+        ArrayList<String> phoneNumbers =  new ArrayList<>();
+        phoneNumbers.add("1");
+        phoneNumbers.add("2");
+        phoneNumbers.add("3");
         DataBaseHandler dataBaseHandler = DataBaseHandler.getInstance(this);
-        dataBaseHandler.insertContact("slav","atanasov");
+        dataBaseHandler.insertContact("slav","atanasov","2");
+        mDummyUsersList = dataBaseHandler.printContacts();
         init();
     }
 

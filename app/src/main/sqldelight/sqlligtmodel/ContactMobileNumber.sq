@@ -1,5 +1,0 @@
-CREATE TABLE contactMobileNumber(
-id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-contact_id INTEGER NOT NULL,
-mobile_number TEXT,
-FOREIGN KEY(contact_id) REFERENCES contact(id));

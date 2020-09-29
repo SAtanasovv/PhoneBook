@@ -1,0 +1,10 @@
+CREATE TABLE contactNumbers(
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+contact_id INTEGER,
+number TEXT,
+number_type TEXT,
+FOREIGN KEY(contact_id) REFERENCES contact(id));
+
+InsertPhoneNumber:
+INSERT INTO contactNumbers(number,contact_id)
+VALUES(?,contact_id);

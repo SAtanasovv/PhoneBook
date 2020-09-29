@@ -1,5 +1,0 @@
-CREATE TABLE contactHomeNumber(
-id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-contact_id INTEGER NOT NULL,
-home_number TEXT,
-FOREIGN KEY(contact_id) REFERENCES contact(id));

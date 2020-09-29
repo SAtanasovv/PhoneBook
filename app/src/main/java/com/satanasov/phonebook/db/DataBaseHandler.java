@@ -10,12 +10,13 @@ import com.satanasov.phonebook.Database;
 import com.squareup.sqldelight.android.AndroidSqliteDriver;
 import com.squareup.sqldelight.db.SqlDriver;
 
+import java.util.ArrayList;
+
 import sqlligtmodel.Contact;
 import sqlligtmodel.ContactQueries;
 
-public class DataBaseHandler extends SQLiteOpenHelper {
-    public static final String mDB_NAME = "contacts.db";
-    public static final int mDB_VERSION = 1;
+public class DataBaseHandler{
+    public static final String     mDB_NAME = "contacts.db";
 
     private static DataBaseHandler mInstance;
 
@@ -29,24 +30,30 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return mInstance;
     }
 
-    private DataBaseHandler(@Nullable Context context) {
-        super(context, mDB_NAME, null, mDB_VERSION);
+    private DataBaseHandler(Context context) {
         this.mContext=context;
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
         SqlDriver driver = new AndroidSqliteDriver(Database.Companion.getSchema(),mContext,mDB_NAME);
         mDatabase=Database.Companion.invoke(driver);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
-    }
-
-    public void insertContact(String firstName, String lastName){
+    public void insertContact(String firstName, String lastName,String phoneNumbers){
         mDatabase.getContactQueries().InsertContact(firstName,lastName);
+        mDatabase.getContactQueries().InsertEmail(phoneNumbers);
+        //mDatabase.getContactQueries().InsertPhone(phoneNumbers);
+
+
+
     }
+
+    public ArrayList printContacts(){
+       ArrayList arrayList = (ArrayList) mDatabase.getContactQueries().SelectAll().executeAsList();
+       return arrayList;
+    }
+
+    public void deleteContactById(int id){
+        mDatabase.getContactQueries().DeleteContact(id);
+    }
+
+
 
 }
