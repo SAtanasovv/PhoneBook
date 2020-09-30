@@ -253,4 +253,11 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         mMainNumberAutoCompleteTextView.setEnabled(false);
         mEmailEditText.setEnabled(false);
     }
+
+    private void saveContactToDB(){
+        if(!mMobileNumberAutoCompleteTextView.getText().equals(" ")){
+
+        }
+
+    }
 }

@@ -15,14 +15,17 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.satanasov.phonebook.Database;
 import com.satanasov.phonebook.adapter.MainActivityRecycleAdapter;
 import com.satanasov.phonebook.databinding.ActivityMainBinding;
 import com.satanasov.phonebook.db.DataBaseHandler;
 import com.satanasov.phonebook.globalData.PhoneContacts;
+import com.satanasov.phonebook.model.PhoneNumber;
 import com.satanasov.phonebook.model.User;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.globalData.Utils;
+import com.squareup.sqldelight.TransactionWithReturn;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -44,12 +47,14 @@ public class MainActivity extends BaseActivity {
         requestContactPermission();
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         //dummyUsers();
-        ArrayList<String> phoneNumbers =  new ArrayList<>();
-        phoneNumbers.add("1");
-        phoneNumbers.add("2");
-        phoneNumbers.add("3");
+        //this.deleteDatabase("phoneBookContacts8.db");
+        PhoneNumber  phoneNumber = new PhoneNumber("0896",Utils.HOME_PHONE_NUMBER);
+        PhoneNumber  phoneNumber1 = new PhoneNumber("0896",Utils.WORK_PHONE_NUMBER);
+        ArrayList<PhoneNumber> phoneNumbers =  new ArrayList<>();
+        phoneNumbers.add(phoneNumber);
+        phoneNumbers.add(phoneNumber1);
         DataBaseHandler dataBaseHandler = DataBaseHandler.getInstance(this);
-        dataBaseHandler.insertContact("slav","atanasov","2");
+        dataBaseHandler.insertContact("slav","atanasov","alabala",phoneNumbers);
         mDummyUsersList = dataBaseHandler.printContacts();
         init();
     }

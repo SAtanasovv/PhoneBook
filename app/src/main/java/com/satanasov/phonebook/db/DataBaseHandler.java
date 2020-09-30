@@ -1,30 +1,40 @@
 package com.satanasov.phonebook.db;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
-import androidx.annotation.Nullable;
 
 import com.satanasov.phonebook.Database;
+import com.satanasov.phonebook.model.PhoneNumber;
+import com.squareup.sqldelight.TransactionCallbacks;
+import com.squareup.sqldelight.TransactionWithReturn;
+import com.squareup.sqldelight.TransactionWithoutReturn;
 import com.squareup.sqldelight.android.AndroidSqliteDriver;
 import com.squareup.sqldelight.db.SqlDriver;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
-import sqlligtmodel.Contact;
-import sqlligtmodel.ContactQueries;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
 
-public class DataBaseHandler{
-    public static final String     mDB_NAME = "contacts.db";
+
+public class DataBaseHandler implements TransactionWithReturn {
+    public static final String     mDB_NAME = "phoneBookContacts8.db";
 
     private static DataBaseHandler mInstance;
 
     private Database               mDatabase;
     private Context                mContext;
 
+    private ArrayList<PhoneNumber> phoneNumbers;
+
+    public Database getDatabase() {
+        return mDatabase;
+    }
+
     public static synchronized DataBaseHandler getInstance(Context context){
-        if(null == mInstance){
+        if(mInstance == null){
             mInstance = new DataBaseHandler(context);
         }
         return mInstance;
@@ -36,13 +46,17 @@ public class DataBaseHandler{
         mDatabase=Database.Companion.invoke(driver);
     }
 
-    public void insertContact(String firstName, String lastName,String phoneNumbers){
-        mDatabase.getContactQueries().InsertContact(firstName,lastName);
-        mDatabase.getContactQueries().InsertEmail(phoneNumbers);
-        //mDatabase.getContactQueries().InsertPhone(phoneNumbers);
+    public void insertContact(String firstName, String lastName,String email,ArrayList<PhoneNumber> phoneNumbers){
 
-
-
+        //mDatabase.getContactQueries().InsertContact();
+        //String result = mDatabase.getContactQueries().transactionWithResult(false,);
+        mDatabase.getContactQueries().InsertUserName(firstName,lastName);
+        mDatabase.getContactQueries().StoreID();
+        mDatabase.getContactQueries().InsertEmail(email);
+        for (int i = 0 ; i<phoneNumbers.size();i++){
+        mDatabase.getContactQueries().InsertPhone(phoneNumbers.get(i).getPhoneNumber(),phoneNumbers.get(i).getPhoneNumberType());
+        }
+        //mDatabase.getContactQueries().Commit();
     }
 
     public ArrayList printContacts(){
@@ -55,5 +69,24 @@ public class DataBaseHandler{
     }
 
 
+    @NotNull
+    @Override
+    public Void rollback(Object o) {
+        return null;
+    }
 
+    @Override
+    public Object transaction(@NotNull Function1 function1) {
+        return null;
+    }
+
+    @Override
+    public void afterCommit(@NotNull Function0<Unit> function0) {
+
+    }
+
+    @Override
+    public void afterRollback(@NotNull Function0<Unit> function0) {
+
+    }
 }
