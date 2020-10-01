@@ -1,27 +1,27 @@
 package com.satanasov.phonebook.model;
 
 public class PhoneNumber {
-    private String phoneNumber;
-    private Long    phoneNumberType;
+    private String mPhoneNumber;
+    private Long   mPhoneNumberType;
 
     public PhoneNumber(String phoneNumber, Long phoneNumberType) {
-        this.phoneNumber = phoneNumber;
-        this.phoneNumberType = phoneNumberType;
+        this.mPhoneNumber = phoneNumber;
+        this.mPhoneNumberType = phoneNumberType;
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return mPhoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.mPhoneNumber = phoneNumber;
     }
 
     public Long getPhoneNumberType() {
-        return phoneNumberType;
+        return mPhoneNumberType;
     }
 
     public void setPhoneNumberType(Long phoneNumberType) {
-        this.phoneNumberType = phoneNumberType;
+        this.mPhoneNumberType = phoneNumberType;
     }
 }

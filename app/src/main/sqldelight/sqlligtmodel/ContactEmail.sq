@@ -1,6 +1,6 @@
 CREATE TABLE contactEmail(
-id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-contact_id INTEGER,
-email TEXT,
-email_type TEXT,
-FOREIGN KEY(contact_id) REFERENCES contact(id));
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    contact_id INTEGER,
+    email TEXT,
+    email_type TEXT,
+    FOREIGN KEY(contact_id) REFERENCES contact(id));

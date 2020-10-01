@@ -1,9 +1,9 @@
 CREATE TABLE contactEmailType(
-id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-contact_email_id INTEGER,
-email_type TEXT,
-FOREIGN KEY(contact_email_id) REFERENCES contactEmail(id));
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    contact_email_id INTEGER,
+    email_type TEXT,
+    FOREIGN KEY(contact_email_id) REFERENCES contactEmail(id));
 
 
-INSERT INTO contactEmailType(email_type)
-VALUES ('HOME'),('WORK');
+    INSERT INTO contactEmailType(email_type)
+    VALUES ('HOME'),('WORK');

@@ -44,7 +44,6 @@ private static final String[] mPROJECTION =
                 String contactName;
                 String contactEmail;
                 Bitmap contactPhoto;
-                byte[] byteArray;
                 User user = new User();
 
                 contactId       = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));

@@ -1,11 +1,8 @@
 CREATE TABLE contactNumberType(
-id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-contact_number_id INTEGER,
-number_type TEXT,
-FOREIGN KEY(contact_number_id) REFERENCES contactNumbers(id));
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    contact_number_id INTEGER,
+    number_type TEXT,
+    FOREIGN KEY(contact_number_id) REFERENCES contactNumbers(id));
 
-INSERT INTO contactNumberType(number_type)
-VALUES ('WORK'),('MAIN'),('HOME'),('MOBILE');
-
-ShowNumberTypes:
-SELECT * FROM contactNumberType;
+    INSERT INTO contactNumberType(number_type)
+    VALUES ('WORK'),('MAIN'),('HOME'),('MOBILE');
