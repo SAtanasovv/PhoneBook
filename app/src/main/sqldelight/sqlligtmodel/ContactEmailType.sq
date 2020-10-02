@@ -4,6 +4,5 @@ CREATE TABLE contactEmailType(
     email_type TEXT,
     FOREIGN KEY(contact_email_id) REFERENCES contactEmail(id));
 
-
     INSERT INTO contactEmailType(email_type)
     VALUES ('HOME'),('WORK');

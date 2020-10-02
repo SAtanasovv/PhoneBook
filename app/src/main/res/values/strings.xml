@@ -21,4 +21,12 @@
     <string name="type_mobile">Mobile </string>
     <string name="type_work">Work </string>
     <string name="type_main">Main </string>
+    <string name="insert_success">Insert Successful </string>
+    <string name="insert_failed">Insert Failed </string>
+    <string name="show_success">Show Successful </string>
+    <string name="show_failed">Show Failed </string>
+    <string name="delete_success">Delete Successful </string>
+    <string name="delete_failed">Delete Failed </string>
+    <string name="update_success">Update Successful </string>
+    <string name="update_failed">Update Failed </string>
 </resources>

@@ -22,8 +22,10 @@ import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.globalData.Utils;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
+    private List                  mTestList;
     private ArrayList<User>       mDummyUsersList = new ArrayList<>();
     private PhoneContacts         mPhoneContacts  = new PhoneContacts(this);
     private RecyclerView          mRecyclerView;
@@ -37,6 +39,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         requestContactPermission();
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        //mTestList = DataBaseTransactionsKt.showAllContactsFromDB(this);
         mDummyUsersList = mPhoneContacts.getContacts();
         init();
     }

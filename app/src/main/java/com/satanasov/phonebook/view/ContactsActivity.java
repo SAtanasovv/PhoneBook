@@ -16,7 +16,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.satanasov.phonebook.databinding.ActivityContactsBinding;
-import com.satanasov.phonebook.db.DataBaseTransactionsKt;
+import com.satanasov.phonebook.db.DataBaseQueriesKt;
 import com.satanasov.phonebook.globalData.Utils;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.model.PhoneNumber;
@@ -272,6 +272,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             PhoneNumber phoneNumber = new PhoneNumber(mMainNumberAutoCompleteTextView.getText().toString(),Utils.MAIN_PHONE_NUMBER);
             PhoneNumbers.add(phoneNumber);
         }
-        DataBaseTransactionsKt.insertIntoDB(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),mEmailEditText.getText().toString(),PhoneNumbers,this);
+        DataBaseQueriesKt.insertContactIntoDB(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),mEmailEditText.getText().toString(),PhoneNumbers,this);
     }
 }

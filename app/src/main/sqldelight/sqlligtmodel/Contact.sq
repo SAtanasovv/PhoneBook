@@ -3,7 +3,11 @@ CREATE TABLE contact (
     first_name TEXT ,
     last_name  TEXT );
 
-SelectAll:
+StoreID:
+    INSERT OR REPLACE INTO storeContactID
+    VALUES ('contactID',last_insert_rowid());
+
+SelectAllContacts:
     SELECT contact.id,contact.first_name,contact.last_name,contactEmail.contact_id,contactEmail.email,contactNumbers.contact_id,contactNumbers.number,contactNumberType.number_type
     FROM contact
     LEFT JOIN  contactEmail       ON  contact.id = contactEmail.contact_id
@@ -11,16 +15,16 @@ SelectAll:
     LEFT JOIN  contactNumberType  ON  contactNumbers.number_type = contactNumberType.id;
 
 SelectContactById:
-    SELECT * FROM contact
-    WHERE id = ?;
+    SELECT contact.id,contact.first_name,contact.last_name,contactEmail.contact_id,contactEmail.email,contactNumbers.contact_id,contactNumbers.number,contactNumberType.number_type
+    FROM contact
+    LEFT JOIN  contactEmail       ON  contact.id = contactEmail.contact_id
+    LEFT JOIN  contactNumbers     ON  contact.id = contactNumbers.contact_id
+    LEFT JOIN  contactNumberType  ON  contactNumbers.number_type = contactNumberType.id
+    WHERE      contact.id = ?;
 
 InsertUserName:
     INSERT INTO contact(first_name, last_name)
     VALUES (?, ?);
-
-StoreID:
-    INSERT OR REPLACE INTO storeContactID
-    VALUES ('contactID',last_insert_rowid());
 
 InsertEmail:
     INSERT INTO contactEmail(contact_id,email)
@@ -30,6 +34,22 @@ InsertPhone:
     INSERT INTO contactNumbers(contact_id,number,number_type)
     VALUES((SELECT value FROM storeContactID WHERE storedContact = 'contactID'),?,?);
 
+UpdateUserName:
+    UPDATE contact
+    SET first_name = ? , last_name = ?
+    WHERE contact.id = ?;
+
+UpdateEmail:
+    UPDATE contactEmail
+    SET email = ?
+    WHERE contactEmail.id = ?;
+
+UpdatePhoneNumber:
+    UPDATE contactNumbers
+    SET number = ?
+    WHERE contactNumbers.id = ?;
+
 DeleteContact:
-    DELETE FROM contact WHERE id = ?;
+    DELETE FROM contact
+    WHERE id = ?;
 

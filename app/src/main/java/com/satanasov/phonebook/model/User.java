@@ -133,4 +133,5 @@ public class User implements Parcelable {
     public void setImageId(Bitmap mImageId) {
         this.mImageId = mImageId;
     }
+
 }
