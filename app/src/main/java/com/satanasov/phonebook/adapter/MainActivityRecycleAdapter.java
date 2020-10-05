@@ -13,17 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.satanasov.phonebook.databinding.PhoneBookRowBinding;
 import com.satanasov.phonebook.globalData.Utils;
-import com.satanasov.phonebook.model.User;
+import com.satanasov.phonebook.model.UserModel;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.view.ContactsActivity;
 import java.util.ArrayList;
 
 public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
-    private ArrayList<User>     mDummyUserList;
+    private ArrayList<UserModel>     mDummyUserList;
     private Context             mContext;
 
-    public MainActivityRecycleAdapter(ArrayList<User> mDummyUserList,Context context){
+    public MainActivityRecycleAdapter(ArrayList<UserModel> mDummyUserList, Context context){
         this.mDummyUserList  = mDummyUserList;
         this.mContext        = context;
     }
@@ -38,7 +38,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        User user  = mDummyUserList.get(position);
+        UserModel user  = mDummyUserList.get(position);
         holder.mContactImage.setImageBitmap(user.getImageId());
         holder.bind(user);
     }
@@ -53,11 +53,11 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
     public ImageView            mContactImage;
     public ImageButton          mOptions;
-    private ArrayList<User>     mDummyUserList;
+    private ArrayList<UserModel>     mDummyUserList;
     private Context             mContext;
     private PhoneBookRowBinding mBinding;
 
-    public MyViewHolder(PhoneBookRowBinding binding,Context context,ArrayList<User> mDummyUserList) {
+    public MyViewHolder(PhoneBookRowBinding binding,Context context,ArrayList<UserModel> mDummyUserList) {
         super(binding.getRoot());
         this.mBinding       = binding;
         this.mContext       = context;
@@ -97,14 +97,14 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     }
 
     private void goToContactsActivity(Utils.ChangeOptions option, int position){
-        User user     = mDummyUserList.get(position);
+        UserModel user     = mDummyUserList.get(position);
         Intent intent = new Intent(mContext, ContactsActivity.class);
         intent.putExtra(Utils.INTENT_EXTRA_OPTION, option);
         intent.putExtra(Utils.INTENT_USER_DETAILS, user);
         mContext.startActivity(intent);
     }
 
-    public void bind(User user){
+    public void bind(UserModel user){
         mBinding.setUser(user);
         mBinding.executePendingBindings();
     }

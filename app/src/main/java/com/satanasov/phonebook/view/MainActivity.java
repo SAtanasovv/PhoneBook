@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.satanasov.phonebook.adapter.MainActivityRecycleAdapter;
 import com.satanasov.phonebook.databinding.ActivityMainBinding;
-import com.satanasov.phonebook.db.DataBaseQueriesKt;
+import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.PhoneContacts;
-import com.satanasov.phonebook.model.User;
+import com.satanasov.phonebook.model.UserModel;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.globalData.Utils;
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private List                  mTestList;
-    private ArrayList<User>       mDummyUsersList = new ArrayList<>();
+    private ArrayList<UserModel>       mDummyUsersList = new ArrayList<>();
     private PhoneContacts         mPhoneContacts  = new PhoneContacts(this);
     private RecyclerView          mRecyclerView;
     private RecyclerView.Adapter  mAdapter;
@@ -40,7 +40,11 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         requestContactPermission();
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
-        mTestList = DataBaseQueriesKt.showAllContactsFromDB(this);
+        //this.deleteDatabase("phoneBookContacts8.db");
+        DataBaseQueries dataBaseQueries = new DataBaseQueries();
+        mTestList = dataBaseQueries.getAllContacts(this);
+        dataBaseQueries.deleteContactById(this,5);
+        mTestList = dataBaseQueries.getAllNumbers(this);
         mDummyUsersList = mPhoneContacts.getContacts();
         init();
     }

@@ -1,3 +1,7 @@
 CREATE TABLE storeContactID (
     storedContact TEXT PRIMARY KEY,
     value INTEGER);
+
+StoreID:
+    INSERT OR REPLACE INTO storeContactID
+    VALUES ('contactID',last_insert_rowid());

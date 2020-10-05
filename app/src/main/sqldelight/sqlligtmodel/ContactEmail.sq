@@ -2,5 +2,21 @@ CREATE TABLE contactEmail(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     contact_id INTEGER,
     email TEXT,
-    email_type TEXT,
+    email_type INTEGER,
     FOREIGN KEY(contact_id) REFERENCES contact(id));
+
+InsertEmail:
+     INSERT INTO contactEmail(contact_id,email,email_type)
+     VALUES((SELECT value FROM storeContactID WHERE storedContact = 'contactID'),?,?);
+
+UpdateEmail:
+     UPDATE contactEmail
+     SET email = ?
+     WHERE contactEmail.id = ?;
+
+GetAllEmails:
+     SELECT * FROM contactEmail;
+
+DeleteEmail:
+     DELETE FROM contactEmail
+     WHERE contact_id = ?;

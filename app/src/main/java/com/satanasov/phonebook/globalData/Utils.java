@@ -15,5 +15,6 @@ public class Utils {
      public static Long    HOME_PHONE_NUMBER    = 3L;
      public static Long    MOBILE_PHONE_NUMBER  = 4L;
 
-
+     public static Long    HOME_EMAIL    = 1L;
+     public static Long    WORK_EMAIL    = 2L;
 }

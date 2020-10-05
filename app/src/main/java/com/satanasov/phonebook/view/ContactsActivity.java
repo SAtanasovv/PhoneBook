@@ -8,23 +8,19 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
-
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.satanasov.phonebook.databinding.ActivityContactsBinding;
-import com.satanasov.phonebook.db.DataBaseTableContactEmail;
-import com.satanasov.phonebook.db.DataBaseTableContactNames;
-import com.satanasov.phonebook.db.DataBaseTableContactNumbers;
+import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.Utils;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
-import com.satanasov.phonebook.model.ContactEmail;
-import com.satanasov.phonebook.model.ContactName;
-import com.satanasov.phonebook.model.ContactPhoneNumber;
-import com.satanasov.phonebook.model.User;
+import com.satanasov.phonebook.model.ContactEmailModel;
+import com.satanasov.phonebook.model.ContactModel;
+import com.satanasov.phonebook.model.ContactPhoneNumberModel;
+import com.satanasov.phonebook.model.UserModel;
 import com.satanasov.phonebook.R;
 import java.util.ArrayList;
 
@@ -52,7 +48,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     private Button             mSaveBtn;
     private Button             mCancelBtn;
 
-    private User               mUser;
+    private UserModel mUser;
     private ChangeOptions      mOption;
 
     @Override
@@ -258,36 +254,38 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         mEmailEditText.setEnabled(false);
     }
 
-    private void saveContactToDB(){
-        ArrayList<ContactPhoneNumber> contactPhoneNumbers = new ArrayList<>();
+    private ArrayList<ContactPhoneNumberModel> getAllPhoneNumbers(){
+        ArrayList<ContactPhoneNumberModel> contactPhoneNumberModels = new ArrayList<>();
         if (!mMobileNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(mMobileNumberAutoCompleteTextView.getText().toString(),Utils.MOBILE_PHONE_NUMBER);
-            contactPhoneNumbers.add(contactPhoneNumber);
+            ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel(mMobileNumberAutoCompleteTextView.getText().toString(),Utils.MOBILE_PHONE_NUMBER);
+            contactPhoneNumberModels.add(contactPhoneNumberModel);
         }
         if (!mWorkNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(mWorkNumberAutoCompleteTextView.getText().toString(),Utils.WORK_PHONE_NUMBER);
-            contactPhoneNumbers.add(contactPhoneNumber);
+            ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel(mWorkNumberAutoCompleteTextView.getText().toString(),Utils.WORK_PHONE_NUMBER);
+            contactPhoneNumberModels.add(contactPhoneNumberModel);
         }
         if (!mHomeNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(mHomeNumberAutoCompleteTextView.getText().toString(),Utils.HOME_PHONE_NUMBER);
-            contactPhoneNumbers.add(contactPhoneNumber);
+            ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel(mHomeNumberAutoCompleteTextView.getText().toString(),Utils.HOME_PHONE_NUMBER);
+            contactPhoneNumberModels.add(contactPhoneNumberModel);
         }
         if (!mMainNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(mMainNumberAutoCompleteTextView.getText().toString(),Utils.MAIN_PHONE_NUMBER);
-            contactPhoneNumbers.add(contactPhoneNumber);
+            ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel(mMainNumberAutoCompleteTextView.getText().toString(),Utils.MAIN_PHONE_NUMBER);
+            contactPhoneNumberModels.add(contactPhoneNumberModel);
         }
-        //DataBaseQueriesKt.insertContactIntoDB(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),mEmailEditText.getText().toString(),PhoneNumbers,this);
-        DataBaseTableContactNames dataBaseTableContactNames = new DataBaseTableContactNames();
-        ContactName contactName = new ContactName(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString());
-        dataBaseTableContactNames.add(contactName,this);
+        return contactPhoneNumberModels;
+    }
 
-        DataBaseTableContactNumbers dataBaseTableContactNumbers = new DataBaseTableContactNumbers();
-        ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber();
-        contactPhoneNumber.setPhoneNumbers(contactPhoneNumbers);
-        dataBaseTableContactNumbers.add(contactPhoneNumber,this);
+    private ArrayList<ContactEmailModel> getAllEmails(){
+        ArrayList<ContactEmailModel> contactEmailModelList = new ArrayList<>();
+        if(!mEmailEditText.getText().toString().equalsIgnoreCase("")){
+            ContactEmailModel contactEmailModel = new ContactEmailModel(mEmailEditText.getText().toString(),Utils.HOME_EMAIL);
+            contactEmailModelList.add(contactEmailModel);
+        }
+        return contactEmailModelList;
+    }
 
-        DataBaseTableContactEmail dataBaseTableContactEmail = new DataBaseTableContactEmail();
-        ContactEmail contactEmail = new ContactEmail(mEmailEditText.getText().toString());
-        dataBaseTableContactEmail.add(contactEmail,this);
+    private void saveContactToDB(){
+        DataBaseQueries dataBaseQueries = new DataBaseQueries();
+        dataBaseQueries.storeContact(this, new ContactModel(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),getAllPhoneNumbers(),getAllEmails()));
     }
 }

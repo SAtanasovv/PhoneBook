@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
 
-import com.satanasov.phonebook.model.User;
+import com.satanasov.phonebook.model.UserModel;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -29,9 +29,9 @@ private static final String[] mPROJECTION =
         this.mContext = mContext;
     }
 
-    public ArrayList<User> getContacts(){
+    public ArrayList<UserModel> getContacts(){
 
-    ArrayList<User> contactList = new ArrayList<>();
+    ArrayList<UserModel> contactList = new ArrayList<>();
 
     Cursor cursor = mContext.getContentResolver().query(
             ContactsContract.Contacts.CONTENT_URI, null, null, null,
@@ -44,7 +44,7 @@ private static final String[] mPROJECTION =
                 String contactName;
                 String contactEmail;
                 Bitmap contactPhoto;
-                User user = new User();
+                UserModel user = new UserModel();
 
                 contactId       = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 contactName     = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));

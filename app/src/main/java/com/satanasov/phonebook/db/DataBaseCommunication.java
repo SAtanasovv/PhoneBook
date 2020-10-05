@@ -5,10 +5,10 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver;
 import com.squareup.sqldelight.db.SqlDriver;
 
 public class DataBaseCommunication {
-    public static final String     mDB_NAME = "phoneBookContacts8.db";
+    public static final String           mDB_NAME = "phoneBookContacts8.db";
     private static DataBaseCommunication mInstance;
-    private Database               mDatabase;
-    private Context                mContext;
+    private Database                     mDatabase;
+    private Context                      mContext;
 
     public static synchronized DataBaseCommunication getInstance(Context context){
         if(mInstance == null){

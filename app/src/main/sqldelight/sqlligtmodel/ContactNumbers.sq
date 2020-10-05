@@ -5,3 +5,19 @@ CREATE TABLE contactNumbers(
     number_type INTEGER,
     FOREIGN KEY(contact_id) REFERENCES contact(id));
 
+
+InsertPhone:
+    INSERT INTO contactNumbers(contact_id,number,number_type)
+    VALUES((SELECT value FROM storeContactID WHERE storedContact = 'contactID'),?,?);
+
+UpdatePhoneNumber:
+    UPDATE contactNumbers
+    SET number = ?
+    WHERE contactNumbers.id = ?;
+
+GetAllContacts:
+    SELECT * FROM contactNumbers;
+
+DeletePhoneNumber:
+    DELETE FROM contactNumbers
+    WHERE contact_id = ?;
