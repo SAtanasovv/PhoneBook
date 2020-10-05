@@ -3,10 +3,10 @@ package com.satanasov.phonebook.db
 import android.content.Context
 import android.widget.Toast
 import com.satanasov.phonebook.R
-import com.satanasov.phonebook.model.PhoneNumber
+import com.satanasov.phonebook.model.ContactPhoneNumber
 import java.util.ArrayList
 
-fun insertContactIntoDB (firstName: String, lastName: String, email: String, phoneNumbers: ArrayList<PhoneNumber>,context: Context){
+fun insertContactIntoDB (firstName: String, lastName: String, email: String, contactPhoneNumbers: ArrayList<ContactPhoneNumber>, context: Context){
     val database =  DataBaseCommunication.getInstance(context).database
         database.contactQueries.transaction {
             afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
@@ -15,7 +15,7 @@ fun insertContactIntoDB (firstName: String, lastName: String, email: String, pho
             database.contactQueries.InsertUserName(firstName,lastName)
             database.contactQueries.StoreID()
             database.contactQueries.InsertEmail(email)
-            for (phoneNumber in phoneNumbers)
+            for (phoneNumber in contactPhoneNumbers)
                 database.contactQueries.InsertPhone(phoneNumber.phoneNumber,phoneNumber.phoneNumberType)
     }
 }

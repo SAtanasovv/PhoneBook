@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.satanasov.phonebook.adapter.MainActivityRecycleAdapter;
 import com.satanasov.phonebook.databinding.ActivityMainBinding;
+import com.satanasov.phonebook.db.DataBaseQueriesKt;
 import com.satanasov.phonebook.globalData.PhoneContacts;
 import com.satanasov.phonebook.model.User;
 import com.satanasov.phonebook.R;
@@ -39,7 +40,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         requestContactPermission();
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
-        //mTestList = DataBaseTransactionsKt.showAllContactsFromDB(this);
+        mTestList = DataBaseQueriesKt.showAllContactsFromDB(this);
         mDummyUsersList = mPhoneContacts.getContacts();
         init();
     }

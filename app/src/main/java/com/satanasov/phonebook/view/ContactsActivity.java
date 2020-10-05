@@ -16,10 +16,14 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.satanasov.phonebook.databinding.ActivityContactsBinding;
-import com.satanasov.phonebook.db.DataBaseQueriesKt;
+import com.satanasov.phonebook.db.DataBaseTableContactEmail;
+import com.satanasov.phonebook.db.DataBaseTableContactNames;
+import com.satanasov.phonebook.db.DataBaseTableContactNumbers;
 import com.satanasov.phonebook.globalData.Utils;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
-import com.satanasov.phonebook.model.PhoneNumber;
+import com.satanasov.phonebook.model.ContactEmail;
+import com.satanasov.phonebook.model.ContactName;
+import com.satanasov.phonebook.model.ContactPhoneNumber;
 import com.satanasov.phonebook.model.User;
 import com.satanasov.phonebook.R;
 import java.util.ArrayList;
@@ -255,23 +259,35 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void saveContactToDB(){
-        ArrayList<PhoneNumber>  PhoneNumbers = new ArrayList<>();
+        ArrayList<ContactPhoneNumber> contactPhoneNumbers = new ArrayList<>();
         if (!mMobileNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-            PhoneNumber phoneNumber = new PhoneNumber(mMobileNumberAutoCompleteTextView.getText().toString(),Utils.MOBILE_PHONE_NUMBER);
-            PhoneNumbers.add(phoneNumber);
+            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(mMobileNumberAutoCompleteTextView.getText().toString(),Utils.MOBILE_PHONE_NUMBER);
+            contactPhoneNumbers.add(contactPhoneNumber);
         }
         if (!mWorkNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-            PhoneNumber phoneNumber = new PhoneNumber(mWorkNumberAutoCompleteTextView.getText().toString(),Utils.WORK_PHONE_NUMBER);
-            PhoneNumbers.add(phoneNumber);
+            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(mWorkNumberAutoCompleteTextView.getText().toString(),Utils.WORK_PHONE_NUMBER);
+            contactPhoneNumbers.add(contactPhoneNumber);
         }
         if (!mHomeNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-            PhoneNumber phoneNumber = new PhoneNumber(mHomeNumberAutoCompleteTextView.getText().toString(),Utils.HOME_PHONE_NUMBER);
-            PhoneNumbers.add(phoneNumber);
+            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(mHomeNumberAutoCompleteTextView.getText().toString(),Utils.HOME_PHONE_NUMBER);
+            contactPhoneNumbers.add(contactPhoneNumber);
         }
         if (!mMainNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-            PhoneNumber phoneNumber = new PhoneNumber(mMainNumberAutoCompleteTextView.getText().toString(),Utils.MAIN_PHONE_NUMBER);
-            PhoneNumbers.add(phoneNumber);
+            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(mMainNumberAutoCompleteTextView.getText().toString(),Utils.MAIN_PHONE_NUMBER);
+            contactPhoneNumbers.add(contactPhoneNumber);
         }
-        DataBaseQueriesKt.insertContactIntoDB(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),mEmailEditText.getText().toString(),PhoneNumbers,this);
+        //DataBaseQueriesKt.insertContactIntoDB(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),mEmailEditText.getText().toString(),PhoneNumbers,this);
+        DataBaseTableContactNames dataBaseTableContactNames = new DataBaseTableContactNames();
+        ContactName contactName = new ContactName(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString());
+        dataBaseTableContactNames.add(contactName,this);
+
+        DataBaseTableContactNumbers dataBaseTableContactNumbers = new DataBaseTableContactNumbers();
+        ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber();
+        contactPhoneNumber.setPhoneNumbers(contactPhoneNumbers);
+        dataBaseTableContactNumbers.add(contactPhoneNumber,this);
+
+        DataBaseTableContactEmail dataBaseTableContactEmail = new DataBaseTableContactEmail();
+        ContactEmail contactEmail = new ContactEmail(mEmailEditText.getText().toString());
+        dataBaseTableContactEmail.add(contactEmail,this);
     }
 }
