@@ -1,11 +1,17 @@
 package com.satanasov.phonebook.db
 
 import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteCursor
 import android.widget.Toast
 import com.satanasov.phonebook.R
 import com.satanasov.phonebook.model.ContactEmailModel
 import com.satanasov.phonebook.model.ContactModel
 import com.satanasov.phonebook.model.ContactPhoneNumberModel
+import com.squareup.sqldelight.db.SqlCursor
+import sqlligtmodel.ContactNumbers
+import sqlligtmodel.GetAllContacts
+import java.util.ArrayList
 
 class DataBaseQueries {
 
@@ -15,7 +21,7 @@ class DataBaseQueries {
                 afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
                 afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
                 // add contact photo contactQueries
-                database.contactQueries.InsertUserName(contact.firstName,contact.lastName)
+                database.contactQueries.InsertUser(contact.firstName,contact.lastName)
                 database.storeContactIDQueries.StoreID()
                 for (phoneNumber in contact.contactPhoneNumberModels)
                     database.contactNumbersQueries.InsertPhone(phoneNumber.phoneNumber,phoneNumber.phoneNumberType)
@@ -24,32 +30,30 @@ class DataBaseQueries {
             }
     }
 
-        fun getAllContacts(context: Context): List<Any> {
+        fun getAllContacts(context: Context): SqlCursor {
             var contactList: List<Any> = emptyList()
             val database = DataBaseCommunication.getInstance(context).database
-            contactList = database.contactQueries.SelectAllContacts().executeAsList()
 
-            return contactList
+            return database.contactQueries.GetAllContacts().execute()
         }
 
-        fun getAllNumbers(context: Context): List<Any> {
+        fun getAllContactsAsList(context: Context): List<GetAllContacts> {
             var contactList: List<Any> = emptyList()
             val database = DataBaseCommunication.getInstance(context).database
-            contactList  = database.contactNumbersQueries.GetAllContacts().executeAsList();
 
-            return contactList
+            return database.contactQueries.GetAllContacts().executeAsList();
         }
 
         fun updateContact(context: Context,contact: ContactModel,number: ContactPhoneNumberModel,email: ContactEmailModel){
             val database = DataBaseCommunication.getInstance(context).database
-            database.contactQueries.transaction {
-                afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
-                afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
+                database.contactQueries.transaction {
+                    afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
+                    afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
 
-                database.contactQueries.UpdateUserName(contact.firstName,contact.lastName,contact.id)
-                database.contactNumbersQueries.UpdatePhoneNumber(number.phoneNumber,number.id)
-                database.contactEmailQueries.UpdateEmail(email.email,email.id)
-            }
+                    database.contactQueries.UpdateUserName(contact.firstName,contact.lastName,contact.id)
+                    database.contactNumbersQueries.UpdatePhoneNumber(number.phoneNumber,number.id)
+                    database.contactEmailQueries.UpdateEmail(email.email,email.id)
+                }
         }
 
         fun deleteContactById(context: Context, id: Long){

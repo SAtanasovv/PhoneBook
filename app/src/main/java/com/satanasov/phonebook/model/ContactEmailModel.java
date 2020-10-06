@@ -15,6 +15,12 @@ public class ContactEmailModel {
         this.mEmail     = email;
         this.mEmailType = emailType;
     }
+
+    public ContactEmailModel(Long id,String email, Long emailType) {
+        this.mID        = id;
+        this.mEmail     = email;
+        this.mEmailType = emailType;
+    }
     public ContactEmailModel(String email, Long emailType, Long contactID, Long id) {
         this.mEmail     = email;
         this.mEmailType = emailType;

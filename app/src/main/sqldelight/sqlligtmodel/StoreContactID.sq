@@ -5,3 +5,6 @@ CREATE TABLE storeContactID (
 StoreID:
     INSERT OR REPLACE INTO storeContactID
     VALUES ('contactID',last_insert_rowid());
+
+GetID:
+    SELECT value FROM storeContactID;

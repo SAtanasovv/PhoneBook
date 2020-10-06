@@ -18,17 +18,21 @@ import com.satanasov.phonebook.adapter.MainActivityRecycleAdapter;
 import com.satanasov.phonebook.databinding.ActivityMainBinding;
 import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.PhoneContacts;
+import com.satanasov.phonebook.model.ContactEmailModel;
+import com.satanasov.phonebook.model.ContactPhoneNumberModel;
 import com.satanasov.phonebook.model.UserModel;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.globalData.Utils;
+import com.squareup.sqldelight.db.SqlCursor;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends BaseActivity {
-    private List                  mTestList;
-    private ArrayList<UserModel>       mDummyUsersList = new ArrayList<>();
+    private ArrayList<UserModel>  mDataBaseList   = new ArrayList<>();
+    private ArrayList<UserModel>  mDummyUsersList = new ArrayList<>();
+    private ArrayList<UserModel>  mMergedList = new ArrayList<>();
     private PhoneContacts         mPhoneContacts  = new PhoneContacts(this);
+    private DataBaseQueries       dataBaseQueries = new DataBaseQueries();
     private RecyclerView          mRecyclerView;
     private RecyclerView.Adapter  mAdapter;
     private FloatingActionButton  mFloatingButton;
@@ -41,11 +45,10 @@ public class MainActivity extends BaseActivity {
         requestContactPermission();
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         //this.deleteDatabase("phoneBookContacts8.db");
-        DataBaseQueries dataBaseQueries = new DataBaseQueries();
-        mTestList = dataBaseQueries.getAllContacts(this);
-        dataBaseQueries.deleteContactById(this,5);
-        mTestList = dataBaseQueries.getAllNumbers(this);
-        mDummyUsersList = mPhoneContacts.getContacts();
+        //dataBaseQueries.deleteContactById(this,5);
+        //List list = dataBaseQueries.getAllContactsAsList(this);
+        convertToUserModelList();
+        mergeLists();
         init();
     }
 
@@ -61,7 +64,7 @@ public class MainActivity extends BaseActivity {
         mRecyclerView  = mBinding.recyclerViewMainActivityId;
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter       = new MainActivityRecycleAdapter(mDummyUsersList,this);
+        mAdapter       = new MainActivityRecycleAdapter(mMergedList,this);
         mRecyclerView.setAdapter(mAdapter);
 
         Toolbar toolbar  = findViewById(R.id.main_toolbar);
@@ -107,5 +110,45 @@ public class MainActivity extends BaseActivity {
             } else
                 Toast.makeText(this, R.string.permission_unsuccessful, Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void convertToUserModelList(){
+        UserModel user = new UserModel();
+        ContactPhoneNumberModel phoneNumberModel;
+        ContactEmailModel contactEmailModel;
+        SqlCursor cursor = dataBaseQueries.getAllContacts(this);
+        ArrayList<ContactPhoneNumberModel> phoneNumberList = new ArrayList<>();
+        ArrayList<ContactEmailModel> emailList = new ArrayList<>();
+        Long userID = 0L;
+        Long emailID = 0L;
+       while(cursor.next()) {
+           if (cursor.getLong(1) != userID) {
+               if(userID!=0L){
+               mDataBaseList.add(user);}
+               userID = cursor.getLong(1);
+               phoneNumberList = new ArrayList<>();
+               emailList = new ArrayList<>();
+           }
+               phoneNumberModel = new ContactPhoneNumberModel(cursor.getLong(7),cursor.getString(8),cursor.getLong(9));
+               phoneNumberList.add(phoneNumberModel);
+               contactEmailModel = new ContactEmailModel(cursor.getLong(4),cursor.getString(5),cursor.getLong(6));
+
+               if(emailID!=cursor.getLong(4)){
+                   emailList.add(contactEmailModel);
+                   emailID = cursor.getLong(4);
+           }
+               user = new UserModel(cursor.getLong(1), cursor.getString(2), cursor.getString(3),emailList,phoneNumberList);
+       }
+       mDataBaseList.add(user);
+    }
+
+    private void mergeLists(){
+        mMergedList.addAll(mDummyUsersList);
+        mMergedList.removeAll(mDataBaseList);
+        mMergedList.addAll(mDataBaseList);
+
+    }
+    private void transferContacts(){
+
     }
 }

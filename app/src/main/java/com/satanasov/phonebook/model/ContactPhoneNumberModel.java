@@ -1,8 +1,9 @@
 package com.satanasov.phonebook.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ContactPhoneNumberModel {
+public class ContactPhoneNumberModel implements Serializable {
     private Long    mID;
     private Long    mContactID;
     private String  mPhoneNumber;
@@ -13,6 +14,12 @@ public class ContactPhoneNumberModel {
     }
 
     public ContactPhoneNumberModel(String phoneNumber, Long phoneNumberType) {
+        this.mPhoneNumber     = phoneNumber;
+        this.mPhoneNumberType = phoneNumberType;
+    }
+
+    public ContactPhoneNumberModel(Long id,String phoneNumber, Long phoneNumberType) {
+        this.mID              = id;
         this.mPhoneNumber     = phoneNumber;
         this.mPhoneNumberType = phoneNumberType;
     }

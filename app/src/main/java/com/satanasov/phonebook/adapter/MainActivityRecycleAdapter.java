@@ -51,11 +51,11 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
  class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public ImageView            mContactImage;
-    public ImageButton          mOptions;
-    private ArrayList<UserModel>     mDummyUserList;
-    private Context             mContext;
-    private PhoneBookRowBinding mBinding;
+    public ImageView             mContactImage;
+    public ImageButton           mOptions;
+    private ArrayList<UserModel> mDummyUserList;
+    private Context              mContext;
+    private PhoneBookRowBinding  mBinding;
 
     public MyViewHolder(PhoneBookRowBinding binding,Context context,ArrayList<UserModel> mDummyUserList) {
         super(binding.getRoot());

@@ -6,12 +6,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
-
 import com.satanasov.phonebook.model.UserModel;
-
 import java.io.InputStream;
 import java.util.ArrayList;
-
 import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE_HOME;
 import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE_MAIN;
 import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;

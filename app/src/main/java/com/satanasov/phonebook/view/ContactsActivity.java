@@ -48,7 +48,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     private Button             mSaveBtn;
     private Button             mCancelBtn;
 
-    private UserModel mUser;
+    private UserModel          mUser;
     private ChangeOptions      mOption;
 
     @Override
@@ -179,7 +179,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
     private void checkIfFieldsAreEmpty(){
         if (mFirstNameEditText.getText().toString().equalsIgnoreCase(" ") ||
-            mLastNameEditText.getText().toString().equalsIgnoreCase(" ")  ||
             mEmailEditText.getText().toString().equalsIgnoreCase(" ")){
             mSaveBtn.setEnabled(false);
         }
@@ -255,24 +254,24 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     }
 
     private ArrayList<ContactPhoneNumberModel> getAllPhoneNumbers(){
-        ArrayList<ContactPhoneNumberModel> contactPhoneNumberModels = new ArrayList<>();
+        ArrayList<ContactPhoneNumberModel> contactPhoneNumberModelsList = new ArrayList<>();
         if (!mMobileNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
             ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel(mMobileNumberAutoCompleteTextView.getText().toString(),Utils.MOBILE_PHONE_NUMBER);
-            contactPhoneNumberModels.add(contactPhoneNumberModel);
+            contactPhoneNumberModelsList.add(contactPhoneNumberModel);
         }
         if (!mWorkNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
             ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel(mWorkNumberAutoCompleteTextView.getText().toString(),Utils.WORK_PHONE_NUMBER);
-            contactPhoneNumberModels.add(contactPhoneNumberModel);
+            contactPhoneNumberModelsList.add(contactPhoneNumberModel);
         }
         if (!mHomeNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
             ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel(mHomeNumberAutoCompleteTextView.getText().toString(),Utils.HOME_PHONE_NUMBER);
-            contactPhoneNumberModels.add(contactPhoneNumberModel);
+            contactPhoneNumberModelsList.add(contactPhoneNumberModel);
         }
         if (!mMainNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
             ContactPhoneNumberModel contactPhoneNumberModel = new ContactPhoneNumberModel(mMainNumberAutoCompleteTextView.getText().toString(),Utils.MAIN_PHONE_NUMBER);
-            contactPhoneNumberModels.add(contactPhoneNumberModel);
+            contactPhoneNumberModelsList.add(contactPhoneNumberModel);
         }
-        return contactPhoneNumberModels;
+        return contactPhoneNumberModelsList;
     }
 
     private ArrayList<ContactEmailModel> getAllEmails(){
