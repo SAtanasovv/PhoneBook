@@ -4,7 +4,7 @@
     <data>
         <variable
         name  ="user"
-        type  ="com.satanasov.phonebook.model.UserModel" />
+        type  ="com.satanasov.phonebook.model.ContactModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
 

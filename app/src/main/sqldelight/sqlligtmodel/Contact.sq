@@ -5,12 +5,8 @@ CREATE TABLE contact (
     profile_photo BLOB);
 
 GetAllContacts:
-    SELECT contact.profile_photo,contact.id,contact.first_name,contact.last_name,contactEmail.id,contactEmail.email,contactEmailType.email_type,contactNumbers.id,contactNumbers.number,contactNumberType.number_type
-    FROM contact
-    LEFT JOIN  contactEmail       ON  contact.id = contactEmail.contact_id
-    LEFT JOIN  contactNumbers     ON  contact.id = contactNumbers.contact_id
-    LEFT JOIN  contactEmailType   ON  contactEmail.email_type = contactEmailType.id
-    LEFT JOIN  contactNumberType  ON  contactNumbers.number_type = contactNumberType.id;
+    SELECT contact.id,contact.first_name,contact.last_name
+    FROM   contact;
 
 GetContactById:
     SELECT contact.id,contact.first_name,contact.last_name,contactEmail.contact_id,contactEmail.email,contactNumbers.contact_id,contactNumbers.number,contactNumberType.number_type

@@ -15,8 +15,10 @@ UpdatePhoneNumber:
     SET number = ?
     WHERE contactNumbers.id = ?;
 
-GetAllContacts:
-    SELECT * FROM contactNumbers;
+GetAllNumbers:
+    SELECT contactNumbers.id, contactNumbers.number, contactNumbers.number_type
+    FROM contactNumbers
+    WHERE contact_id =?;
 
 DeletePhoneNumber:
     DELETE FROM contactNumbers

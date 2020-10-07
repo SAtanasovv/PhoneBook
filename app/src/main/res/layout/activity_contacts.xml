@@ -8,7 +8,7 @@
     <data>
         <variable
             name  ="user"
-            type  ="com.satanasov.phonebook.model.UserModel" />
+            type  ="com.satanasov.phonebook.model.ContactModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -190,7 +190,6 @@
                     android:id              ="@+id/email_edit_text_contacts_id"
                     android:layout_width    ="match_parent"
                     android:layout_height   ="wrap_content"
-                    android:text            ='@{user.email}'
                     android:inputType       ="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 

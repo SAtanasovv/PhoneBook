@@ -17,7 +17,7 @@ UpdateEmail:
 GetAllEmails:
      SELECT contactEmail.contact_id,contactEmail.email,contactEmail.email_type
      FROM contactEmail
-     LEFT JOIN  contactEmailType ON  contactEmail.email_type = contactEmailType.id;
+     WHERE contact_id = ?;
 
 DeleteEmail:
      DELETE FROM contactEmail

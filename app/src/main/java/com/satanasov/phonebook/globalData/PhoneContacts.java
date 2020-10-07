@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
-import com.satanasov.phonebook.model.UserModel;
+import com.satanasov.phonebook.model.ContactModel;
+import com.satanasov.phonebook.model.EmailModel;
+import com.satanasov.phonebook.model.PhoneNumberModel;
 import java.io.InputStream;
 import java.util.ArrayList;
 import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE_HOME;
@@ -26,9 +28,9 @@ private static final String[] mPROJECTION =
         this.mContext = mContext;
     }
 
-    public ArrayList<UserModel> getContacts(){
+    public ArrayList<ContactModel> getContacts(){
 
-    ArrayList<UserModel> contactList = new ArrayList<>();
+    ArrayList<ContactModel> contactList = new ArrayList<>();
 
     Cursor cursor = mContext.getContentResolver().query(
             ContactsContract.Contacts.CONTENT_URI, null, null, null,
@@ -39,13 +41,13 @@ private static final String[] mPROJECTION =
                 int    hasPhoneNumber = 0;
                 String contactId;
                 String contactName;
-                String contactEmail;
                 Bitmap contactPhoto;
-                UserModel user = new UserModel();
+                ContactModel user = new ContactModel();
 
                 contactId       = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 contactName     = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 hasPhoneNumber  = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                user.setId(Long.parseLong(contactId));
                 user.setFirstName(contactName);
 
                 if(hasPhoneNumber>0){
@@ -57,29 +59,38 @@ private static final String[] mPROJECTION =
 
                         switch(phoneNumberType){
                             case TYPE_HOME:
-                                user.getHomeNumberList().add(contactPhoneNumber);
+                                user.getPhoneNumberModelList().add(new PhoneNumberModel(contactPhoneNumber,Utils.HOME_PHONE_NUMBER));
                                 break;
                             case TYPE_MOBILE:
-                                user.getMobileNumberList().add(contactPhoneNumber);
+                                user.getPhoneNumberModelList().add(new PhoneNumberModel(contactPhoneNumber,Utils.MOBILE_PHONE_NUMBER));
                                 break;
                             case TYPE_WORK:
-                                user.getWorkNumberList().add(contactPhoneNumber);
+                                user.getPhoneNumberModelList().add(new PhoneNumberModel(contactPhoneNumber,Utils.WORK_PHONE_NUMBER));
                                 break;
                             case TYPE_MAIN:
-                                user.getMainNumberList().add(contactPhoneNumber);
+                                user.getPhoneNumberModelList().add(new PhoneNumberModel(contactPhoneNumber,Utils.MAIN_PHONE_NUMBER));
                                 break;
                         }
                     }
                 }
-                 Cursor phoneEmailCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, mPROJECTION,
+
+                    Cursor phoneEmailCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
                   ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[] {contactId}, null);
+                     while(phoneEmailCursor!=null && phoneEmailCursor.moveToNext()) {
+                         int emailType = phoneEmailCursor.getInt(phoneEmailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE));
+                         String email = phoneEmailCursor.getString(phoneEmailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
 
-                if (phoneEmailCursor!=null && phoneEmailCursor.moveToNext()){
-                    contactEmail = phoneEmailCursor.getString(phoneEmailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
-                    user.setEmail(contactEmail);
-                    phoneEmailCursor.close();
-                }
+                         switch (emailType){
+                             case TYPE_HOME:
+                                 user.getEmailModelList().add(new EmailModel(email,Utils.HOME_EMAIL));
+                                 break;
+                             case TYPE_WORK:
+                                 user.getEmailModelList().add(new EmailModel(email,Utils.WORK_EMAIL));
+                                 break;
+                         }
 
+                    }
+                phoneEmailCursor.close();
                 InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(mContext.getContentResolver(),
                         ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,Long.parseLong(contactId)));
 

@@ -1,27 +1,29 @@
 package com.satanasov.phonebook.model;
 
-public class ContactEmailModel {
+import java.io.Serializable;
+
+public class EmailModel implements Serializable {
     private Long   mID;
     private Long   mContactID;
     private String mEmail;
     private Long   mEmailType;
 
 
-    public ContactEmailModel(String mEmail) {
+    public EmailModel(String mEmail) {
         this.mEmail = mEmail;
     }
 
-    public ContactEmailModel(String email, Long emailType) {
+    public EmailModel(String email, Long emailType) {
         this.mEmail     = email;
         this.mEmailType = emailType;
     }
 
-    public ContactEmailModel(Long id,String email, Long emailType) {
+    public EmailModel(Long id, String email, Long emailType) {
         this.mID        = id;
         this.mEmail     = email;
         this.mEmailType = emailType;
     }
-    public ContactEmailModel(String email, Long emailType, Long contactID, Long id) {
+    public EmailModel(String email, Long emailType, Long contactID, Long id) {
         this.mEmail     = email;
         this.mEmailType = emailType;
         this.mContactID = contactID;

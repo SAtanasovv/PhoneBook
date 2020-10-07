@@ -1,30 +1,47 @@
 package com.satanasov.phonebook.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import androidx.annotation.Nullable;
 
-public class ContactPhoneNumberModel implements Serializable {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class PhoneNumberModel implements Serializable {
     private Long    mID;
     private Long    mContactID;
     private String  mPhoneNumber;
     private Long    mPhoneNumberType;
 
 
-    public ContactPhoneNumberModel() {
+    @Override
+    public int hashCode() {
+        return Objects.hash(mPhoneNumber);
     }
 
-    public ContactPhoneNumberModel(String phoneNumber, Long phoneNumberType) {
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        PhoneNumberModel contactPhoneNumberModel = (PhoneNumberModel) obj;
+        return Objects.equals(mPhoneNumber,contactPhoneNumberModel.mPhoneNumber);
+    }
+
+    public PhoneNumberModel() {
+    }
+
+    public PhoneNumberModel(String phoneNumber, Long phoneNumberType) {
         this.mPhoneNumber     = phoneNumber;
         this.mPhoneNumberType = phoneNumberType;
     }
 
-    public ContactPhoneNumberModel(Long id,String phoneNumber, Long phoneNumberType) {
+    public PhoneNumberModel(Long id, String phoneNumber, Long phoneNumberType) {
         this.mID              = id;
         this.mPhoneNumber     = phoneNumber;
         this.mPhoneNumberType = phoneNumberType;
     }
 
-    public ContactPhoneNumberModel(String phoneNumber, Long phoneNumberType, Long contactID, Long id) {
+    public PhoneNumberModel(String phoneNumber, Long phoneNumberType, Long contactID, Long id) {
         this.mPhoneNumber     = phoneNumber;
         this.mPhoneNumberType = phoneNumberType;
         this.mContactID       = contactID;

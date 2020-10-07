@@ -17,4 +17,18 @@ public class Utils {
 
      public static Long    HOME_EMAIL    = 1L;
      public static Long    WORK_EMAIL    = 2L;
+
+     public static int     CONTACT_ID          = 0;
+     public static int     CONTACT_FIRST_NAME  = 1;
+     public static int     CONTACT_LAST_NAME   = 2;
+
+     public static int     CONTACT_NUMBER_ID   = 0;
+     public static int     CONTACT_NUMBER      = 1;
+     public static int     CONTACT_NUMBER_TYPE = 2;
+
+     public static int     CONTACT_EMAIL_ID    = 0;
+     public static int     CONTACT_EMAIL       = 1;
+     public static int     CONTACT_EMAIL_TYPE  = 2;
+
+
 }
