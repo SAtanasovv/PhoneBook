@@ -14,9 +14,11 @@ public class ContactModel implements Parcelable {
     private Bitmap     mImageResource;
     private String     mFirstName;
     private String     mLastName;
-    private ArrayList  mPhoneNumberModelsList = new ArrayList();
-    private ArrayList  mEmailModelsList = new ArrayList() ;
 
+    private boolean    mExpanded = false;
+
+    private ArrayList  mPhoneNumberModelsList = new ArrayList();
+    private ArrayList  mEmailModelsList       = new ArrayList() ;
 
     @Override
     public int hashCode() {
@@ -29,6 +31,7 @@ public class ContactModel implements Parcelable {
             return true;
         if (obj == null || getClass() != obj.getClass())
             return false;
+
         ContactModel ContactModel = (ContactModel) obj;
         return Objects.equals(mPhoneNumberModelsList,ContactModel.mPhoneNumberModelsList);
     }
@@ -49,21 +52,13 @@ public class ContactModel implements Parcelable {
         this.mPhoneNumberModelsList  = contactPhoneNumberModelsList;
     }
 
-    public ContactModel(String firstName, String lastName, Long Id, Bitmap imageResource, ArrayList<PhoneNumberModel> contactPhoneNumberModelsList, ArrayList<EmailModel> contactEmailModelsList  ) {
-        this.mFirstName               = firstName;
-        this.mLastName                = lastName;
-        this.mId                      = Id;
-        this.mImageResource           = imageResource;
-        this.mEmailModelsList         = contactEmailModelsList;
-        this.mPhoneNumberModelsList   = contactPhoneNumberModelsList;
-    }
-
     protected ContactModel(Parcel in) {
         if (in.readByte() == 0) {
             mId = null;
         } else {
             mId = in.readLong();
         }
+
         mImageResource         = in.readParcelable(Bitmap.class.getClassLoader());
         mFirstName             = in.readString();
         mLastName              = in.readString();
@@ -102,6 +97,14 @@ public class ContactModel implements Parcelable {
             return new ContactModel[size];
         }
     };
+
+    public boolean isExpanded() {
+        return mExpanded;
+    }
+
+    public void setExpanded(boolean mExpanded) {
+        this.mExpanded = mExpanded;
+    }
 
     public String getFirstName() {
         return mFirstName;

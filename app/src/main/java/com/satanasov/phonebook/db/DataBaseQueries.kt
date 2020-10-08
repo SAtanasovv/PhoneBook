@@ -17,10 +17,13 @@ class DataBaseQueries {
                      afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
                      afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
                      // add contact photo contactQueries
+
                      database.contactQueries.InsertUser(contact.firstName,contact.lastName)
                      database.storeContactIDQueries.StoreID()
+
                      for (phoneNumber in contact.phoneNumberModelList)
                          database.contactNumbersQueries.InsertPhone(phoneNumber.phoneNumber,phoneNumber.phoneNumberType)
+
                      for (email in contact.emailModelList)
                          database.contactEmailQueries.InsertEmail(email.email,email.emailType)
                  }

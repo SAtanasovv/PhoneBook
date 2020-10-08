@@ -11,7 +11,10 @@
     android:layout_width   ="match_parent"
     android:layout_height  ="wrap_content">
 
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id             ="@+id/contact_details_constraint_layout"
+        android:layout_width   ="match_parent"
+        android:layout_height  ="match_parent">
     <TextView
         android:id                          ="@+id/first_name_text_view_phone_book_row_id"
         android:layout_height               ="wrap_content"
@@ -51,14 +54,30 @@
 
     <ImageButton
         android:id                             ="@+id/contact_settings_button_phone_book_row_id"
-        android:layout_width                   ="45dp"
-        android:layout_height                  ="45dp"
+        android:layout_width                   ="35dp"
+        android:layout_height                  ="35dp"
         android:layout_marginRight             ="16dp"
         android:layout_marginEnd               ="16dp"
-        android:tint                           ="@color/design_default_color_secondary"
+        android:background                     ="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf ="parent"
         app:layout_constraintEnd_toEndOf       ="parent"
         app:layout_constraintTop_toTopOf       ="parent"
-        app:srcCompat                          ="@android:drawable/ic_menu_sort_by_size" />
+        app:srcCompat                          ="@drawable/arrow1" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id                              ="@+id/expandable_area"
+        android:visibility                      ="gone"
+        android:layout_width                    ="fill_parent"
+        android:layout_height                   ="wrap_content"
+        android:gravity                         ="center"
+        android:orientation                     ="horizontal"
+        app:layout_constraintTop_toBottomOf     ="@id/contact_details_constraint_layout"
+        app:layout_constraintBottom_toBottomOf  ="parent"
+        app:layout_constraintStart_toStartOf    ="parent"
+        app:layout_constraintEnd_toEndOf        ="parent">
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

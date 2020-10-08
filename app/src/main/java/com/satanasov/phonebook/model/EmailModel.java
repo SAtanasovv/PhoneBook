@@ -9,10 +9,6 @@ public class EmailModel implements Serializable {
     private Long   mEmailType;
 
 
-    public EmailModel(String mEmail) {
-        this.mEmail = mEmail;
-    }
-
     public EmailModel(String email, Long emailType) {
         this.mEmail     = email;
         this.mEmailType = emailType;
@@ -23,6 +19,7 @@ public class EmailModel implements Serializable {
         this.mEmail     = email;
         this.mEmailType = emailType;
     }
+
     public EmailModel(String email, Long emailType, Long contactID, Long id) {
         this.mEmail     = email;
         this.mEmailType = emailType;

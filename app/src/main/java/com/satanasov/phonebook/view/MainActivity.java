@@ -16,25 +16,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.satanasov.phonebook.adapter.MainActivityRecycleAdapter;
 import com.satanasov.phonebook.databinding.ActivityMainBinding;
-import com.satanasov.phonebook.db.DataBaseQueries;
-import com.satanasov.phonebook.globalData.PhoneContacts;
+import com.satanasov.phonebook.Helpers.ContactsData;
 import com.satanasov.phonebook.model.ContactModel;
-import com.satanasov.phonebook.model.EmailModel;
 import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.globalData.Utils;
-import com.squareup.sqldelight.db.SqlCursor;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class MainActivity extends BaseActivity {
-    private ArrayList<ContactModel>  mDataBaseList   = new ArrayList<>();
-    private ArrayList<ContactModel>  mPhoneStorageList = new ArrayList<>();
-    private ArrayList<ContactModel>  mMergedList = new ArrayList<>();
-    private PhoneContacts         mPhoneContacts  = new PhoneContacts(this);
-    private DataBaseQueries       dataBaseQueries = new DataBaseQueries();
+    private ArrayList<ContactModel>  mDataBaseContactList     = new ArrayList<>();
+    private ArrayList<ContactModel>  mPhoneStorageContactList = new ArrayList<>();
+    private ArrayList<ContactModel>  mMergedList              = new ArrayList<>();
+
+    private ContactsData          mContactsData               = new ContactsData(this);
+
     private RecyclerView          mRecyclerView;
     private RecyclerView.Adapter  mAdapter;
     private FloatingActionButton  mFloatingButton;
@@ -44,12 +42,13 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestContactPermission(); // rename
+
+        getPermissionToReadContactsFromInternalStorage();
+        mDataBaseContactList = mContactsData.getContactModelListFromDataBase();
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         //this.deleteDatabase("phoneBookContacts8.db");
         //dataBaseQueries.deleteContactById(this,5);
         //List list = dataBaseQueries.getAllContactsAsList(this);
-        convertToUserModelList(); // rename
         mergeLists();
         init();
     }
@@ -63,10 +62,11 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mRecyclerView  = mBinding.recyclerViewMainActivityId;
+        mAdapter      = new MainActivityRecycleAdapter(mMergedList,this);
+
+        mRecyclerView = mBinding.recyclerViewMainActivityId;
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter       = new MainActivityRecycleAdapter(mMergedList,this);
         mRecyclerView.setAdapter(mAdapter);
 
         Toolbar toolbar  = findViewById(R.id.main_toolbar);
@@ -79,8 +79,9 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void requestContactPermission() {
+    public void getPermissionToReadContactsFromInternalStorage() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.permission_title);
@@ -89,67 +90,34 @@ public class MainActivity extends BaseActivity {
                 builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[] {android.Manifest.permission.READ_CONTACTS}
-                                , mPERMISSIONS_REQUEST_READ_CONTACTS);
+                        requestPermissions(new String[] {android.Manifest.permission.READ_CONTACTS}, mPERMISSIONS_REQUEST_READ_CONTACTS);
                     }
                 });
                 builder.show();
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.READ_CONTACTS},
-                        mPERMISSIONS_REQUEST_READ_CONTACTS);
             }
-        } else
-           mPhoneStorageList.addAll(mPhoneContacts.getContacts());
+            else
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, mPERMISSIONS_REQUEST_READ_CONTACTS);
+        }
+        else
+            mPhoneStorageContactList.addAll(mContactsData.getContactsModelListFromPhoneStorage());
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (requestCode == mPERMISSIONS_REQUEST_READ_CONTACTS) {
+
             if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mPhoneStorageList.addAll(mPhoneContacts.getContacts());
+                mPhoneStorageContactList.addAll(mContactsData.getContactsModelListFromPhoneStorage());
                 Toast.makeText(this, R.string.permission_success, Toast.LENGTH_LONG).show();
-            } else
+            }
+            else
                 Toast.makeText(this, R.string.permission_unsuccessful, Toast.LENGTH_LONG).show();
         }
     }
 
-    private void convertToUserModelList(){
-        ContactModel user; // delete UserModel and start using ContactModel
-        PhoneNumberModel phoneNumberModel;
-        EmailModel contactEmailModel;
-
-        SqlCursor cursorContact = dataBaseQueries.getContacts(this);
-
-        while(cursorContact.next()) {
-           ArrayList<PhoneNumberModel>  phoneNumberList = new ArrayList<>();
-           ArrayList<EmailModel>        emailList       = new ArrayList<>();
-
-           user = new ContactModel(cursorContact.getLong(Utils.CONTACT_ID),cursorContact.getString(Utils.CONTACT_FIRST_NAME),cursorContact.getString(Utils.CONTACT_LAST_NAME));
-           SqlCursor cursorNumbers = dataBaseQueries.getContactPhoneNumbers(this, user.getId());
-
-           while (cursorNumbers.next()){
-               phoneNumberModel = new PhoneNumberModel(cursorNumbers.getLong(Utils.CONTACT_NUMBER_ID),cursorNumbers.getString(Utils.CONTACT_NUMBER),cursorNumbers.getLong(Utils.CONTACT_NUMBER_TYPE));
-               phoneNumberList.add(phoneNumberModel);
-           }
-
-           user.setPhoneNumberModelList(phoneNumberList);
-
-           SqlCursor cursorEmails = dataBaseQueries.getContactEmails(this,user.getId());
-
-           while (cursorEmails.next()){
-               contactEmailModel = new EmailModel(cursorEmails.getLong(Utils.CONTACT_EMAIL_ID),cursorEmails.getString(Utils.CONTACT_EMAIL),cursorEmails.getLong(Utils.CONTACT_EMAIL_TYPE));
-               emailList.add(contactEmailModel);
-           }
-
-           user.setEmailModelList(emailList);
-           mDataBaseList.add(user);
-       }
-    }
-
     private void mergeLists(){
-        for (ContactModel dataBaseUser : mDataBaseList){
-            for(ContactModel phoneBookUser : mPhoneStorageList){
+        for (ContactModel dataBaseUser : mDataBaseContactList){
+            for(ContactModel phoneBookUser : mPhoneStorageContactList){
                 for(PhoneNumberModel dataBaseNumber : dataBaseUser.getPhoneNumberModelList()) {
                     for (PhoneNumberModel phoneBookNumber : phoneBookUser.getPhoneNumberModelList()) {
                         if(dataBaseNumber.getPhoneNumber().equals(phoneBookNumber.getPhoneNumber())){
@@ -164,8 +132,8 @@ public class MainActivity extends BaseActivity {
             }
         }
         Set<ContactModel> userModelsSet = new LinkedHashSet<>();
-        userModelsSet.addAll(mDataBaseList);
-        userModelsSet.addAll(mPhoneStorageList);
+        userModelsSet.addAll(mDataBaseContactList);
+        userModelsSet.addAll(mPhoneStorageContactList);
         mMergedList = new ArrayList<>(userModelsSet);
     }
 }
