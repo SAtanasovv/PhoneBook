@@ -16,6 +16,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionManager;
+
+import com.google.android.material.card.MaterialCardView;
 import com.satanasov.phonebook.databinding.PhoneBookRowBinding;
 import com.satanasov.phonebook.databinding.PhoneBookRowChildBinding;
 import com.satanasov.phonebook.globalData.Utils;
@@ -40,24 +43,36 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         PhoneBookRowBinding phoneBookRowBinding = PhoneBookRowBinding.inflate(layoutInflater,parent,false);
+       // PhoneBookRowChildBinding phoneBookRowChildBinding = PhoneBookRowChildBinding.inflate(layoutInflater,parent,false);
         return  new MyViewHolder(phoneBookRowBinding,mContext,mDummyUserList);
     }
+
+    /*
+    https://stackoverflow.com/questions/49178019/dynamically-add-table-and-rows-in-cardviews-contained-in-recyclerview
+    https://stackoverflow.com/questions/26245139/how-to-create-recyclerview-with-multiple-view-type
+    https://stackoverflow.com/questions/27128425/add-multiple-custom-views-to-layout-programmatically
+
+    */
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         ContactModel user  = mDummyUserList.get(position);
         holder.mContactImage.setImageBitmap(user.getImageId());
+        for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){
+            View rowView = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandableLayout, false);
+            TextView text = rowView.findViewById(R.id.text_field_text_view);
+            text.setText(phoneNumber.getPhoneNumber());
+            holder.mExpandableLayout.addView(text,position);
+        }
         holder.bind(user);
-        holder.mOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ContactModel contact = mDummyUserList.get(position);
-                boolean expanded = contact.isExpanded();
-                contact.setExpanded(!expanded);
-                holder.mExpandableLayout.setVisibility(expanded ? View.VISIBLE : View.GONE);
-                notifyItemChanged(position);
-            }
-        });
+//        holder.mExpandButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                notifyItemChanged(position);
+//            }
+//        });
+
+
     }
 
     @Override
@@ -69,32 +84,50 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
  class MyViewHolder extends RecyclerView.ViewHolder {
 
+    public MaterialCardView          mContactCardView;
+    public  LinearLayout             mExpandableLayout;
+    public  ImageView                mContactImage;
+    public  ImageButton              mExpandButton;
+    private ArrayList<ContactModel>  mDummyUserList;
+    private Context                  mContext;
+    private PhoneBookRowBinding      mBinding;
+    private PhoneBookRowChildBinding mChildBinding;
 
-    public  LinearLayout            mExpandableLayout;
-    public  ImageView               mContactImage;
-    public  ImageButton             mOptions;
-    private ArrayList<ContactModel> mDummyUserList;
-    private Context                 mContext;
-    private PhoneBookRowBinding     mBinding;
+    public TextView                mTextType;
+    public TextView                mText;
 
     public MyViewHolder(PhoneBookRowBinding binding, Context context, final ArrayList<ContactModel> mDummyUserList) {
         super(binding.getRoot());
 
         this.mBinding       = binding;
+        //this.mChildBinding  = childBinding;
         this.mContext       = context;
         this.mDummyUserList = mDummyUserList;
 
-        mOptions            = binding.contactSettingsButtonPhoneBookRowId;
+        mContactCardView    = binding.parentCardView;
+        mExpandButton       = binding.contactSettingsButtonPhoneBookRowId;
         mExpandableLayout   = binding.expandableArea;
         mContactImage       = binding.imageViewPhoneBookRowId;
+        //mText               = childBinding.textFieldTextView;
+        //mTextType           = childBinding.typeFieldTextView;
 
-//        mOptions.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//            }
-//        });
+        mExpandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContactModel contact = mDummyUserList.get(getAdapterPosition());
+                contact.setExpanded(!contact.isExpanded());
+
+                if (contact.isExpanded()){
+                    TransitionManager.beginDelayedTransition(mContactCardView);
+                    mExpandableLayout.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    TransitionManager.beginDelayedTransition(mContactCardView);
+                    mExpandableLayout.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     public void showPopUp(View v) {
