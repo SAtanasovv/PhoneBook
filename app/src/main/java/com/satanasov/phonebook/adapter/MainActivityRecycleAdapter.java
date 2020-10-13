@@ -6,6 +6,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,8 +33,12 @@ import java.util.ArrayList;
 
 public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
-    private ArrayList<ContactModel>  mDummyUserList;
-    private Context                  mContext;
+    private ArrayList<ContactModel>         mDummyUserList;
+    private Context                         mContext;
+    private static final int                      mWORK_NUMBER = 1;
+    private static final int                      mMAIN_NUMBER = 2;
+    private static final int                      mHOME_NUMBER = 3;
+    private static final int                      mMOBILE_NUMBER = 4;
 
     public MainActivityRecycleAdapter(ArrayList<ContactModel> mDummyUserList, Context context){
         this.mDummyUserList  = mDummyUserList;
@@ -43,7 +50,6 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         PhoneBookRowBinding phoneBookRowBinding = PhoneBookRowBinding.inflate(layoutInflater,parent,false);
-       // PhoneBookRowChildBinding phoneBookRowChildBinding = PhoneBookRowChildBinding.inflate(layoutInflater,parent,false);
         return  new MyViewHolder(phoneBookRowBinding,mContext,mDummyUserList);
     }
 
@@ -51,6 +57,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     https://stackoverflow.com/questions/49178019/dynamically-add-table-and-rows-in-cardviews-contained-in-recyclerview
     https://stackoverflow.com/questions/26245139/how-to-create-recyclerview-with-multiple-view-type
     https://stackoverflow.com/questions/27128425/add-multiple-custom-views-to-layout-programmatically
+    https://stackoverflow.com/questions/34552070/dynamically-adding-views-in-a-recyclerview-only-to-current-item/42482524#42482524
 
     */
 
@@ -58,20 +65,36 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         ContactModel user  = mDummyUserList.get(position);
         holder.mContactImage.setImageBitmap(user.getImageId());
+
         for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){
-            View rowView = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandableLayout, false);
-            TextView text = rowView.findViewById(R.id.text_field_text_view);
+            View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandableLayout, false);
+            TextView text     = rowView.findViewById(R.id.text_field_text_view);
+            TextView textType = rowView.findViewById(R.id.type_field_text_view);
             text.setText(phoneNumber.getPhoneNumber());
-            holder.mExpandableLayout.addView(text,position);
+            switch (phoneNumber.getPhoneNumberType().intValue()){
+                case mHOME_NUMBER:
+                    textType.setText(R.string.type_home);
+                break;
+
+                case mWORK_NUMBER:
+                    textType.setText(R.string.type_work);
+                break;
+
+                case mMAIN_NUMBER:
+                    textType.setText(R.string.type_main);
+                break;
+
+                case mMOBILE_NUMBER:
+                    textType.setText(R.string.type_mobile);
+                break;
+
+            }
+            holder.setIsRecyclable(false);
+            holder.mExpandableLayout.addView(rowView);
+
+
         }
         holder.bind(user);
-//        holder.mExpandButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                notifyItemChanged(position);
-//            }
-//        });
-
 
     }
 
@@ -84,23 +107,18 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
  class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public MaterialCardView          mContactCardView;
+    public ConstraintLayout          mContactCardView;
     public  LinearLayout             mExpandableLayout;
     public  ImageView                mContactImage;
     public  ImageButton              mExpandButton;
     private ArrayList<ContactModel>  mDummyUserList;
     private Context                  mContext;
     private PhoneBookRowBinding      mBinding;
-    private PhoneBookRowChildBinding mChildBinding;
-
-    public TextView                mTextType;
-    public TextView                mText;
 
     public MyViewHolder(PhoneBookRowBinding binding, Context context, final ArrayList<ContactModel> mDummyUserList) {
         super(binding.getRoot());
 
         this.mBinding       = binding;
-        //this.mChildBinding  = childBinding;
         this.mContext       = context;
         this.mDummyUserList = mDummyUserList;
 
@@ -108,8 +126,6 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         mExpandButton       = binding.contactSettingsButtonPhoneBookRowId;
         mExpandableLayout   = binding.expandableArea;
         mContactImage       = binding.imageViewPhoneBookRowId;
-        //mText               = childBinding.textFieldTextView;
-        //mTextType           = childBinding.typeFieldTextView;
 
         mExpandButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,11 +136,13 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
                 if (contact.isExpanded()){
                     TransitionManager.beginDelayedTransition(mContactCardView);
                     mExpandableLayout.setVisibility(View.VISIBLE);
+                    mExpandButton.setRotation(180f);
                 }
                 else
                 {
                     TransitionManager.beginDelayedTransition(mContactCardView);
                     mExpandableLayout.setVisibility(View.GONE);
+                    mExpandButton.setRotation(0f);
                 }
             }
         });

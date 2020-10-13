@@ -134,6 +134,7 @@ public class MainActivity extends BaseActivity {
         Set<ContactModel> userModelsSet = new LinkedHashSet<>();
         userModelsSet.addAll(mDataBaseContactList);
         userModelsSet.addAll(mPhoneStorageContactList);
+        userModelsSet.addAll(mPhoneStorageContactList);
         mMergedList = new ArrayList<>(userModelsSet);
     }
 }

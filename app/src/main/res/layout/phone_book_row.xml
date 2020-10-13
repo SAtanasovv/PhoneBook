@@ -6,7 +6,7 @@
         name  ="user"
         type  ="com.satanasov.phonebook.model.ContactModel" />
     </data>
-<com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
 
     android:id="@+id/parentCardView"
     android:layout_width   ="match_parent"
@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id             ="@+id/contact_details_constraint_layout"
         android:layout_width   ="match_parent"
-        android:layout_height  ="match_parent">
+        android:layout_height  ="wrap_content">
     <TextView
         android:id                          ="@+id/first_name_text_view_phone_book_row_id"
         android:layout_height               ="wrap_content"
@@ -63,22 +63,46 @@
         app:layout_constraintBottom_toBottomOf ="parent"
         app:layout_constraintEnd_toEndOf       ="parent"
         app:layout_constraintTop_toTopOf       ="parent"
-        app:srcCompat                          ="@drawable/arrow1" />
+        app:srcCompat                          ="@drawable/ic_down_arrow" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <LinearLayout
-        android:id                              ="@+id/expandable_area"
-        android:visibility                      ="gone"
-        android:layout_width                    ="fill_parent"
-        android:layout_height                   ="wrap_content"
-        android:gravity                         ="center"
-        android:orientation                     ="horizontal"
-        app:layout_constraintTop_toBottomOf     ="@id/contact_details_constraint_layout"
-        app:layout_constraintBottom_toBottomOf  ="parent"
-        app:layout_constraintStart_toStartOf    ="parent"
-        app:layout_constraintEnd_toEndOf        ="parent">
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+        <LinearLayout
+            android:id                              ="@+id/expandable_area"
+            android:visibility                      ="gone"
+            android:layout_width                    ="fill_parent"
+            android:layout_height                   ="wrap_content"
+            android:gravity                         ="top"
+            android:orientation                     ="vertical"
+            app:layout_constraintTop_toBottomOf     ="@id/contact_details_constraint_layout"
+            app:layout_constraintBottom_toBottomOf  ="@id/parentCardView"
+            app:layout_constraintStart_toStartOf    ="parent"
+            app:layout_constraintEnd_toEndOf        ="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom">
+                <Button
+                    android:id="@+id/view_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/edit_number"
+                    app:layout_constraintBottom_toBottomOf="parent">
+                </Button>
+
+                <Button
+                    android:id="@+id/edit_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/view_number"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+                </Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
