@@ -1,5 +1,4 @@
 package com.satanasov.phonebook.view;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;

@@ -1,5 +1,4 @@
 package com.satanasov.phonebook.view;
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,7 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.satanasov.phonebook.databinding.ActivityContactsBinding;
@@ -29,24 +27,14 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     private ImageView                     mContactImage;
     private TextInputEditText             mFirstNameEditText;
     private TextInputEditText             mLastNameEditText;
-    private MaterialAutoCompleteTextView  mMobileNumberAutoCompleteTextView;
-    private MaterialAutoCompleteTextView  mWorkNumberAutoCompleteTextView;
-    private MaterialAutoCompleteTextView  mHomeNumberAutoCompleteTextView;
-    private MaterialAutoCompleteTextView  mMainNumberAutoCompleteTextView;
-    private TextInputEditText             mEmailEditText;
 
     private TextInputLayout    mFirstNameTextInputLayout;
     private TextInputLayout    mLastNameTextInputLayout;
-    private TextInputLayout    mMobileNumberTextInputLayout;
-    private TextInputLayout    mHomeNumberTextInputLayout;
-    private TextInputLayout    mMainNumberTextInputLayout;
-    private TextInputLayout    mWorkNumberTextInputLayout;
-    private TextInputLayout    mEmailTextInputLayout;
 
     private Button             mSaveBtn;
     private Button             mCancelBtn;
 
-    private ContactModel       mUser;
+    private ContactModel       mContact;
     private ChangeOptions      mOption;
 
     @Override
@@ -93,20 +81,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         mContactImage                      = findViewById(R.id.contact_image_view);
         mFirstNameEditText                 = findViewById(R.id.first_name_edit_text_contacts_id);
         mLastNameEditText                  = findViewById(R.id.last_name_edit_text_contacts_id);
-        mEmailEditText                     = findViewById(R.id.email_edit_text_contacts_id);
-
-        mMobileNumberAutoCompleteTextView  = findViewById(R.id.mobile_number_edit_text_contacts_id);
-        mWorkNumberAutoCompleteTextView    = findViewById(R.id.work_number_edit_text_contacts_id);
-        mHomeNumberAutoCompleteTextView    = findViewById(R.id.home_number_edit_text_contacts_id);
-        mMainNumberAutoCompleteTextView    = findViewById(R.id.main_number_edit_text_contacts_id);
 
         mFirstNameTextInputLayout          = findViewById(R.id.input_layout_first_name_contacts_id);
         mLastNameTextInputLayout           = findViewById(R.id.input_layout_last_name_contacts_id);
-        mMobileNumberTextInputLayout       = findViewById(R.id.input_layout_mobile_number_contacts_id);
-        mWorkNumberTextInputLayout         = findViewById(R.id.input_layout_work_number_contacts_id);
-        mHomeNumberTextInputLayout         = findViewById(R.id.input_layout_home_number_contacts_id);
-        mMainNumberTextInputLayout         = findViewById(R.id.input_layout_main_number_contacts_id);
-        mEmailTextInputLayout              = findViewById(R.id.input_layout_email_contacts_id);
 
         mSaveBtn                           = findViewById(R.id.save_button_contacts_id);
         mCancelBtn                         = findViewById(R.id.cancel_button_contacts_id);
@@ -123,13 +100,11 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
         mFirstNameEditText.addTextChangedListener(watcher);
         mLastNameEditText.addTextChangedListener(watcher);
-        mMobileNumberAutoCompleteTextView.addTextChangedListener(watcher);
-        mEmailEditText.addTextChangedListener(watcher);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null){
             mOption = (ChangeOptions) bundle.getSerializable(Utils.INTENT_EXTRA_OPTION);
-            mUser   = bundle.getParcelable(Utils.INTENT_USER_DETAILS);
+            mContact   = bundle.getParcelable(Utils.INTENT_USER_DETAILS);
             changeOptions(mOption);
         }
     }
@@ -143,16 +118,16 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             break;
 
             case EDIT_CONTACT:
-                mContactsBinding.setUser(mUser);
-                mContactImage.setImageBitmap(mUser.getImageId());
+                mContactsBinding.setUser(mContact);
+                mContactImage.setImageBitmap(mContact.getImageId());
                 getSupportActionBar().setTitle(R.string.edit_contact);
 
                 setDifferentPhoneNumberTypes();
             break;
 
             case VIEW_CONTACT:
-                mContactsBinding.setUser(mUser);
-                mContactImage.setImageBitmap(mUser.getImageId());
+                mContactsBinding.setUser(mContact);
+                mContactImage.setImageBitmap(mContact.getImageId());
                 mSaveBtn.setVisibility(View.GONE);
                 getSupportActionBar().setTitle(R.string.view_contact);
 
@@ -164,27 +139,11 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void setDifferentPhoneNumberTypes(){
-//        if (!mUser.getMainNumberList().isEmpty()){
-//            mMainNumberAutoCompleteTextView.setText(mUser.getMainNumberList().get(0));
-//            mMainNumberAutoCompleteTextView.setAdapter(new ArrayAdapter<>(this,R.layout.dropdown_phone_number_menu_item,mUser.getMainNumberList()));
-//        }
-//        if (!mUser.getMobileNumberList().isEmpty()){
-//            mMobileNumberAutoCompleteTextView.setText(mUser.getMobileNumberList().get(0));
-//            mMobileNumberAutoCompleteTextView.setAdapter(new ArrayAdapter<>(this,R.layout.dropdown_phone_number_menu_item,mUser.getMobileNumberList()));
-//        }
-//        if (!mUser.getHomeNumberList().isEmpty()){
-//            mHomeNumberAutoCompleteTextView.setText(mUser.getHomeNumberList().get(0));
-//            mHomeNumberAutoCompleteTextView.setAdapter(new ArrayAdapter<>(this,R.layout.dropdown_phone_number_menu_item,mUser.getHomeNumberList()));
-//        }
-//        if (!mUser.getWorkNumberList().isEmpty()){
-//            mWorkNumberAutoCompleteTextView.setText(mUser.getWorkNumberList().get(0));
-//            mWorkNumberAutoCompleteTextView.setAdapter(new ArrayAdapter<>(this,R.layout.dropdown_phone_number_menu_item,mUser.getWorkNumberList()));
-//        }
+        // Set existing contacts for view/edit
     }
 
     private void checkIfFieldsAreEmpty(){
-        if (mFirstNameEditText.getText().toString().equalsIgnoreCase(" ") ||
-            mEmailEditText.getText().toString().equalsIgnoreCase(" ")){
+        if (mFirstNameEditText.getText().toString().equalsIgnoreCase(" ")){
 
             mSaveBtn.setEnabled(false);
         }
@@ -208,74 +167,30 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         }
         else
             mLastNameTextInputLayout.setError(null);
-
-        if (editable.length()>mMobileNumberTextInputLayout.getCounterMaxLength()  &&
-            mMobileNumberAutoCompleteTextView.hasFocus()){
-            mMobileNumberTextInputLayout.setError( getString(R.string.input_text_error_message)  +
-            mMobileNumberTextInputLayout.getCounterMaxLength());
-        }
-        else
-            mMobileNumberTextInputLayout.setError(null);
-
-        if (editable.length()>mEmailTextInputLayout.getCounterMaxLength()        &&
-            mEmailTextInputLayout.hasFocus()){
-            mEmailTextInputLayout.setError( getString(R.string.input_text_error_message)        +
-            mEmailTextInputLayout.getCounterMaxLength());
-        }
-        else
-            mEmailTextInputLayout.setError(null);
     }
 
     private void hideEmptyFields(){
-        if (mUser.getFirstName() == null || mUser.getFirstName().equalsIgnoreCase(" "))
+        if (mContact.getFirstName() == null || mContact.getFirstName().equalsIgnoreCase(" "))
             mFirstNameTextInputLayout.setVisibility(View.GONE);
 
-        if (mUser.getLastName() == null || mUser.getLastName().equalsIgnoreCase(" "))
+        if (mContact.getLastName() == null || mContact.getLastName().equalsIgnoreCase(" "))
             mLastNameTextInputLayout.setVisibility(View.GONE);
     }
 
     private void disableFieldsWhenViewing(){
         mFirstNameEditText.setEnabled(false);
         mLastNameEditText.setEnabled(false);
-        mMobileNumberAutoCompleteTextView.setEnabled(false);
-        mWorkNumberAutoCompleteTextView.setEnabled(false);
-        mHomeNumberAutoCompleteTextView.setEnabled(false);
-        mMainNumberAutoCompleteTextView.setEnabled(false);
-        mEmailEditText.setEnabled(false);
     }
 
     private ArrayList<PhoneNumberModel> getAllPhoneNumbers(){
         ArrayList<PhoneNumberModel> contactPhoneNumberModelsList = new ArrayList<>();
-        if (!mMobileNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-
-            PhoneNumberModel contactPhoneNumberModel = new PhoneNumberModel(mMobileNumberAutoCompleteTextView.getText().toString(),Utils.MOBILE_PHONE_NUMBER);
-            contactPhoneNumberModelsList.add(contactPhoneNumberModel);
-        }
-        if (!mWorkNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-
-            PhoneNumberModel contactPhoneNumberModel = new PhoneNumberModel(mWorkNumberAutoCompleteTextView.getText().toString(),Utils.WORK_PHONE_NUMBER);
-            contactPhoneNumberModelsList.add(contactPhoneNumberModel);
-        }
-        if (!mHomeNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-
-            PhoneNumberModel contactPhoneNumberModel = new PhoneNumberModel(mHomeNumberAutoCompleteTextView.getText().toString(),Utils.HOME_PHONE_NUMBER);
-            contactPhoneNumberModelsList.add(contactPhoneNumberModel);
-        }
-        if (!mMainNumberAutoCompleteTextView.getText().toString().equalsIgnoreCase("")){
-
-            PhoneNumberModel contactPhoneNumberModel = new PhoneNumberModel(mMainNumberAutoCompleteTextView.getText().toString(),Utils.MAIN_PHONE_NUMBER);
-            contactPhoneNumberModelsList.add(contactPhoneNumberModel);
-        }
+       // Get new contact phoneNumbers
         return contactPhoneNumberModelsList;
     }
 
     private ArrayList<EmailModel> getAllEmails(){
         ArrayList<EmailModel> contactEmailModelList = new ArrayList<>();
-        if(!mEmailEditText.getText().toString().equalsIgnoreCase("")){
-
-            EmailModel contactEmailModel = new EmailModel(mEmailEditText.getText().toString(),Utils.HOME_EMAIL);
-            contactEmailModelList.add(contactEmailModel);
-        }
+        // Get new contact emails
         return contactEmailModelList;
     }
 

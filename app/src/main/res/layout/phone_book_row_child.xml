@@ -5,37 +5,53 @@
             name  ="user"
             type  ="com.satanasov.phonebook.model.ContactModel" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/child_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-    <TextView
-        android:id                             ="@+id/type_field_text_view"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android           ="http://schemas.android.com/apk/res/android"
+    xmlns:app               ="http://schemas.android.com/apk/res-auto"
+
+    android:id              ="@+id/child_layout"
+    android:layout_width    ="match_parent"
+    android:layout_height   ="wrap_content">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id                             ="@+id/type_field_layout"
         android:layout_height                  ="wrap_content"
-        android:layout_width                   ="60dp"
+        android:layout_width                   ="wrap_content"
         android:layout_marginTop               ="16dp"
-        android:layout_marginBottom            ="16dp"
-        android:layout_marginLeft              ="16dp"
-        app:layout_constraintEnd_toStartOf     ="@id/text_field_text_view"
+        android:layout_marginStart             ="16dp"
+        app:layout_constraintEnd_toStartOf     ="@id/text_field_layout"
         app:layout_constraintBottom_toBottomOf ="parent"
         app:layout_constraintTop_toTopOf       ="parent"
-        app:layout_constraintStart_toStartOf   ="parent" />
+        app:layout_constraintStart_toStartOf   ="parent"
+        style                                  ="@style/Rounded">
 
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
+        android:id                             ="@+id/type_field_text_view"
+        android:layout_height                  ="wrap_content"
+        android:layout_width                   ="wrap_content"
+        android:textAlignment                  ="center"
+        android:editable                       ="false"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id                             ="@+id/text_field_layout"
+        android:layout_height                  ="wrap_content"
+        android:layout_width                   ="wrap_content"
+        android:layout_marginTop               ="16dp"
+        android:layout_marginStart             ="8dp"
+        android:layout_marginEnd               ="16dp"
+        app:layout_constraintBottom_toBottomOf ="parent"
+        app:layout_constraintStart_toEndOf     ="@id/type_field_layout"
+        app:layout_constraintEnd_toEndOf       ="parent"
+        app:layout_constraintTop_toTopOf       ="parent"
+        style                                  ="@style/Rounded">
+
+    <com.google.android.material.textfield.TextInputEditText
         android:id                             ="@+id/text_field_text_view"
         android:layout_height                  ="wrap_content"
-        android:layout_width                   ="0dp"
-        android:layout_marginTop               ="16dp"
-        android:layout_marginLeft              ="16dp"
-        android:layout_marginRight             ="16dp"
-        android:layout_marginBottom            ="16dp"
-        app:layout_constraintBottom_toBottomOf ="parent"
-        app:layout_constraintStart_toEndOf     ="@id/type_field_text_view"
-        app:layout_constraintEnd_toEndOf       ="parent"
-        app:layout_constraintTop_toTopOf       ="parent" />
-
+        android:layout_width                   ="wrap_content"
+        android:editable                       ="false"/>
+    </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

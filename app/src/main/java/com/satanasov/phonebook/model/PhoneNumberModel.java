@@ -27,9 +27,6 @@ public class PhoneNumberModel implements Serializable {
         return Objects.equals(mPhoneNumber,contactPhoneNumberModel.mPhoneNumber);
     }
 
-    public PhoneNumberModel() {
-    }
-
     public PhoneNumberModel(String phoneNumber, Long phoneNumberType) {
         this.mPhoneNumber     = phoneNumber;
         this.mPhoneNumberType = phoneNumberType;
