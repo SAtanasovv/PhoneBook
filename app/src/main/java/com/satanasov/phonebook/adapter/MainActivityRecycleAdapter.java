@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
+import com.satanasov.phonebook.Helpers.ContactsData;
 import com.satanasov.phonebook.databinding.PhoneBookRowBinding;
 import com.satanasov.phonebook.globalData.Utils;
 import com.satanasov.phonebook.model.ContactModel;
@@ -25,11 +26,6 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
     private ArrayList<ContactModel>  mDummyUserList;
     private Context                  mContext;
-
-    private static final int         mWORK_NUMBER   = 1;
-    private static final int         mMAIN_NUMBER   = 2;
-    private static final int         mHOME_NUMBER   = 3;
-    private static final int         mMOBILE_NUMBER = 4;
 
     public MainActivityRecycleAdapter(ArrayList<ContactModel> mDummyUserList, Context context){
         this.mDummyUserList  = mDummyUserList;
@@ -46,32 +42,18 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        ContactModel user  = mDummyUserList.get(position);
+        ContactModel user          = mDummyUserList.get(position);
+        ContactsData mContactsData = new ContactsData(mContext);
+
         holder.mContactImage.setImageBitmap(user.getImageId());
 
         for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){
             View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandableLayout, false);
             TextView text     = rowView.findViewById(R.id.text_field_text_view);
             TextView textType = rowView.findViewById(R.id.type_field_text_view);
+
             text.setText(phoneNumber.getPhoneNumber());
-
-            switch (phoneNumber.getPhoneNumberType().intValue()){
-                case mHOME_NUMBER:
-                    textType.setText(R.string.type_home);
-                break;
-
-                case mWORK_NUMBER:
-                    textType.setText(R.string.type_work);
-                break;
-
-                case mMAIN_NUMBER:
-                    textType.setText(R.string.type_main);
-                break;
-
-                case mMOBILE_NUMBER:
-                    textType.setText(R.string.type_mobile);
-                break;
-            }
+            textType.setText( mContactsData.getPhoneNumberTypeText(phoneNumber.getPhoneNumberType()));
             holder.mExpandableLayout.addView(rowView);
         }
         holder.bind(user);
@@ -80,13 +62,14 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     @Override
     public void onViewRecycled(@NonNull MyViewHolder holder) {
         super.onViewRecycled(holder);
-        holder.mExpandableLayout.removeAllViews();
 
+        holder.mExpandableLayout.removeAllViews();
         ContactModel contact = mDummyUserList.get(holder.getAdapterPosition());
-       if (contact.isExpanded()){
+
+        if (contact.isExpanded()){
         contact.setExpanded(false);
         holder.mHiddenLayout.setVisibility(View.GONE);
-        holder.mExpandButton.setRotation(0f);
+        holder.mExpandButton.setRotation(Utils.ROTATE_TO_0_DEGREES);
        }
     }
 
@@ -98,7 +81,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
  class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public  ConstraintLayout         mContactView;
+    public  LinearLayout             mContactView;
     public  ConstraintLayout         mHiddenLayout;
     public  LinearLayout             mExpandableLayout;
 
@@ -111,9 +94,6 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     private Context                  mContext;
     private PhoneBookRowBinding      mBinding;
 
-    private static final float ROTATE_TO_180_DEGREES = 180f;
-    private static final float ROTATE_TO_0_DEGREES = 0f;
-
     public MyViewHolder(PhoneBookRowBinding binding, Context context, final ArrayList<ContactModel> mDummyUserList) {
         super(binding.getRoot());
 
@@ -122,7 +102,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         this.mDummyUserList = mDummyUserList;
 
         mContactView      = binding.parentConstraintLayout;
-        mExpandableLayout = binding.expandableArea;
+        mExpandableLayout = binding.expandableAreaPhoneNumbers;
         mHiddenLayout     = binding.hiddenLayout;
 
         mContactImage     = binding.imageViewPhoneBookRowId;
@@ -139,11 +119,11 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
                 if (contact.isExpanded()){
                     TransitionManager.beginDelayedTransition(mContactView);
                     mHiddenLayout.setVisibility(View.VISIBLE);
-                    mExpandButton.setRotation(ROTATE_TO_180_DEGREES);
+                    mExpandButton.setRotation(Utils.ROTATE_TO_180_DEGREES);
                 }
                 else {
                     mHiddenLayout.setVisibility(View.GONE);
-                    mExpandButton.setRotation(ROTATE_TO_0_DEGREES);
+                    mExpandButton.setRotation(Utils.ROTATE_TO_0_DEGREES);
                 }
             }
         });

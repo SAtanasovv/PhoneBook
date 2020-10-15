@@ -1,11 +1,11 @@
 package com.satanasov.phonebook.Helpers;
-
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
+import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.Utils;
 import com.satanasov.phonebook.model.ContactModel;
@@ -162,4 +162,24 @@ public class ContactsData {
         }
         return mPhoneStorageContactList;
     }
-}
+
+    public String getPhoneNumberTypeText(Long typeID){
+        String numberType = "";
+
+        if(typeID.equals(Utils.HOME_PHONE_NUMBER))
+            numberType = (mContext.getString(R.string.type_home));
+
+        else if (typeID.equals(Utils.WORK_PHONE_NUMBER))
+            numberType = (mContext.getString(R.string.type_work)) ;
+
+        else if (typeID.equals(Utils.MOBILE_PHONE_NUMBER))
+            numberType = (mContext.getString(R.string.type_mobile));
+
+        else if (typeID.equals(Utils.MAIN_PHONE_NUMBER))
+            numberType = (mContext.getString(R.string.type_main));
+
+
+        return numberType;
+        }
+    }
+

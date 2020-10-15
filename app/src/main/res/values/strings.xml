@@ -29,4 +29,6 @@
     <string name="delete_failed">Delete Failed </string>
     <string name="update_success">Update Successful </string>
     <string name="update_failed">Update Failed </string>
+    <string name="phone_numbers">Phone Numbers: </string>
+    <string name="email">Emails: </string>
 </resources>

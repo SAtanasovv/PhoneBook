@@ -2,8 +2,8 @@
 
 
 <layout xmlns:android  ="http://schemas.android.com/apk/res/android"
-    xmlns:app          ="http://schemas.android.com/apk/res-auto"
-    xmlns:tools        ="http://schemas.android.com/tools">
+        xmlns:app      ="http://schemas.android.com/apk/res-auto"
+        xmlns:tools    ="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -25,15 +25,25 @@
             app:layout_constraintTop_toTopOf      ="parent"
             app:layout_constraintStart_toStartOf  ="parent" />
 
-        <ImageView
-            android:id                              ="@+id/contact_image_view"
-            android:layout_width                    ="150dp"
-            android:layout_height                   ="80dp"
-            android:layout_marginTop                ="8dp"
+        <androidx.cardview.widget.CardView
+            android:layout_width                    ="100dp"
+            android:layout_height                   ="100dp"
+            android:innerRadius                     ="0dp"
+            android:elevation                       ="10dp"
+            android:shape                           ="ring"
+            android:layout_centerHorizontal         ="true"
+            app:cardCornerRadius                    ="50dp"
             app:layout_constraintBottom_toTopOf     ="@id/center_constrain_layout"
             app:layout_constraintEnd_toEndOf        ="parent"
             app:layout_constraintStart_toStartOf    ="parent"
-            app:layout_constraintTop_toBottomOf     ="@id/contacts_toolbar" />
+            app:layout_constraintTop_toBottomOf     ="@id/contacts_toolbar">
+
+            <ImageView
+                 android:id             ="@+id/contact_image_view"
+                 android:layout_width   ="100dp"
+                 android:layout_height  ="100dp" />
+
+        </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id                              ="@+id/center_constrain_layout"
@@ -91,18 +101,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <Button
-            android:id                                  ="@+id/cancel_button_contacts_id"
-            android:layout_width                        ="0dp"
-            android:layout_height                       ="wrap_content"
-            android:layout_marginLeft                   ="16dp"
-            android:layout_marginRight                  ="16dp"
-            android:layout_marginTop                    ="16dp"
-            android:text                                ="@string/cancel"
-            android:layout_marginBottom                 ="8dp"
-            app:layout_constraintBottom_toBottomOf      ="parent"
-            app:layout_constraintStart_toStartOf        ="parent"
-            app:layout_constraintEnd_toStartOf          ="@id/save_button_contacts_id"
-            app:layout_constraintWidth_default          ="spread" />
+            android:id                              ="@+id/cancel_button_contacts_id"
+            android:layout_width                    ="0dp"
+            android:layout_height                   ="wrap_content"
+            android:layout_marginLeft               ="16dp"
+            android:layout_marginRight              ="16dp"
+            android:layout_marginTop                ="16dp"
+            android:text                            ="@string/cancel"
+            android:layout_marginBottom             ="8dp"
+            app:layout_constraintBottom_toBottomOf  ="parent"
+            app:layout_constraintStart_toStartOf    ="parent"
+            app:layout_constraintEnd_toStartOf      ="@id/save_button_contacts_id"
+            app:layout_constraintWidth_default      ="spread" />
 
         <Button
             android:id                              ="@+id/save_button_contacts_id"
