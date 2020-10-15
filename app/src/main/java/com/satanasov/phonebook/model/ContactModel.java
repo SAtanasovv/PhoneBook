@@ -16,6 +16,7 @@ public class ContactModel implements Parcelable {
     private String     mLastName;
 
     private boolean    mExpanded;
+    private boolean    mDataBaseContact;
 
     private ArrayList  mPhoneNumberModelsList = new ArrayList();
     private ArrayList  mEmailModelsList       = new ArrayList() ;
@@ -37,14 +38,16 @@ public class ContactModel implements Parcelable {
     }
 
     public ContactModel() {
-        this.mExpanded  = false;
+        this.mExpanded        = false;
+        this.mDataBaseContact = false;
     }
 
     public ContactModel(Long id, String firstName, String lastName) {
-        this.mId        = id;
-        this.mFirstName = firstName;
-        this.mLastName  = lastName;
-        this.mExpanded  = false;
+        this.mId              = id;
+        this.mFirstName       = firstName;
+        this.mLastName        = lastName;
+        this.mExpanded        = false;
+        this.mDataBaseContact = false;
     }
 
     public ContactModel(String firstName, String lastName, ArrayList<PhoneNumberModel> contactPhoneNumberModelsList, ArrayList<EmailModel> contactEmailModelsList  ) {
@@ -52,8 +55,8 @@ public class ContactModel implements Parcelable {
         this.mLastName               = lastName;
         this.mEmailModelsList        = contactEmailModelsList;
         this.mPhoneNumberModelsList  = contactPhoneNumberModelsList;
-        this.mExpanded  = false;
-
+        this.mExpanded               = false;
+        this.mDataBaseContact        = false;
     }
 
     protected ContactModel(Parcel in) {
@@ -108,6 +111,14 @@ public class ContactModel implements Parcelable {
 
     public void setExpanded(boolean mExpanded) {
         this.mExpanded = mExpanded;
+    }
+
+    public boolean isDataBaseContact() {
+        return mDataBaseContact;
+    }
+
+    public void setDataBaseContact(boolean mDataBaseContact) {
+        this.mDataBaseContact = mDataBaseContact;
     }
 
     public String getFirstName() {

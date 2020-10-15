@@ -54,12 +54,19 @@
             android:layout_marginTop                ="8dp"
             tools:context                           =".view.ContactsActivity">
 
+            <View
+                android:layout_width        ="match_parent"
+                android:layout_height       ="2dp"
+                android:background          ="@color/colorPrimaryDark"
+                tools:ignore                ="MissingConstraints" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id                              ="@+id/input_layout_first_name_contacts_id"
                 android:layout_width                    ="match_parent"
                 android:layout_height                   ="wrap_content"
                 android:layout_marginLeft               ="16dp"
                 android:layout_marginRight              ="16dp"
+                android:layout_marginTop                ="8dp"
                 android:hint                            ="@string/enter_first_name"
                 app:counterMaxLength                    ="5"
                 app:errorEnabled                        ="true"
@@ -83,7 +90,6 @@
                 android:layout_marginLeft               ="16dp"
                 android:layout_marginRight              ="16dp"
                 android:hint                            ="@string/enter_last_name"
-                app:counterMaxLength                    ="5"
                 app:errorEnabled                        ="true"
                 app:layout_constraintEnd_toEndOf        ="@id/center_constrain_layout"
                 app:layout_constraintStart_toStartOf    ="@id/center_constrain_layout"
@@ -97,7 +103,11 @@
                     android:text            ='@{user.lastName}'
                     android:inputType       ="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
-
+            <View
+                android:layout_width  ="match_parent"
+                android:layout_height ="2dp"
+                android:background    ="@color/colorPrimaryDark"
+                app:layout_constraintTop_toBottomOf="@id/input_layout_last_name_contacts_id" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <Button

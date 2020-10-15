@@ -54,6 +54,7 @@ public class ContactsData {
             ArrayList<PhoneNumberModel> phoneNumberList = new ArrayList<>();
 
             user = new ContactModel(cursorContact.getLong(CONTACT_ID),cursorContact.getString(CONTACT_FIRST_NAME),cursorContact.getString(CONTACT_LAST_NAME));
+            user.setDataBaseContact(true);
 
             SqlCursor cursorNumbers = mDataBaseQueries.getContactPhoneNumbers(mContext, user.getId());
             while (cursorNumbers.next()){
@@ -177,7 +178,6 @@ public class ContactsData {
 
         else if (typeID.equals(Utils.MAIN_PHONE_NUMBER))
             numberType = (mContext.getString(R.string.type_main));
-
 
         return numberType;
         }

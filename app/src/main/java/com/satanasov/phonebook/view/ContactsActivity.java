@@ -78,17 +78,18 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void init(){
-        mContactImage                      = findViewById(R.id.contact_image_view);
-        mFirstNameEditText                 = findViewById(R.id.first_name_edit_text_contacts_id);
-        mLastNameEditText                  = findViewById(R.id.last_name_edit_text_contacts_id);
+        mContactImage               = findViewById(R.id.contact_image_view);
+        mFirstNameEditText          = findViewById(R.id.first_name_edit_text_contacts_id);
+        mLastNameEditText           = findViewById(R.id.last_name_edit_text_contacts_id);
 
-        mFirstNameTextInputLayout          = findViewById(R.id.input_layout_first_name_contacts_id);
-        mLastNameTextInputLayout           = findViewById(R.id.input_layout_last_name_contacts_id);
+        mFirstNameTextInputLayout   = findViewById(R.id.input_layout_first_name_contacts_id);
+        mLastNameTextInputLayout    = findViewById(R.id.input_layout_last_name_contacts_id);
 
-        mSaveBtn                           = findViewById(R.id.save_button_contacts_id);
-        mCancelBtn                         = findViewById(R.id.cancel_button_contacts_id);
+        mSaveBtn                    = findViewById(R.id.save_button_contacts_id);
+        mCancelBtn                  = findViewById(R.id.cancel_button_contacts_id);
 
-        Toolbar toolbar                    = findViewById(R.id.contacts_toolbar);
+        Toolbar toolbar             = findViewById(R.id.contacts_toolbar);
+
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -184,7 +185,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
     private ArrayList<PhoneNumberModel> getAllPhoneNumbers(){
         ArrayList<PhoneNumberModel> contactPhoneNumberModelsList = new ArrayList<>();
-       // Get new contact phoneNumbers
+        // Get new contact phoneNumbers
         return contactPhoneNumberModelsList;
     }
 

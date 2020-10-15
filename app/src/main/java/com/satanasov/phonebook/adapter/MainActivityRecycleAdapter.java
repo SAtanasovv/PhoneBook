@@ -45,6 +45,11 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         ContactModel user          = mDummyUserList.get(position);
         ContactsData mContactsData = new ContactsData(mContext);
 
+        if (!user.isDataBaseContact())
+            holder.mViewButton.setVisibility(View.GONE);
+        else
+            holder.mViewButton.setVisibility(View.VISIBLE);
+
         holder.mContactImage.setImageBitmap(user.getImageId());
 
         for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){

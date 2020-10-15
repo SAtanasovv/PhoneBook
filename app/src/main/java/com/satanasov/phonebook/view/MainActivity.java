@@ -46,7 +46,6 @@ public class MainActivity extends BaseActivity {
         mDataBaseContactList = mContactsData.getContactModelListFromDataBase();
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         //this.deleteDatabase("phoneBookContacts8.db");
-        //dataBaseQueries.deleteContactById(this,5);
         //List list = dataBaseQueries.getAllContactsAsList(this);
         mergeLists();
         init();
