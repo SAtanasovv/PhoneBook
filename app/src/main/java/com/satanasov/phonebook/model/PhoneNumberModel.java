@@ -65,15 +65,15 @@ public class PhoneNumberModel implements Serializable {
         return mContactID;
     }
 
-    public void setContactID(Long mContactID) {
-        this.mContactID = mContactID;
+    public void setContactID(Long contactID) {
+        this.mContactID = contactID;
     }
 
     public Long getID() {
         return mID;
     }
 
-    public void setID(Long mID) {
-        this.mID = mID;
+    public void setID(Long id) {
+        this.mID = id;
     }
 }

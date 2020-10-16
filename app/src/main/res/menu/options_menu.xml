@@ -5,5 +5,5 @@
         android:title   ="@string/edit_contact"/>
 
     <item android:id    ="@+id/view_option"
-        android:title   ="@string/view_contact"/>
+        android:title   ="@string/delete_contact"/>
 </menu>

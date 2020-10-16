@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
 import com.satanasov.phonebook.Helpers.ContactsData;
 import com.satanasov.phonebook.databinding.PhoneBookRowBinding;
+import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.Utils;
 import com.satanasov.phonebook.model.ContactModel;
 import com.satanasov.phonebook.R;
@@ -27,8 +28,8 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     private ArrayList<ContactModel>  mDummyUserList;
     private Context                  mContext;
 
-    public MainActivityRecycleAdapter(ArrayList<ContactModel> mDummyUserList, Context context){
-        this.mDummyUserList  = mDummyUserList;
+    public MainActivityRecycleAdapter(ArrayList<ContactModel> dummyUserList, Context context){
+        this.mDummyUserList  = dummyUserList;
         this.mContext        = context;
     }
 
@@ -37,18 +38,18 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         PhoneBookRowBinding phoneBookRowBinding = PhoneBookRowBinding.inflate(layoutInflater,parent,false);
-        return  new MyViewHolder(phoneBookRowBinding,mContext,mDummyUserList);
+        return  new MyViewHolder(phoneBookRowBinding,mContext,mDummyUserList,this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         ContactModel user          = mDummyUserList.get(position);
-        ContactsData mContactsData = new ContactsData(mContext);
+        ContactsData contactsData  = new ContactsData(mContext);
 
         if (!user.isDataBaseContact())
-            holder.mViewButton.setVisibility(View.GONE);
+            holder.mDeleteButton.setVisibility(View.GONE);
         else
-            holder.mViewButton.setVisibility(View.VISIBLE);
+            holder.mDeleteButton.setVisibility(View.VISIBLE);
 
         holder.mContactImage.setImageBitmap(user.getImageId());
 
@@ -58,7 +59,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
             TextView textType = rowView.findViewById(R.id.type_field_text_view);
 
             text.setText(phoneNumber.getPhoneNumber());
-            textType.setText( mContactsData.getPhoneNumberTypeText(phoneNumber.getPhoneNumberType()));
+            textType.setText(contactsData.getPhoneNumberTypeText(phoneNumber.getPhoneNumberType()));
             holder.mExpandableLayout.addView(rowView);
         }
         holder.bind(user);
@@ -69,42 +70,60 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         super.onViewRecycled(holder);
 
         holder.mExpandableLayout.removeAllViews();
-        ContactModel contact = mDummyUserList.get(holder.getAdapterPosition());
 
-        if (contact.isExpanded()){
-        contact.setExpanded(false);
-        holder.mHiddenLayout.setVisibility(View.GONE);
-        holder.mExpandButton.setRotation(Utils.ROTATE_TO_0_DEGREES);
-       }
+        if (holder.getAdapterPosition()>=0) {
+            ContactModel contact = mDummyUserList.get(holder.getAdapterPosition());
+
+            if (contact.isExpanded()) {
+                contact.setExpanded(false);
+                holder.mHiddenLayout.setVisibility(View.GONE);
+                holder.mExpandButton.setRotation(Utils.ROTATE_TO_0_DEGREES);
+            }
+        }
+        else{
+            holder.mHiddenLayout.setVisibility(View.GONE);
+            holder.mExpandButton.setRotation(Utils.ROTATE_TO_0_DEGREES);
+        }
     }
 
     @Override
     public int getItemCount() {
         return mDummyUserList.size();
     }
+
+    public void deleteItem(int position){
+        ContactModel    contactModel    = mDummyUserList.get(position);
+        DataBaseQueries dataBaseQueries = new DataBaseQueries();
+        contactModel.setExpanded(false);
+        mDummyUserList.remove(position);
+        dataBaseQueries.deleteContactById(mContext,contactModel.getId());
+        notifyItemRemoved(position);
+    }
 }
 
  class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public  LinearLayout             mContactView;
-    public  ConstraintLayout         mHiddenLayout;
-    public  LinearLayout             mExpandableLayout;
+    public  MainActivityRecycleAdapter mAdapter;
+    public  LinearLayout               mContactView;
+    public  ConstraintLayout           mHiddenLayout;
+    public  LinearLayout               mExpandableLayout;
 
-    public  ImageView                mContactImage;
-    public  ImageButton              mExpandButton;
-    public  Button                   mEditButton;
-    public  Button                   mViewButton;
-    private ArrayList<ContactModel>  mDummyUserList;
+    public  ImageView                  mContactImage;
+    public  ImageButton                mExpandButton;
+    public  Button                     mEditButton;
+    public  Button                     mDeleteButton;
+    private ArrayList<ContactModel>    mDummyUserList;
 
-    private Context                  mContext;
-    private PhoneBookRowBinding      mBinding;
+    private Context                    mContext;
+    private PhoneBookRowBinding        mBinding;
 
-    public MyViewHolder(PhoneBookRowBinding binding, Context context, final ArrayList<ContactModel> mDummyUserList) {
+    public MyViewHolder(PhoneBookRowBinding binding, Context context, final ArrayList<ContactModel> dummyUserList,MainActivityRecycleAdapter adapter) {
         super(binding.getRoot());
 
         this.mBinding       = binding;
         this.mContext       = context;
-        this.mDummyUserList = mDummyUserList;
+        this.mDummyUserList = dummyUserList;
+        this.mAdapter       = adapter;
 
         mContactView      = binding.parentConstraintLayout;
         mExpandableLayout = binding.expandableAreaPhoneNumbers;
@@ -113,7 +132,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         mContactImage     = binding.imageViewPhoneBookRowId;
         mExpandButton     = binding.contactSettingsButtonPhoneBookRowId;
         mEditButton       = binding.editContact;
-        mViewButton       = binding.viewContact;
+        mDeleteButton     = binding.deleteContact;
 
         mExpandButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,10 +159,10 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
             }
         });
 
-        mViewButton.setOnClickListener(new View.OnClickListener() {
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToContactsActivity(Utils.ChangeOptions.VIEW_CONTACT,getAdapterPosition());
+                mAdapter.deleteItem(getAdapterPosition());
             }
         });
     }

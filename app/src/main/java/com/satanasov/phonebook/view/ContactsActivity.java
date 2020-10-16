@@ -22,11 +22,11 @@ import java.util.ArrayList;
 
 public class ContactsActivity extends BaseActivity implements View.OnClickListener {
 
-    private ActivityContactsBinding       mContactsBinding;
+    private ActivityContactsBinding  mContactsBinding;
 
-    private ImageView                     mContactImage;
-    private TextInputEditText             mFirstNameEditText;
-    private TextInputEditText             mLastNameEditText;
+    private ImageView                mContactImage;
+    private TextInputEditText        mFirstNameEditText;
+    private TextInputEditText        mLastNameEditText;
 
     private TextInputLayout    mFirstNameTextInputLayout;
     private TextInputLayout    mLastNameTextInputLayout;
@@ -122,9 +122,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                 mContactsBinding.setUser(mContact);
                 mContactImage.setImageBitmap(mContact.getImageId());
                 getSupportActionBar().setTitle(R.string.edit_contact);
-
-                setDifferentPhoneNumberTypes();
-            break;
+             break;
 
             case VIEW_CONTACT:
                 mContactsBinding.setUser(mContact);
@@ -132,17 +130,11 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                 mSaveBtn.setVisibility(View.GONE);
                 getSupportActionBar().setTitle(R.string.view_contact);
 
-                setDifferentPhoneNumberTypes();
                 disableFieldsWhenViewing();
                 hideEmptyFields();
             break;
         }
     }
-
-    private void setDifferentPhoneNumberTypes(){
-        // Set existing contacts for view/edit
-    }
-
     private void checkIfFieldsAreEmpty(){
         if (mFirstNameEditText.getText().toString().equalsIgnoreCase(" ")){
 
@@ -155,6 +147,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     private void checkErrorsInFields(Editable editable){
         if (editable.length()>mFirstNameTextInputLayout.getCounterMaxLength()   &&
             mFirstNameEditText.hasFocus()){
+
             mFirstNameTextInputLayout.setError( getString(R.string.input_text_error_message)   +
             mFirstNameTextInputLayout.getCounterMaxLength());
         }
@@ -163,6 +156,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
         if (editable.length()>mLastNameTextInputLayout.getCounterMaxLength()    &&
             mLastNameEditText.hasFocus()){
+
             mLastNameTextInputLayout.setError( getString(R.string.input_text_error_message)    +
             mLastNameTextInputLayout.getCounterMaxLength());
         }
@@ -186,6 +180,8 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     private ArrayList<PhoneNumberModel> getAllPhoneNumbers(){
         ArrayList<PhoneNumberModel> contactPhoneNumberModelsList = new ArrayList<>();
         // Get new contact phoneNumbers
+        PhoneNumberModel phoneNumberModel = new PhoneNumberModel("7412369801",3L);
+        contactPhoneNumberModelsList.add(phoneNumberModel);
         return contactPhoneNumberModelsList;
     }
 

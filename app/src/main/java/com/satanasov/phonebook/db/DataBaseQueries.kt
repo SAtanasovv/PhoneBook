@@ -68,8 +68,8 @@ class DataBaseQueries {
         fun deleteContactById(context: Context, id: Long){
             val database = DataBaseCommunication.getInstance(context).database
                 database.contactQueries.transaction {
-                    afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
-                    afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
+                    afterCommit { Toast.makeText(context, R.string.delete_success, Toast.LENGTH_SHORT).show() }
+                    afterRollback { Toast.makeText(context, R.string.delete_failed, Toast.LENGTH_SHORT).show() }
 
                     database.contactEmailQueries.DeleteEmail(id)
                     database.contactNumbersQueries.DeletePhoneNumber(id)

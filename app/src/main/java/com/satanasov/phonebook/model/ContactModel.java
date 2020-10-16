@@ -109,63 +109,63 @@ public class ContactModel implements Parcelable {
         return mExpanded;
     }
 
-    public void setExpanded(boolean mExpanded) {
-        this.mExpanded = mExpanded;
+    public void setExpanded(boolean expanded) {
+        this.mExpanded = expanded;
     }
 
     public boolean isDataBaseContact() {
         return mDataBaseContact;
     }
 
-    public void setDataBaseContact(boolean mDataBaseContact) {
-        this.mDataBaseContact = mDataBaseContact;
+    public void setDataBaseContact(boolean dataBaseContact) {
+        this.mDataBaseContact = dataBaseContact;
     }
 
     public String getFirstName() {
         return mFirstName;
     }
 
-    public void setFirstName(String mFirstName) {
-        this.mFirstName = mFirstName;
+    public void setFirstName(String firstName) {
+        this.mFirstName = firstName;
     }
 
     public String getLastName() {
         return mLastName;
     }
 
-    public void setLastName(String mLastName) {
-        this.mLastName = mLastName;
+    public void setLastName(String lastName) {
+        this.mLastName = lastName;
     }
 
     public Long getId() {
         return mId;
     }
 
-    public void setId(Long mId) {
-        this.mId = mId;
+    public void setId(Long id) {
+        this.mId = id;
     }
 
     public Bitmap getImageId() {
         return mImageResource;
     }
 
-    public void setImageId(Bitmap mImageId) {
-        this.mImageResource = mImageId;
+    public void setImageId(Bitmap imageId) {
+        this.mImageResource = imageId;
     }
 
     public ArrayList<PhoneNumberModel> getPhoneNumberModelList() {
         return mPhoneNumberModelsList;
     }
 
-    public void setPhoneNumberModelList(ArrayList<PhoneNumberModel> mContactPhoneNumberModels) {
-        this.mPhoneNumberModelsList = mContactPhoneNumberModels;
+    public void setPhoneNumberModelList(ArrayList<PhoneNumberModel> contactPhoneNumberModels) {
+        this.mPhoneNumberModelsList = contactPhoneNumberModels;
     }
 
     public ArrayList<EmailModel> getEmailModelList() {
         return mEmailModelsList;
     }
 
-    public void setEmailModelList(ArrayList<EmailModel> mContactEmailModels) {
-        this.mEmailModelsList = mContactEmailModels;
+    public void setEmailModelList(ArrayList<EmailModel> contactEmailModels) {
+        this.mEmailModelsList = contactEmailModels;
     }
 }

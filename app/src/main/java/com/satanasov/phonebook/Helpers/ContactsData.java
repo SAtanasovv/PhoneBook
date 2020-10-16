@@ -43,8 +43,8 @@ public class ContactsData {
     }
 
     public ArrayList<ContactModel> getContactModelListFromDataBase(){
-        ContactModel user;
-        EmailModel contactEmailModel;
+        ContactModel     user;
+        EmailModel       contactEmailModel;
         PhoneNumberModel phoneNumberModel;
 
         SqlCursor cursorContact = mDataBaseQueries.getContacts(mContext);
@@ -78,8 +78,23 @@ public class ContactsData {
     }
 
     public ArrayList<ContactModel> getContactsModelListFromPhoneStorage(){
+        String[] userNameProjection  = new String[]{
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone._ID,
+                ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER
+        };
 
-        Cursor cursor = mContext.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null,
+        String[] phoneNumberProjection = new String[]{
+                ContactsContract.CommonDataKinds.Phone.TYPE,
+                ContactsContract.CommonDataKinds.Phone.NUMBER
+        };
+
+        String[] emailProjection = new String[]{
+                ContactsContract.CommonDataKinds.Email.TYPE,
+                ContactsContract.CommonDataKinds.Email.ADDRESS
+        };
+
+        Cursor cursor = mContext.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, userNameProjection, null, null,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" ASC ");
 
         if (cursor!=null && cursor.getCount()>0){
@@ -89,6 +104,7 @@ public class ContactsData {
                 String contactId;
                 String contactName;
                 Bitmap contactPhoto;
+
                 ContactModel user = new ContactModel();
 
                 contactId       = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
@@ -99,12 +115,12 @@ public class ContactsData {
                 user.setFirstName(contactName);
 
                 if(hasPhoneNumber>0){
-                    Cursor phoneNumberCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                    Cursor phoneNumberCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, phoneNumberProjection,
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{contactId}, null);
 
                     while (phoneNumberCursor != null && phoneNumberCursor.moveToNext()) {
 
-                        int phoneNumberType = phoneNumberCursor.getInt(phoneNumberCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                        int phoneNumberType       = phoneNumberCursor.getInt(phoneNumberCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
                         String contactPhoneNumber = phoneNumberCursor.getString(phoneNumberCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
                         switch(phoneNumberType){
@@ -127,7 +143,7 @@ public class ContactsData {
                         }
                     }
                 }
-                Cursor phoneEmailCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
+                Cursor phoneEmailCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, emailProjection,
                         ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[] {contactId}, null);
 
                 while(phoneEmailCursor!=null && phoneEmailCursor.moveToNext()) {

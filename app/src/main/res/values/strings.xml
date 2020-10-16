@@ -2,6 +2,7 @@
     <string name="app_name">PhoneBook</string>
     <string name="add_contact">Add Contact</string>
     <string name="edit_contact">Edit</string>
+    <string name="delete_contact">Delete</string>
     <string name="view_contact">View</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
@@ -31,4 +32,14 @@
     <string name="update_failed">Update Failed </string>
     <string name="phone_numbers">Phone Numbers: </string>
     <string name="email">Emails: </string>
+
+
+    <string-array name="different_number_types">
+
+        <item>Home</item>
+        <item>Mobile</item>
+        <item>Work</item>
+        <item>Main</item>
+    </string-array>
+
 </resources>

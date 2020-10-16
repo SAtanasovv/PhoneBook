@@ -108,10 +108,10 @@
             </LinearLayout>
 
             <Button
-                android:id                             ="@+id/view_contact"
+                android:id                             ="@+id/delete_contact"
                 android:layout_width                   ="wrap_content"
                 android:layout_height                  ="wrap_content"
-                android:text                           ="@string/view_contact"
+                android:text                           ="@string/delete_contact"
                 android:layout_marginTop               ="8dp"
                 android:layout_marginEnd               ="8dp"
                 app:layout_constraintEnd_toStartOf     ="@id/edit_contact"

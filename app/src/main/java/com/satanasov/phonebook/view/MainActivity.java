@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -35,23 +36,25 @@ public class MainActivity extends BaseActivity {
     private RecyclerView          mRecyclerView;
     private RecyclerView.Adapter  mAdapter;
     private FloatingActionButton  mFloatingButton;
+    private ProgressBar           mLoadingBar;
 
     public static final int       mPERMISSIONS_REQUEST_READ_CONTACTS = 1;
+
     ActivityMainBinding           mBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        init();
         getPermissionToReadContactsFromInternalStorage();
         mDataBaseContactList = mContactsData.getContactModelListFromDataBase();
-        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
-        //this.deleteDatabase("phoneBookContacts8.db");
-        //List list = dataBaseQueries.getAllContactsAsList(this);
         mergeLists();
-        init();
+
     }
 
     private void init(){
+        mLoadingBar     = findViewById(R.id.loading_bar);
         mFloatingButton = findViewById(R.id.add_floating_button_main_activity_id);
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,15 +63,18 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        Toolbar toolbar  = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    private void initAdapter(){
+
         mAdapter      = new MainActivityRecycleAdapter(mMergedList,this);
 
         mRecyclerView = mBinding.recyclerViewMainActivityId;
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
-
-        Toolbar toolbar  = findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
     }
 
     private void goToContactsActivity(ChangeOptions option){
@@ -95,6 +101,7 @@ public class MainActivity extends BaseActivity {
             }
             else
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, mPERMISSIONS_REQUEST_READ_CONTACTS);
+
         }
         else
             mPhoneStorageContactList.addAll(mContactsData.getContactsModelListFromPhoneStorage());
@@ -102,11 +109,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        mLoadingBar.setVisibility(View.VISIBLE);
         if (requestCode == mPERMISSIONS_REQUEST_READ_CONTACTS) {
-
             if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mPhoneStorageContactList.addAll(mContactsData.getContactsModelListFromPhoneStorage());
-                Toast.makeText(this, R.string.permission_success, Toast.LENGTH_LONG).show();
             }
             else
                 Toast.makeText(this, R.string.permission_unsuccessful, Toast.LENGTH_LONG).show();
@@ -132,7 +138,7 @@ public class MainActivity extends BaseActivity {
         Set<ContactModel> userModelsSet = new LinkedHashSet<>();
         userModelsSet.addAll(mDataBaseContactList);
         userModelsSet.addAll(mPhoneStorageContactList);
-        userModelsSet.addAll(mPhoneStorageContactList);
         mMergedList = new ArrayList<>(userModelsSet);
+        initAdapter();
     }
 }
