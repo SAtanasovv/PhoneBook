@@ -18,10 +18,10 @@
     <string name="permission_message">Please enable access to contacts.</string>
     <string name="permission_success">You have contacts permission</string>
     <string name="permission_unsuccessful">You have disabled a contacts permission.</string>
-    <string name="type_home">Home </string>
-    <string name="type_mobile">Mobile </string>
-    <string name="type_work">Work </string>
-    <string name="type_main">Main </string>
+    <string name="type_home">Home</string>
+    <string name="type_mobile">Mobile</string>
+    <string name="type_work">Work</string>
+    <string name="type_main">Main</string>
     <string name="insert_success">Insert Successful </string>
     <string name="insert_failed">Insert Failed </string>
     <string name="show_success">Show Successful </string>

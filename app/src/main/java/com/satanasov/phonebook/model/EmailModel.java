@@ -20,13 +20,6 @@ public class EmailModel implements Serializable {
         this.mEmailType = emailType;
     }
 
-    public EmailModel(String email, Long emailType, Long contactID, Long id) {
-        this.mEmail     = email;
-        this.mEmailType = emailType;
-        this.mContactID = contactID;
-        this.mID        = id;
-    }
-
     public String getEmail() {
         return mEmail;
     }

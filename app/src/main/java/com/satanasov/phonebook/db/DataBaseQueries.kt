@@ -53,15 +53,19 @@ class DataBaseQueries {
             return database.contactQueries.GetAllContacts().executeAsList();
         }
 
-        fun updateContact(context: Context, contact: ContactModel, number: PhoneNumberModel, email: EmailModel){
+        fun updateContact(context: Context, contact: ContactModel){
             val database = DataBaseCommunication.getInstance(context).database
                 database.contactQueries.transaction {
                     afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
                     afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
 
                     database.contactQueries.UpdateUserName(contact.firstName,contact.lastName,contact.id)
-                    database.contactNumbersQueries.UpdatePhoneNumber(number.phoneNumber,number.id)
-                    database.contactEmailQueries.UpdateEmail(email.email,email.id)
+
+                    for (number in contact.phoneNumberModelList)
+                    database.contactNumbersQueries.UpdatePhoneNumber(number.phoneNumber,number.phoneNumberType,number.id)
+
+                    for (email in contact.emailModelList)
+                    database.contactEmailQueries.UpdateEmail(email.email,email.emailType,email.id)
                 }
         }
 

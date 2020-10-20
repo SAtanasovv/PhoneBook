@@ -180,7 +180,7 @@ public class ContactsData {
         return mPhoneStorageContactList;
     }
 
-    public String getPhoneNumberTypeText(Long typeID){
+    public String getSpinnerTypeText(Long typeID){
         String numberType = "";
 
         if(typeID.equals(Utils.HOME_PHONE_NUMBER))
@@ -197,5 +197,25 @@ public class ContactsData {
 
         return numberType;
         }
+
+
+    public Long getSpinnerTypeID(String type){
+        Long longID = 0L;
+
+        if(type.equals(mContext.getString(R.string.type_home)))
+            longID = Utils.HOME_PHONE_NUMBER;
+
+        else if (type.equals(mContext.getString(R.string.type_work)))
+            longID = (Utils.WORK_PHONE_NUMBER);
+
+        else if (type.equals(mContext.getString(R.string.type_mobile)))
+            longID = (Utils.MOBILE_PHONE_NUMBER);
+
+        else if (type.equals(mContext.getString(R.string.type_main)))
+            longID = (Utils.MAIN_PHONE_NUMBER);
+
+        return longID;
+        }
+
     }
 

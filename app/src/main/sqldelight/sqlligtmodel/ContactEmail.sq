@@ -11,11 +11,11 @@ InsertEmail:
 
 UpdateEmail:
      UPDATE contactEmail
-     SET email = ?
+     SET email = ?, email_type = ?
      WHERE contactEmail.id = ?;
 
 GetAllEmails:
-     SELECT contactEmail.contact_id,contactEmail.email,contactEmail.email_type
+     SELECT contactEmail.id,contactEmail.email,contactEmail.email_type
      FROM contactEmail
      WHERE contact_id = ?;
 

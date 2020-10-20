@@ -12,7 +12,7 @@ InsertPhone:
 
 UpdatePhoneNumber:
     UPDATE contactNumbers
-    SET number = ?
+    SET number = ?, number_type = ?
     WHERE contactNumbers.id = ?;
 
 GetAllNumbers:

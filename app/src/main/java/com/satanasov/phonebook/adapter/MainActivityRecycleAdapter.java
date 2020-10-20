@@ -19,6 +19,7 @@ import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.Utils;
 import com.satanasov.phonebook.model.ContactModel;
 import com.satanasov.phonebook.R;
+import com.satanasov.phonebook.model.EmailModel;
 import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.view.ContactsActivity;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+        LayoutInflater layoutInflater           = LayoutInflater.from(mContext);
         PhoneBookRowBinding phoneBookRowBinding = PhoneBookRowBinding.inflate(layoutInflater,parent,false);
         return  new MyViewHolder(phoneBookRowBinding,mContext,mDummyUserList,this);
     }
@@ -54,13 +55,23 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         holder.mContactImage.setImageBitmap(user.getImageId());
 
         for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){
-            View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandableLayout, false);
+            View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandablePhoneNumberLayout, false);
             TextView text     = rowView.findViewById(R.id.text_field_text_view);
             TextView textType = rowView.findViewById(R.id.type_field_text_view);
 
             text.setText(phoneNumber.getPhoneNumber());
-            textType.setText(contactsData.getPhoneNumberTypeText(phoneNumber.getPhoneNumberType()));
-            holder.mExpandableLayout.addView(rowView);
+            textType.setText(contactsData.getSpinnerTypeText(phoneNumber.getPhoneNumberType()));
+            holder.mExpandablePhoneNumberLayout.addView(rowView);
+        }
+
+        for (EmailModel emailModel : user.getEmailModelList()){
+            View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandableEmailLayout, false);
+            TextView text     = rowView.findViewById(R.id.text_field_text_view);
+            TextView textType = rowView.findViewById(R.id.type_field_text_view);
+
+            text.setText(emailModel.getEmail());
+            textType.setText(contactsData.getSpinnerTypeText(emailModel.getEmailType()));
+            holder.mExpandableEmailLayout.addView(rowView);
         }
         holder.bind(user);
     }
@@ -69,7 +80,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public void onViewRecycled(@NonNull MyViewHolder holder) {
         super.onViewRecycled(holder);
 
-        holder.mExpandableLayout.removeAllViews();
+        holder.mExpandablePhoneNumberLayout.removeAllViews();
 
         if (holder.getAdapterPosition()>=0) {
             ContactModel contact = mDummyUserList.get(holder.getAdapterPosition());
@@ -106,7 +117,8 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public  MainActivityRecycleAdapter mAdapter;
     public  LinearLayout               mContactView;
     public  ConstraintLayout           mHiddenLayout;
-    public  LinearLayout               mExpandableLayout;
+    public  LinearLayout               mExpandablePhoneNumberLayout;
+    public  LinearLayout               mExpandableEmailLayout;
 
     public  ImageView                  mContactImage;
     public  ImageButton                mExpandButton;
@@ -125,14 +137,15 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         this.mDummyUserList = dummyUserList;
         this.mAdapter       = adapter;
 
-        mContactView      = binding.parentConstraintLayout;
-        mExpandableLayout = binding.expandableAreaPhoneNumbers;
-        mHiddenLayout     = binding.hiddenLayout;
+        mContactView                 = binding.parentConstraintLayout;
+        mExpandablePhoneNumberLayout = binding.expandableAreaPhoneNumbers;
+        mExpandableEmailLayout       = binding.expandableAreaEmails;
+        mHiddenLayout                = binding.hiddenLayout;
 
-        mContactImage     = binding.imageViewPhoneBookRowId;
-        mExpandButton     = binding.contactSettingsButtonPhoneBookRowId;
-        mEditButton       = binding.editContact;
-        mDeleteButton     = binding.deleteContact;
+        mContactImage   = binding.imageViewPhoneBookRowId;
+        mExpandButton   = binding.contactSettingsButtonPhoneBookRowId;
+        mEditButton     = binding.editContact;
+        mDeleteButton   = binding.deleteContact;
 
         mExpandButton.setOnClickListener(new View.OnClickListener() {
             @Override
