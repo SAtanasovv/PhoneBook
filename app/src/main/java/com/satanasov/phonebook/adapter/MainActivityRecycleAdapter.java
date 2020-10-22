@@ -81,6 +81,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         super.onViewRecycled(holder);
 
         holder.mExpandablePhoneNumberLayout.removeAllViews();
+        holder.mExpandableEmailLayout.removeAllViews();
 
         if (holder.getAdapterPosition()>=0) {
             ContactModel contact = mDummyUserList.get(holder.getAdapterPosition());
@@ -90,10 +91,6 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
                 holder.mHiddenLayout.setVisibility(View.GONE);
                 holder.mExpandButton.setRotation(Utils.ROTATE_TO_0_DEGREES);
             }
-        }
-        else{
-            holder.mHiddenLayout.setVisibility(View.GONE);
-            holder.mExpandButton.setRotation(Utils.ROTATE_TO_0_DEGREES);
         }
     }
 
@@ -105,6 +102,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public void deleteItem(int position){
         ContactModel    contactModel    = mDummyUserList.get(position);
         DataBaseQueries dataBaseQueries = new DataBaseQueries();
+
         contactModel.setExpanded(false);
         mDummyUserList.remove(position);
         dataBaseQueries.deleteContactById(mContext,contactModel.getId());
@@ -183,6 +181,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     private void goToContactsActivity(Utils.ChangeOptions option, int position){
         ContactModel user  = mDummyUserList.get(position);
         Intent intent      = new Intent(mContext, ContactsActivity.class);
+
         intent.putExtra(Utils.INTENT_EXTRA_OPTION, option);
         intent.putExtra(Utils.INTENT_USER_DETAILS, user);
         mContext.startActivity(intent);

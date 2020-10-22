@@ -22,3 +22,7 @@ GetAllEmails:
 DeleteEmail:
      DELETE FROM contactEmail
      WHERE contact_id = ?;
+
+DeleteEmailByID:
+     DELETE FROM contactEmail
+     WHERE id = ?;

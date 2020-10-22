@@ -24,7 +24,6 @@ import com.satanasov.phonebook.model.ContactModel;
 import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.R;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class ContactsActivity extends BaseActivity implements View.OnClickListener {
 
@@ -54,6 +53,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     private ContactModel       mContact;
     private ChangeOptions      mOption;
 
+    ArrayList<PhoneNumberModel> mPhoneNumbersList = new ArrayList<>();
+    ArrayList<EmailModel> mEmailList              = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +84,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             case R.id.cancel_button_contacts_id:
                 onBackPressed();
             break;
-
         }
     }
 
@@ -127,7 +128,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        mSaveBtn.setOnClickListener(this);
         mCancelBtn.setOnClickListener(this);
         mInsertPhoneNumberRow.setOnClickListener(this);
         mInsertEmailRow.setOnClickListener(this);
@@ -137,8 +137,8 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null){
-            mOption = (ChangeOptions) bundle.getSerializable(Utils.INTENT_EXTRA_OPTION);
-            mContact   = bundle.getParcelable(Utils.INTENT_USER_DETAILS);
+            mOption     = (ChangeOptions) bundle.getSerializable(Utils.INTENT_EXTRA_OPTION);
+            mContact    = bundle.getParcelable(Utils.INTENT_USER_DETAILS);
             changeOptions(mOption);
         }
     }
@@ -160,6 +160,8 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             case EDIT_CONTACT:
                 mContactsBinding.setUser(mContact);
                 mContactImage.setImageBitmap(mContact.getImageId());
+                setPhoneNumbersAndEmails();
+                mSaveBtn.setText(R.string.edit_contact);
                 mSaveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -167,7 +169,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
                 getSupportActionBar().setTitle(R.string.edit_contact);
-                setPhoneNumbersAndEmails();
              break;
 
             case VIEW_CONTACT:
@@ -260,7 +261,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         PhoneNumberModel phoneNumberModel = new PhoneNumberModel(mPhoneNumberEditText.getText().toString(),mContactsData.getSpinnerTypeID(mPhoneNumberTypeSpinner.getSelectedItem().toString()));
         contactPhoneNumberModelsList.add(phoneNumberModel);
 
-            for (int i = 1;i<mPhoneNumberLayout.getChildCount();i++){
+            for (int i = 1; i < mPhoneNumberLayout.getChildCount(); i++){
                 View phoneView = mPhoneNumberLayout.getChildAt(i);
 
                 Spinner typeSpinner         = phoneView.findViewById(R.id.type_spinner);
@@ -281,7 +282,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         EmailModel emailModel = new EmailModel(mEmailEditText.getText().toString(), mContactsData.getSpinnerTypeID(mEmailTypeSpinner.getSelectedItem().toString()));
         contactEmailModelList.add(emailModel);
 
-            for (int i = 1;i<mEmailLayout.getChildCount();i++){
+            for (int i = 1; i < mEmailLayout.getChildCount(); i++){
                 View emailView = mEmailLayout.getChildAt(i);
 
                 Spinner typeSpinner         = emailView.findViewById(R.id.type_spinner);
@@ -310,7 +311,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             mPhoneNumberEditText.setText(phoneNumberModelList.get(0).getPhoneNumber());
 
             for (int i = 1; i < phoneNumberModelList.size(); i++) {
-                LayoutInflater rowInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                LayoutInflater rowInflater = this.getLayoutInflater();
                 View phoneNumberRow        = rowInflater.inflate(R.layout.activity_contact_row,null);
 
                 Spinner typeSpinner         = phoneNumberRow.findViewById(R.id.type_spinner);
@@ -319,10 +320,14 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
                 typeSpinner.setSelection(Math.toIntExact(phoneNumberModelList.get(i).getPhoneNumberType()));
                 textField.setText(phoneNumberModelList.get(i).getPhoneNumber());
+                removeRow.setTag(phoneNumberModelList.get(i));
                 removeRow.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
+                        PhoneNumberModel phoneNumber = (PhoneNumberModel) v.getTag();
+                        phoneNumber.setDBOperationType(Utils.DELETE);
+                        mPhoneNumbersList.add(phoneNumber);
                         mPhoneNumberLayout.removeView((LinearLayout) v.getParent());
                     }
                 });
@@ -334,7 +339,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             mEmailEditText.setText(emailModelList.get(0).getEmail());
 
             for (int i = 1; i < emailModelList.size(); i++) {
-                LayoutInflater rowInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                LayoutInflater rowInflater = this.getLayoutInflater();
                 View emailRow              = rowInflater.inflate(R.layout.activity_contact_row,null);
 
                 Spinner typeSpinner         = emailRow.findViewById(R.id.type_spinner);
@@ -343,10 +348,14 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
                 typeSpinner.setSelection(Math.toIntExact(emailModelList.get(i).getEmailType()));
                 textField.setText(emailModelList.get(i).getEmail());
+                removeRow.setTag(emailModelList.get(i));
                 removeRow.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
+                        EmailModel email = (EmailModel) v.getTag();
+                        email.setDBOperationType(Utils.DELETE);
+                        mEmailList.add(email);
                         mEmailLayout.removeView((LinearLayout) v.getParent());
                     }
                 });
@@ -357,24 +366,93 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
     private void updateContact(){
         DataBaseQueries dataBaseQueries = new DataBaseQueries();
-        ArrayList<PhoneNumberModel> userPhoneNumbers = mContact.getPhoneNumberModelList();
-        ArrayList<PhoneNumberModel> editedPhoneNumbers = getAllPhoneNumbers();
 
         if (!mFirstNameEditText.getText().toString().equals(mContact.getFirstName()) && !mFirstNameEditText.getText().toString().equals("")){
             mContact.setFirstName(mFirstNameEditText.getText().toString());
+            mContact.setDBOperationType(Utils.UPDATE);
         }
 
-        if (!mLastNameEditText.getText().toString().equals(mContact.getLastName()) && !mLastNameEditText.getText().toString().equals("")){
+        if (!mLastNameEditText.getText().toString().equals(mContact.getLastName())){
             mContact.setLastName(mLastNameEditText.getText().toString());
+            mContact.setDBOperationType(Utils.UPDATE);
         }
 
-        for (int i = 0; i < userPhoneNumbers.size(); i++ ){
-            if (!userPhoneNumbers.get(i).getPhoneNumber().equals(editedPhoneNumbers.get(i).getPhoneNumber()) && !editedPhoneNumbers.get(i).getPhoneNumber().equals("") ){
-                userPhoneNumbers.get(i).setPhoneNumber(editedPhoneNumbers.get(i).getPhoneNumber());
+        if (!mPhoneNumberEditText.getText().toString().equals(mContact.getPhoneNumberModelList().get(0)) && !mPhoneNumberEditText.getText().toString().equals("") ){
+            PhoneNumberModel phoneNumberModel = mContact.getPhoneNumberModelList().get(0);
+            phoneNumberModel.setPhoneNumber(mPhoneNumberEditText.getText().toString());
+            phoneNumberModel.setDBOperationType(Utils.UPDATE);
+            mPhoneNumbersList.add(phoneNumberModel);
+        }
+
+        if (!mEmailEditText.getText().toString().equals(mContact.getEmailModelList().get(0)) && !mEmailEditText.getText().toString().equals("")){
+            EmailModel emailModel = mContact.getEmailModelList().get(0);
+            emailModel.setEmail(mEmailEditText.getText().toString());
+            emailModel.setDBOperationType(Utils.UPDATE);
+            mEmailList.add(emailModel);
+        }
+
+
+        mContact.setPhoneNumberModelList(defineDBOperationsForPhoneNumbers());
+        mContact.setEmailModelList(defineDBOperationsForEmails());
+        dataBaseQueries.updateContact(this,mContact);
+    }
+
+    private ArrayList<PhoneNumberModel> defineDBOperationsForPhoneNumbers(){
+        for (int i = 1; i < mPhoneNumberLayout.getChildCount(); i++){
+            View phoneView = mPhoneNumberLayout.getChildAt(i);
+
+            TextInputEditText phoneEditText = phoneView.findViewById(R.id.type_field_edit_text);
+            Spinner typeSpinner             = phoneView.findViewById(R.id.type_spinner);
+            ImageButton removeRow           = phoneView.findViewById(R.id.remove_view);
+
+            if (removeRow.getTag() == null){
+                if (!phoneEditText.getText().toString().equals("")){
+
+                    PhoneNumberModel phoneNumber = new PhoneNumberModel(phoneEditText.getText().toString(),mContactsData.getSpinnerTypeID(typeSpinner.getSelectedItem().toString()),Utils.INSERT);
+                    mPhoneNumbersList.add(phoneNumber);
+                }
+            }
+            else {
+                PhoneNumberModel phoneNumber = (PhoneNumberModel) removeRow.getTag();
+
+                if (!phoneNumber.getPhoneNumber().equals(phoneEditText.getText().toString()) && !phoneEditText.getText().toString().equals("")){
+
+                    phoneNumber.setPhoneNumber(phoneEditText.getText().toString());
+                    phoneNumber.setDBOperationType(Utils.UPDATE);
+                    mPhoneNumbersList.add(phoneNumber);
+                }
             }
         }
+        return mPhoneNumbersList;
+    }
 
-        mContact.setPhoneNumberModelList(userPhoneNumbers);
-        dataBaseQueries.updateContact(this,mContact);
+    private ArrayList<EmailModel> defineDBOperationsForEmails(){
+
+        for (int i = 1; i < mEmailLayout.getChildCount(); i++){
+            View emailView = mEmailLayout.getChildAt(i);
+
+            TextInputEditText emailEditText = emailView.findViewById(R.id.type_field_edit_text);
+            Spinner typeSpinner             = emailView.findViewById(R.id.type_spinner);
+            ImageButton removeRow           = emailView.findViewById(R.id.remove_view);
+
+            if (removeRow.getTag() == null){
+                if (!emailEditText.getText().toString().equals("")){
+
+                    EmailModel email = new EmailModel(emailEditText.getText().toString(),mContactsData.getSpinnerTypeID(typeSpinner.getSelectedItem().toString()),Utils.INSERT);
+                    mEmailList.add(email);
+                }
+            }
+            else {
+                EmailModel emailModel = (EmailModel) removeRow.getTag();
+
+                if (!emailModel.getEmail().equals(emailEditText.getText().toString()) && !emailEditText.getText().toString().equals("")){
+
+                    emailModel.setEmail(emailEditText.getText().toString());
+                    emailModel.setDBOperationType(Utils.UPDATE);
+                    mEmailList.add(emailModel);
+                }
+            }
+        }
+        return mEmailList;
     }
 }

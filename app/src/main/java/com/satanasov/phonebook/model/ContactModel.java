@@ -17,6 +17,7 @@ public class ContactModel implements Parcelable {
 
     private boolean    mExpanded;
     private boolean    mDataBaseContact;
+    private int        mDBOperationType;
 
     private ArrayList  mPhoneNumberModelsList = new ArrayList();
     private ArrayList  mEmailModelsList       = new ArrayList() ;
@@ -167,5 +168,13 @@ public class ContactModel implements Parcelable {
 
     public void setEmailModelList(ArrayList<EmailModel> contactEmailModels) {
         this.mEmailModelsList = contactEmailModels;
+    }
+
+    public int getDBOperationType() {
+        return mDBOperationType;
+    }
+
+    public void setDBOperationType(int dbOperationType) {
+        this.mDBOperationType = dbOperationType;
     }
 }

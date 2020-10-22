@@ -8,8 +8,10 @@ import java.util.Objects;
 public class PhoneNumberModel implements Serializable {
     private Long    mID;
     private Long    mContactID;
+    private int     mRowId;
     private String  mPhoneNumber;
     private Long    mPhoneNumberType;
+    private int     mDBOperationType;
 
 
     @Override
@@ -27,9 +29,19 @@ public class PhoneNumberModel implements Serializable {
         return Objects.equals(mPhoneNumber,contactPhoneNumberModel.mPhoneNumber);
     }
 
+    public PhoneNumberModel(){
+
+    }
+
     public PhoneNumberModel(String phoneNumber, Long phoneNumberType) {
         this.mPhoneNumber     = phoneNumber;
         this.mPhoneNumberType = phoneNumberType;
+    }
+
+    public PhoneNumberModel(String phoneNumber, Long phoneNumberType, int dBOperationType) {
+        this.mPhoneNumber     = phoneNumber;
+        this.mPhoneNumberType = phoneNumberType;
+        this.mDBOperationType = dBOperationType;
     }
 
     public PhoneNumberModel(Long id, String phoneNumber, Long phoneNumberType) {
@@ -75,5 +87,21 @@ public class PhoneNumberModel implements Serializable {
 
     public void setID(Long id) {
         this.mID = id;
+    }
+
+    public int getRowId() {
+        return mRowId;
+    }
+
+    public void setRowId(int mRowId) {
+        this.mRowId = mRowId;
+    }
+
+    public int getDBOperationType() {
+        return mDBOperationType;
+    }
+
+    public void setDBOperationType(int dbOperationType) {
+        this.mDBOperationType = dbOperationType;
     }
 }

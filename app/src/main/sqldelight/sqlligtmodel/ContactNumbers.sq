@@ -23,3 +23,7 @@ GetAllNumbers:
 DeletePhoneNumber:
     DELETE FROM contactNumbers
     WHERE contact_id = ?;
+
+DeletePhoneNumberById:
+    DELETE FROM contactNumbers
+    WHERE id = ?;

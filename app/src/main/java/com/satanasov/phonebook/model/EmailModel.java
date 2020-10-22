@@ -7,11 +7,18 @@ public class EmailModel implements Serializable {
     private Long   mContactID;
     private String mEmail;
     private Long   mEmailType;
+    private int    mDBOperationType;
 
 
     public EmailModel(String email, Long emailType) {
         this.mEmail     = email;
         this.mEmailType = emailType;
+    }
+
+    public EmailModel(String email, Long emailType, int dbOperationType) {
+        this.mEmail = email;
+        this.mEmailType = emailType;
+        this.mDBOperationType = dbOperationType;
     }
 
     public EmailModel(Long id, String email, Long emailType) {
@@ -50,5 +57,13 @@ public class EmailModel implements Serializable {
 
     public void setID(Long id) {
         this.mID = id;
+    }
+
+    public int getDBOperationType() {
+        return mDBOperationType;
+    }
+
+    public void setDBOperationType(int dbOperationType) {
+        this.mDBOperationType = dbOperationType;
     }
 }

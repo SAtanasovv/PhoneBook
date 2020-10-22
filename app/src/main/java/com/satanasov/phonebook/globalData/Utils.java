@@ -21,7 +21,9 @@ public class Utils {
      public static Long    HOME_EMAIL    = 1L;
      public static Long    WORK_EMAIL    = 2L;
 
-
+     public static int     INSERT   = 1;
+     public static int     UPDATE   = 2;
+     public static int     DELETE   = 3;
 
 
 }

@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //deleteDatabase("phoneBookContacts8.db");
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         init();
         getPermissionToReadContactsFromInternalStorage();
@@ -68,10 +68,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initAdapter(){
-
         mAdapter      = new MainActivityRecycleAdapter(mMergedList,this);
-
         mRecyclerView = mBinding.recyclerViewMainActivityId;
+
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);

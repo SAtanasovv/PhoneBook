@@ -3,6 +3,7 @@ package com.satanasov.phonebook.db
 import android.content.Context
 import android.widget.Toast
 import com.satanasov.phonebook.R
+import com.satanasov.phonebook.globalData.Utils
 import com.satanasov.phonebook.model.EmailModel
 import com.satanasov.phonebook.model.ContactModel
 import com.satanasov.phonebook.model.PhoneNumberModel
@@ -59,13 +60,31 @@ class DataBaseQueries {
                     afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
                     afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
 
+                    if (contact.dbOperationType == Utils.UPDATE)
                     database.contactQueries.UpdateUserName(contact.firstName,contact.lastName,contact.id)
 
-                    for (number in contact.phoneNumberModelList)
-                    database.contactNumbersQueries.UpdatePhoneNumber(number.phoneNumber,number.phoneNumberType,number.id)
+                    if  (contact.phoneNumberModelList.isNotEmpty()){
 
-                    for (email in contact.emailModelList)
-                    database.contactEmailQueries.UpdateEmail(email.email,email.emailType,email.id)
+                        for (number in contact.phoneNumberModelList){
+
+                            when (number.dbOperationType){
+                                Utils.INSERT -> database.contactNumbersQueries.InsertPhone(number.phoneNumber,number.phoneNumberType)
+                                Utils.UPDATE -> database.contactNumbersQueries.UpdatePhoneNumber(number.phoneNumber,number.phoneNumberType,number.id)
+                                Utils.DELETE -> database.contactNumbersQueries.DeletePhoneNumberById(number.id)
+                            }
+                        }
+                    }
+                    if (contact.emailModelList.isNotEmpty()){
+
+                        for (email in contact.emailModelList){
+
+                            when (email.dbOperationType){
+                                Utils.INSERT -> database.contactEmailQueries.InsertEmail(email.email,email.emailType)
+                                Utils.UPDATE -> database.contactEmailQueries.UpdateEmail(email.email,email.emailType,email.id)
+                                Utils.DELETE -> database.contactEmailQueries.DeleteEmailByID(email.id)
+                            }
+                        }
+                    }
                 }
         }
 
