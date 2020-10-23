@@ -1,4 +1,6 @@
 package com.satanasov.phonebook.view;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -6,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -16,13 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.satanasov.phonebook.adapter.MainActivityRecycleAdapter;
 import com.satanasov.phonebook.databinding.ActivityMainBinding;
-import com.satanasov.phonebook.Helpers.ContactsData;
+import com.satanasov.phonebook.helpers.ContactsData;
 import com.satanasov.phonebook.model.ContactModel;
 import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.globalData.Utils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -44,18 +49,17 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //deleteDatabase("phoneBookContacts8.db");
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         init();
         getPermissionToReadContactsFromInternalStorage();
         mDataBaseContactList = mContactsData.getContactModelListFromDataBase();
         mergeLists();
-
     }
 
     private void init(){
         mLoadingBar     = findViewById(R.id.loading_bar);
         mFloatingButton = findViewById(R.id.add_floating_button_main_activity_id);
+
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,7 +72,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initAdapter(){
-        mAdapter      = new MainActivityRecycleAdapter(mMergedList,this);
+        mAdapter      = new MainActivityRecycleAdapter(mMergedList,(Context) this);
         mRecyclerView = mBinding.recyclerViewMainActivityId;
 
         mRecyclerView.setHasFixedSize(true);
@@ -79,7 +83,33 @@ public class MainActivity extends BaseActivity {
     private void goToContactsActivity(ChangeOptions option){
         Intent intent = new Intent(MainActivity.this,ContactsActivity.class);
         intent.putExtra(Utils.INTENT_EXTRA_OPTION,option);
-        startActivity(intent);
+        startActivityForResult(intent,Utils.GO_TO_CONTACT_ACTIVITY_ADD);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Utils.GO_TO_CONTACT_ACTIVITY_ADD){
+            if (resultCode == Activity.RESULT_OK){
+                ContactModel contactModel = data.getParcelableExtra(Utils.RETURN_CONTACT_TO_MAIN_ACTIVITY_ADD);
+                mMergedList.add(contactModel);
+                Collections.sort(mMergedList);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+
+        if (requestCode == Utils.GO_TO_CONTACT_ACTIVITY_EDIT){
+            if (resultCode == Activity.RESULT_OK){
+
+                ContactModel contactModel = data.getParcelableExtra(Utils.RETURN_CONTACT_TO_MAIN_ACTIVITY_EDIT);
+                mMergedList.remove(contactModel.getContactPosition());
+                mAdapter.notifyItemRemoved(contactModel.getContactPosition());
+                mMergedList.add(contactModel);
+                Collections.sort(mMergedList);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     public void getPermissionToReadContactsFromInternalStorage() {
@@ -138,6 +168,7 @@ public class MainActivity extends BaseActivity {
         userModelsSet.addAll(mDataBaseContactList);
         userModelsSet.addAll(mPhoneStorageContactList);
         mMergedList = new ArrayList<>(userModelsSet);
+        Collections.sort(mMergedList);
         initAdapter();
     }
 }

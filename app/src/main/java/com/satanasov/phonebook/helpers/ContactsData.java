@@ -1,4 +1,4 @@
-package com.satanasov.phonebook.Helpers;
+package com.satanasov.phonebook.helpers;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -79,17 +79,20 @@ public class ContactsData {
 
     public ArrayList<ContactModel> getContactsModelListFromPhoneStorage(){
         String[] userNameProjection  = new String[]{
+
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
                 ContactsContract.CommonDataKinds.Phone._ID,
                 ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER
         };
 
         String[] phoneNumberProjection = new String[]{
+
                 ContactsContract.CommonDataKinds.Phone.TYPE,
                 ContactsContract.CommonDataKinds.Phone.NUMBER
         };
 
         String[] emailProjection = new String[]{
+
                 ContactsContract.CommonDataKinds.Email.TYPE,
                 ContactsContract.CommonDataKinds.Email.ADDRESS
         };
@@ -113,6 +116,7 @@ public class ContactsData {
 
                 user.setId(Long.parseLong(contactId));
                 user.setFirstName(contactName);
+                user.setDataBaseContact(false);
 
                 if(hasPhoneNumber>0){
                     Cursor phoneNumberCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, phoneNumberProjection,

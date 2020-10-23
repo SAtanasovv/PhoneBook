@@ -1,4 +1,6 @@
 package com.satanasov.phonebook.view;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,7 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.satanasov.phonebook.Helpers.ContactsData;
+import com.satanasov.phonebook.helpers.ContactsData;
 import com.satanasov.phonebook.databinding.ActivityContactsBinding;
 import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.Utils;
@@ -54,7 +56,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     private ChangeOptions      mOption;
 
     ArrayList<PhoneNumberModel> mPhoneNumbersList = new ArrayList<>();
-    ArrayList<EmailModel> mEmailList              = new ArrayList<>();
+    ArrayList<EmailModel>       mEmailList        = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -299,7 +301,16 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
     private void saveContactToDB(){
         DataBaseQueries dataBaseQueries = new DataBaseQueries();
-        dataBaseQueries.storeContact(this, new ContactModel(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),getAllPhoneNumbers(),getAllEmails()));
+        ContactModel contactModel       = new ContactModel(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),getAllPhoneNumbers(),getAllEmails(),true);
+
+        contactModel.setDataBaseContact(true);
+
+        dataBaseQueries.storeContact(this, contactModel);
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(Utils.RETURN_CONTACT_TO_MAIN_ACTIVITY_ADD,contactModel);
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
     }
 
     private void setPhoneNumbersAndEmails(){
@@ -367,17 +378,21 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     private void updateContact(){
         DataBaseQueries dataBaseQueries = new DataBaseQueries();
 
+
         if (!mFirstNameEditText.getText().toString().equals(mContact.getFirstName()) && !mFirstNameEditText.getText().toString().equals("")){
+
             mContact.setFirstName(mFirstNameEditText.getText().toString());
             mContact.setDBOperationType(Utils.UPDATE);
         }
 
         if (!mLastNameEditText.getText().toString().equals(mContact.getLastName())){
+
             mContact.setLastName(mLastNameEditText.getText().toString());
             mContact.setDBOperationType(Utils.UPDATE);
         }
 
         if (!mPhoneNumberEditText.getText().toString().equals(mContact.getPhoneNumberModelList().get(0)) && !mPhoneNumberEditText.getText().toString().equals("") ){
+
             PhoneNumberModel phoneNumberModel = mContact.getPhoneNumberModelList().get(0);
             phoneNumberModel.setPhoneNumber(mPhoneNumberEditText.getText().toString());
             phoneNumberModel.setDBOperationType(Utils.UPDATE);
@@ -385,16 +400,20 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         }
 
         if (!mEmailEditText.getText().toString().equals(mContact.getEmailModelList().get(0)) && !mEmailEditText.getText().toString().equals("")){
+
             EmailModel emailModel = mContact.getEmailModelList().get(0);
             emailModel.setEmail(mEmailEditText.getText().toString());
             emailModel.setDBOperationType(Utils.UPDATE);
             mEmailList.add(emailModel);
         }
-
-
         mContact.setPhoneNumberModelList(defineDBOperationsForPhoneNumbers());
         mContact.setEmailModelList(defineDBOperationsForEmails());
         dataBaseQueries.updateContact(this,mContact);
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(Utils.RETURN_CONTACT_TO_MAIN_ACTIVITY_EDIT,mContact);
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
     }
 
     private ArrayList<PhoneNumberModel> defineDBOperationsForPhoneNumbers(){

@@ -15,6 +15,7 @@ class DataBaseQueries {
          fun storeContact(context: Context,contact: ContactModel) {
              val database = DataBaseCommunication.getInstance(context).database
                  database.contactQueries.transaction {
+
                      afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
                      afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
                      // add contact photo contactQueries
@@ -57,6 +58,7 @@ class DataBaseQueries {
         fun updateContact(context: Context, contact: ContactModel){
             val database = DataBaseCommunication.getInstance(context).database
                 database.contactQueries.transaction {
+
                     afterCommit { Toast.makeText(context, R.string.insert_success, Toast.LENGTH_SHORT).show() }
                     afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
 
@@ -91,6 +93,7 @@ class DataBaseQueries {
         fun deleteContactById(context: Context, id: Long){
             val database = DataBaseCommunication.getInstance(context).database
                 database.contactQueries.transaction {
+
                     afterCommit { Toast.makeText(context, R.string.delete_success, Toast.LENGTH_SHORT).show() }
                     afterRollback { Toast.makeText(context, R.string.delete_failed, Toast.LENGTH_SHORT).show() }
 

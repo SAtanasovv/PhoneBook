@@ -6,9 +6,15 @@ public class Utils {
         EDIT_CONTACT,
         VIEW_CONTACT
     }
+     public static String INTENT_EXTRA_OPTION   = "intentExtraOption";
+     public static String INTENT_USER_DETAILS   = "intentUserDetails";
+     public static String INTENT_USER_POSITION  = "intentUserPosition";
 
-     public static String INTENT_EXTRA_OPTION  = "intentExtraOption";
-     public static String INTENT_USER_DETAILS  = "intentUserDetails";
+     public static String RETURN_CONTACT_TO_MAIN_ACTIVITY_ADD  = "returnContactAdd";
+     public static String RETURN_CONTACT_TO_MAIN_ACTIVITY_EDIT = "returnContactEdit";
+
+     public static int    GO_TO_CONTACT_ACTIVITY_ADD      = 1;
+     public static int    GO_TO_CONTACT_ACTIVITY_EDIT     = 2;
 
      public static Long    HOME_PHONE_NUMBER   = 0L;
      public static Long    MOBILE_PHONE_NUMBER = 1L;
@@ -24,6 +30,5 @@ public class Utils {
      public static int     INSERT   = 1;
      public static int     UPDATE   = 2;
      public static int     DELETE   = 3;
-
 
 }

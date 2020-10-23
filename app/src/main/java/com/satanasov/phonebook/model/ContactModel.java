@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ContactModel implements Parcelable {
+public class ContactModel implements Parcelable , Comparable<ContactModel>  {
     private Long       mId;
     private Bitmap     mImageResource;
     private String     mFirstName;
@@ -18,6 +18,7 @@ public class ContactModel implements Parcelable {
     private boolean    mExpanded;
     private boolean    mDataBaseContact;
     private int        mDBOperationType;
+    private int        mContactPosition;
 
     private ArrayList  mPhoneNumberModelsList = new ArrayList();
     private ArrayList  mEmailModelsList       = new ArrayList() ;
@@ -51,13 +52,13 @@ public class ContactModel implements Parcelable {
         this.mDataBaseContact = false;
     }
 
-    public ContactModel(String firstName, String lastName, ArrayList<PhoneNumberModel> contactPhoneNumberModelsList, ArrayList<EmailModel> contactEmailModelsList  ) {
+    public ContactModel(String firstName, String lastName, ArrayList<PhoneNumberModel> contactPhoneNumberModelsList, ArrayList<EmailModel> contactEmailModelsList, boolean dbContact ) {
         this.mFirstName              = firstName;
         this.mLastName               = lastName;
         this.mEmailModelsList        = contactEmailModelsList;
         this.mPhoneNumberModelsList  = contactPhoneNumberModelsList;
+        this.mDataBaseContact        = dbContact;
         this.mExpanded               = false;
-        this.mDataBaseContact        = false;
     }
 
     protected ContactModel(Parcel in) {
@@ -105,6 +106,8 @@ public class ContactModel implements Parcelable {
             return new ContactModel[size];
         }
     };
+
+
 
     public boolean isExpanded() {
         return mExpanded;
@@ -176,5 +179,19 @@ public class ContactModel implements Parcelable {
 
     public void setDBOperationType(int dbOperationType) {
         this.mDBOperationType = dbOperationType;
+    }
+
+    public Integer getContactPosition() {
+        return mContactPosition;
+    }
+
+    public void setContactPosition(int contactStored) {
+        this.mContactPosition = contactStored;
+    }
+
+
+    @Override
+    public int compareTo(ContactModel o) {
+        return this.getFirstName().compareToIgnoreCase(o.getFirstName());
     }
 }

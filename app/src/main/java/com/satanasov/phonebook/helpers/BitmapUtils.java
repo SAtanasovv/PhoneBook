@@ -1,4 +1,4 @@
-package com.satanasov.phonebook.Helpers;
+package com.satanasov.phonebook.helpers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

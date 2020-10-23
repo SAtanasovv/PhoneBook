@@ -1,4 +1,5 @@
 package com.satanasov.phonebook.adapter;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -10,10 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
-import com.satanasov.phonebook.Helpers.ContactsData;
+import com.satanasov.phonebook.helpers.ContactsData;
 import com.satanasov.phonebook.databinding.PhoneBookRowBinding;
 import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.Utils;
@@ -22,6 +24,8 @@ import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.model.EmailModel;
 import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.view.ContactsActivity;
+import com.satanasov.phonebook.view.MainActivity;
+
 import java.util.ArrayList;
 
 public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -55,6 +59,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         holder.mContactImage.setImageBitmap(user.getImageId());
 
         for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){
+
             View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandablePhoneNumberLayout, false);
             TextView text     = rowView.findViewById(R.id.text_field_text_view);
             TextView textType = rowView.findViewById(R.id.type_field_text_view);
@@ -65,6 +70,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         }
 
         for (EmailModel emailModel : user.getEmailModelList()){
+
             View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandableEmailLayout, false);
             TextView text     = rowView.findViewById(R.id.text_field_text_view);
             TextView textType = rowView.findViewById(R.id.type_field_text_view);
@@ -119,6 +125,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public  LinearLayout               mExpandableEmailLayout;
 
     public  ImageView                  mContactImage;
+    public  CardView                   mContactImageFrame;
     public  ImageButton                mExpandButton;
     public  Button                     mEditButton;
     public  Button                     mDeleteButton;
@@ -140,10 +147,11 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         mExpandableEmailLayout       = binding.expandableAreaEmails;
         mHiddenLayout                = binding.hiddenLayout;
 
-        mContactImage   = binding.imageViewPhoneBookRowId;
-        mExpandButton   = binding.contactSettingsButtonPhoneBookRowId;
-        mEditButton     = binding.editContact;
-        mDeleteButton   = binding.deleteContact;
+        mContactImage       = binding.imageViewPhoneBookRowId;
+        mContactImageFrame  = binding.cardViewPhoneBookRow;
+        mExpandButton       = binding.contactSettingsButtonPhoneBookRowId;
+        mEditButton         = binding.editContact;
+        mDeleteButton       = binding.deleteContact;
 
         mExpandButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,6 +181,8 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mHiddenLayout.setVisibility(View.GONE);
+                mExpandButton.setRotation(Utils.ROTATE_TO_0_DEGREES);
                 mAdapter.deleteItem(getAdapterPosition());
             }
         });
@@ -180,11 +190,11 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
     private void goToContactsActivity(Utils.ChangeOptions option, int position){
         ContactModel user  = mDummyUserList.get(position);
+        user.setContactPosition(position);
         Intent intent      = new Intent(mContext, ContactsActivity.class);
-
         intent.putExtra(Utils.INTENT_EXTRA_OPTION, option);
         intent.putExtra(Utils.INTENT_USER_DETAILS, user);
-        mContext.startActivity(intent);
+        ((Activity)mContext).startActivityForResult(intent,Utils.GO_TO_CONTACT_ACTIVITY_EDIT);
     }
 
     public void bind(ContactModel user){
