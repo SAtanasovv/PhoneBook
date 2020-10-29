@@ -139,8 +139,8 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null){
-            mOption     = (ChangeOptions) bundle.getSerializable(Utils.INTENT_EXTRA_OPTION);
-            mContact    = bundle.getParcelable(Utils.INTENT_USER_DETAILS);
+            this.mOption     = (ChangeOptions) bundle.getSerializable(Utils.INTENT_EXTRA_OPTION);
+            this.mContact    = bundle.getParcelable(Utils.INTENT_USER_DETAILS);
             changeOptions(mOption);
         }
     }
@@ -156,13 +156,13 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                         saveContactToDB();
                     }
                 });
+
                 getSupportActionBar().setTitle(R.string.add_contact);
             break;
 
             case EDIT_CONTACT:
                 mContactsBinding.setUser(mContact);
                 mContactImage.setImageBitmap(mContact.getImageId());
-                setPhoneNumbersAndEmails();
                 mSaveBtn.setText(R.string.edit_contact);
                 mSaveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -170,24 +170,15 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                         updateContact();
                     }
                 });
+
+                setPhoneNumbersAndEmails();
                 getSupportActionBar().setTitle(R.string.edit_contact);
              break;
-
-            case VIEW_CONTACT:
-                mContactsBinding.setUser(mContact);
-                mContactImage.setImageBitmap(mContact.getImageId());
-                mSaveBtn.setVisibility(View.GONE);
-                getSupportActionBar().setTitle(R.string.view_contact);
-
-                disableFieldsWhenViewing();
-                hideEmptyFields();
-            break;
         }
     }
 
     private void checkIfFieldsAreEmpty(){
         if (mFirstNameEditText.getText().toString().equalsIgnoreCase(" ")){
-
             mSaveBtn.setEnabled(false);
         }
         else
@@ -212,19 +203,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         }
         else
             mLastNameTextInputLayout.setError(null);
-    }
-
-    private void hideEmptyFields(){
-        if (mContact.getFirstName() == null || mContact.getFirstName().equalsIgnoreCase(" "))
-            mFirstNameTextInputLayout.setVisibility(View.GONE);
-
-        if (mContact.getLastName() == null || mContact.getLastName().equalsIgnoreCase(" "))
-            mLastNameTextInputLayout.setVisibility(View.GONE);
-    }
-
-    private void disableFieldsWhenViewing(){
-        mFirstNameEditText.setEnabled(false);
-        mLastNameEditText.setEnabled(false);
     }
 
     private void insertPhoneNumberRow(){
@@ -303,12 +281,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         DataBaseQueries dataBaseQueries = new DataBaseQueries();
         ContactModel contactModel       = new ContactModel(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),getAllPhoneNumbers(),getAllEmails(),true);
 
-        contactModel.setDataBaseContact(true);
-
         dataBaseQueries.storeContact(this, contactModel);
 
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(Utils.RETURN_CONTACT_TO_MAIN_ACTIVITY_ADD,contactModel);
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }
@@ -322,26 +297,40 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             mPhoneNumberEditText.setText(phoneNumberModelList.get(0).getPhoneNumber());
 
             for (int i = 1; i < phoneNumberModelList.size(); i++) {
-                LayoutInflater rowInflater = this.getLayoutInflater();
-                View phoneNumberRow        = rowInflater.inflate(R.layout.activity_contact_row,null);
+                PhoneNumberModel phoneNumberModel = phoneNumberModelList.get(i);
+
+                LayoutInflater rowInflater  = this.getLayoutInflater();
+                View phoneNumberRow         = rowInflater.inflate(R.layout.activity_contact_row,null);
 
                 Spinner typeSpinner         = phoneNumberRow.findViewById(R.id.type_spinner);
                 TextInputEditText textField = phoneNumberRow.findViewById(R.id.type_field_edit_text);
                 ImageButton removeRow       = phoneNumberRow.findViewById(R.id.remove_view);
 
-                typeSpinner.setSelection(Math.toIntExact(phoneNumberModelList.get(i).getPhoneNumberType()));
-                textField.setText(phoneNumberModelList.get(i).getPhoneNumber());
-                removeRow.setTag(phoneNumberModelList.get(i));
+                typeSpinner.setSelection(Math.toIntExact(phoneNumberModel.getPhoneNumberType()));
+                textField.setText(phoneNumberModel.getPhoneNumber());
+                removeRow.setTag(phoneNumberModel);
                 removeRow.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
+
                         PhoneNumberModel phoneNumber = (PhoneNumberModel) v.getTag();
                         phoneNumber.setDBOperationType(Utils.DELETE);
                         mPhoneNumbersList.add(phoneNumber);
                         mPhoneNumberLayout.removeView((LinearLayout) v.getParent());
                     }
                 });
+
+                if (phoneNumberModel.getID() == null){
+                    typeSpinner.setEnabled(false);
+                    textField.setEnabled(false);
+                    removeRow.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    typeSpinner.setEnabled(true);
+                    textField.setEnabled(true);
+                    removeRow.setVisibility(View.VISIBLE);
+                }
                 mPhoneNumberLayout.addView(phoneNumberRow);
             }
         }
@@ -350,20 +339,23 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             mEmailEditText.setText(emailModelList.get(0).getEmail());
 
             for (int i = 1; i < emailModelList.size(); i++) {
-                LayoutInflater rowInflater = this.getLayoutInflater();
-                View emailRow              = rowInflater.inflate(R.layout.activity_contact_row,null);
+                EmailModel emailModel = emailModelList.get(i);
+
+                LayoutInflater rowInflater  = this.getLayoutInflater();
+                View emailRow               = rowInflater.inflate(R.layout.activity_contact_row,null);
 
                 Spinner typeSpinner         = emailRow.findViewById(R.id.type_spinner);
                 TextInputEditText textField = emailRow.findViewById(R.id.type_field_edit_text);
                 ImageButton removeRow       = emailRow.findViewById(R.id.remove_view);
 
-                typeSpinner.setSelection(Math.toIntExact(emailModelList.get(i).getEmailType()));
-                textField.setText(emailModelList.get(i).getEmail());
-                removeRow.setTag(emailModelList.get(i));
+                typeSpinner.setSelection(Math.toIntExact(emailModel.getEmailType()));
+                textField.setText(emailModel.getEmail());
+                removeRow.setTag(emailModel);
                 removeRow.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
+
                         EmailModel email = (EmailModel) v.getTag();
                         email.setDBOperationType(Utils.DELETE);
                         mEmailList.add(email);
@@ -377,7 +369,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
     private void updateContact(){
         DataBaseQueries dataBaseQueries = new DataBaseQueries();
-
 
         if (!mFirstNameEditText.getText().toString().equals(mContact.getFirstName()) && !mFirstNameEditText.getText().toString().equals("")){
 
@@ -406,12 +397,12 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             emailModel.setDBOperationType(Utils.UPDATE);
             mEmailList.add(emailModel);
         }
+
         mContact.setPhoneNumberModelList(defineDBOperationsForPhoneNumbers());
         mContact.setEmailModelList(defineDBOperationsForEmails());
         dataBaseQueries.updateContact(this,mContact);
 
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(Utils.RETURN_CONTACT_TO_MAIN_ACTIVITY_EDIT,mContact);
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }

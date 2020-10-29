@@ -24,27 +24,34 @@
          android:elevation        ="10dp"
          android:orientation      ="horizontal">
 
+         <RelativeLayout
+             android:id                 ="@+id/image_border"
+             android:layout_width       ="49dp"
+             android:layout_height      ="49dp"
+             android:elevation          ="10dp"
+             android:layout_marginStart ="4dp"
+             android:layout_marginTop   ="2dp"
+             android:layout_marginBottom="2dp">
          <androidx.cardview.widget.CardView
-             android:id                   ="@+id/card_view_phone_book_row"
-             android:layout_width         ="45dp"
-             android:layout_height        ="45dp"
-             android:innerRadius          ="0dp"
-             android:elevation            ="10dp"
-             android:shape                ="ring"
-             android:layout_marginStart   ="16dp"
-             android:layout_marginTop     ="8dp"
-             android:layout_marginBottom  ="8dp"
-             app:cardCornerRadius         ="22.5dp"
-             android:gravity              ="start">
+             android:id                         ="@+id/card_view_phone_book_row"
+             android:layout_width               ="45dp"
+             android:layout_height              ="45dp"
+             android:innerRadius                ="0dp"
+             android:shape                      ="ring"
+             app:cardCornerRadius               ="22.5dp"
+             android:gravity                    ="start"
+             android:layout_centerVertical      ="true"
+             android:layout_centerHorizontal    ="true">
 
              <ImageView
                  android:id                      ="@+id/image_view_phone_book_row_id"
-                 android:layout_width            ="45dp"
-                 android:layout_height           ="45dp"
+                 android:layout_width            ="match_parent"
+                 android:layout_height           ="match_parent"
                  android:layout_alignParentTop   ="true"
                  android:layout_centerHorizontal ="true" />
 
          </androidx.cardview.widget.CardView>
+         </RelativeLayout>
 
          <TextView
               android:id                  ="@+id/first_name_text_view_phone_book_row_id"

@@ -8,10 +8,6 @@ public class Utils {
     }
      public static String INTENT_EXTRA_OPTION   = "intentExtraOption";
      public static String INTENT_USER_DETAILS   = "intentUserDetails";
-     public static String INTENT_USER_POSITION  = "intentUserPosition";
-
-     public static String RETURN_CONTACT_TO_MAIN_ACTIVITY_ADD  = "returnContactAdd";
-     public static String RETURN_CONTACT_TO_MAIN_ACTIVITY_EDIT = "returnContactEdit";
 
      public static int    GO_TO_CONTACT_ACTIVITY_ADD      = 1;
      public static int    GO_TO_CONTACT_ACTIVITY_EDIT     = 2;
@@ -23,9 +19,6 @@ public class Utils {
 
      public static float ROTATE_TO_180_DEGREES = 180f;
      public static float ROTATE_TO_0_DEGREES   = 0f;
-
-     public static Long    HOME_EMAIL    = 1L;
-     public static Long    WORK_EMAIL    = 2L;
 
      public static int     INSERT   = 1;
      public static int     UPDATE   = 2;

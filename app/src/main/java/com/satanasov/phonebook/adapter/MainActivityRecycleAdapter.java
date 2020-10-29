@@ -1,7 +1,11 @@
 package com.satanasov.phonebook.adapter;
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -26,6 +31,7 @@ import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.view.ContactsActivity;
 import com.satanasov.phonebook.view.MainActivity;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -51,12 +57,20 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         ContactModel user          = mDummyUserList.get(position);
         ContactsData contactsData  = new ContactsData(mContext);
 
-        if (!user.isDataBaseContact())
+        if (!user.isDataBaseContact()){
             holder.mDeleteButton.setVisibility(View.GONE);
-        else
+            holder.mEditButton.setVisibility(View.GONE);
+            holder.mContactImageBorder.setBackgroundResource(0);
+        }
+        else{
             holder.mDeleteButton.setVisibility(View.VISIBLE);
+            holder.mEditButton.setVisibility(View.VISIBLE);
+            holder.mContactImageBorder.setBackgroundResource(R.drawable.circular_border);
+        }
 
-        holder.mContactImage.setImageBitmap(user.getImageId());
+        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, user.getId());
+        InputStream is = ContactsContract.Contacts.openContactPhotoInputStream(mContext.getContentResolver(), contactUri);
+        holder.mContactImage.setImageBitmap(BitmapFactory.decodeStream(is));
 
         for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){
 
@@ -68,7 +82,6 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
             textType.setText(contactsData.getSpinnerTypeText(phoneNumber.getPhoneNumberType()));
             holder.mExpandablePhoneNumberLayout.addView(rowView);
         }
-
         for (EmailModel emailModel : user.getEmailModelList()){
 
             View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandableEmailLayout, false);
@@ -85,11 +98,10 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     @Override
     public void onViewRecycled(@NonNull MyViewHolder holder) {
         super.onViewRecycled(holder);
-
         holder.mExpandablePhoneNumberLayout.removeAllViews();
         holder.mExpandableEmailLayout.removeAllViews();
 
-        if (holder.getAdapterPosition()>=0) {
+        if (holder.getAdapterPosition() >= 0) {
             ContactModel contact = mDummyUserList.get(holder.getAdapterPosition());
 
             if (contact.isExpanded()) {
@@ -114,6 +126,21 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         dataBaseQueries.deleteContactById(mContext,contactModel.getId());
         notifyItemRemoved(position);
     }
+
+    public void updateAdapterData(ArrayList<ContactModel> updatedList){
+
+        this.mDummyUserList = new ArrayList<>();
+        this.mDummyUserList.addAll(updatedList);
+    }
+
+    public void goToContactsActivity(Utils.ChangeOptions option, int position){
+        ContactModel user  = mDummyUserList.get(position);
+        Intent intent      = new Intent(mContext, ContactsActivity.class);
+
+        intent.putExtra(Utils.INTENT_EXTRA_OPTION, option);
+        intent.putExtra(Utils.INTENT_USER_DETAILS, user);
+        ((Activity)mContext).startActivityForResult(intent,Utils.GO_TO_CONTACT_ACTIVITY_EDIT);
+    }
 }
 
  class MyViewHolder extends RecyclerView.ViewHolder {
@@ -123,6 +150,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public  ConstraintLayout           mHiddenLayout;
     public  LinearLayout               mExpandablePhoneNumberLayout;
     public  LinearLayout               mExpandableEmailLayout;
+    public  RelativeLayout             mContactImageBorder;
 
     public  ImageView                  mContactImage;
     public  CardView                   mContactImageFrame;
@@ -149,6 +177,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
         mContactImage       = binding.imageViewPhoneBookRowId;
         mContactImageFrame  = binding.cardViewPhoneBookRow;
+        mContactImageBorder = binding.imageBorder;
         mExpandButton       = binding.contactSettingsButtonPhoneBookRowId;
         mEditButton         = binding.editContact;
         mDeleteButton       = binding.deleteContact;
@@ -174,7 +203,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToContactsActivity(Utils.ChangeOptions.EDIT_CONTACT,getAdapterPosition());
+                mAdapter.goToContactsActivity(Utils.ChangeOptions.EDIT_CONTACT,getAdapterPosition());
             }
         });
 
@@ -186,15 +215,6 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
                 mAdapter.deleteItem(getAdapterPosition());
             }
         });
-    }
-
-    private void goToContactsActivity(Utils.ChangeOptions option, int position){
-        ContactModel user  = mDummyUserList.get(position);
-        user.setContactPosition(position);
-        Intent intent      = new Intent(mContext, ContactsActivity.class);
-        intent.putExtra(Utils.INTENT_EXTRA_OPTION, option);
-        intent.putExtra(Utils.INTENT_USER_DETAILS, user);
-        ((Activity)mContext).startActivityForResult(intent,Utils.GO_TO_CONTACT_ACTIVITY_EDIT);
     }
 
     public void bind(ContactModel user){

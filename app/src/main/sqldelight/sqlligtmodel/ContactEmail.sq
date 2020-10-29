@@ -9,6 +9,10 @@ InsertEmail:
      INSERT INTO contactEmail(contact_id,email,email_type)
      VALUES((SELECT value FROM storeContactID WHERE storedContact = 'contactID'),?,?);
 
+InsertEmailByID:
+     INSERT INTO contactEmail(contact_id,email,email_type)
+     VALUES(?,?,?);
+
 UpdateEmail:
      UPDATE contactEmail
      SET email = ?, email_type = ?

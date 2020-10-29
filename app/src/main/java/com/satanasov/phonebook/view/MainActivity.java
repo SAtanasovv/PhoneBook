@@ -26,6 +26,9 @@ import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.globalData.Utils;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -39,7 +42,7 @@ public class MainActivity extends BaseActivity {
     private ContactsData          mContactsData               = new ContactsData(this);
 
     private RecyclerView          mRecyclerView;
-    private RecyclerView.Adapter  mAdapter;
+    private MainActivityRecycleAdapter  mAdapter;
     private FloatingActionButton  mFloatingButton;
     private ProgressBar           mLoadingBar;
 
@@ -50,10 +53,12 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+
         init();
-        getPermissionToReadContactsFromInternalStorage();
         mDataBaseContactList = mContactsData.getContactModelListFromDataBase();
-        mergeLists();
+        getPermissionToReadContactsFromInternalStorage();
+        mergeLists(mDataBaseContactList);
+        initAdapter();
     }
 
     private void init(){
@@ -92,21 +97,18 @@ public class MainActivity extends BaseActivity {
 
         if (requestCode == Utils.GO_TO_CONTACT_ACTIVITY_ADD){
             if (resultCode == Activity.RESULT_OK){
-                ContactModel contactModel = data.getParcelableExtra(Utils.RETURN_CONTACT_TO_MAIN_ACTIVITY_ADD);
-                mMergedList.add(contactModel);
-                Collections.sort(mMergedList);
+                mergeLists(mContactsData.getContactModelListFromDataBase());
+
+                mAdapter.updateAdapterData(mMergedList);
                 mAdapter.notifyDataSetChanged();
             }
         }
 
         if (requestCode == Utils.GO_TO_CONTACT_ACTIVITY_EDIT){
             if (resultCode == Activity.RESULT_OK){
+                mergeLists(mContactsData.getContactModelListFromDataBase());
 
-                ContactModel contactModel = data.getParcelableExtra(Utils.RETURN_CONTACT_TO_MAIN_ACTIVITY_EDIT);
-                mMergedList.remove(contactModel.getContactPosition());
-                mAdapter.notifyItemRemoved(contactModel.getContactPosition());
-                mMergedList.add(contactModel);
-                Collections.sort(mMergedList);
+                mAdapter.updateAdapterData(mMergedList);
                 mAdapter.notifyDataSetChanged();
             }
         }
@@ -130,10 +132,10 @@ public class MainActivity extends BaseActivity {
             }
             else
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, mPERMISSIONS_REQUEST_READ_CONTACTS);
-
         }
-        else
-            mPhoneStorageContactList.addAll(mContactsData.getContactsModelListFromPhoneStorage());
+        else{
+           mPhoneStorageContactList.addAll(mContactsData.getContactsModelListFromPhoneStorage());
+        }
     }
 
     @Override
@@ -148,8 +150,8 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void mergeLists(){
-        for (ContactModel dataBaseUser : mDataBaseContactList){
+    private void mergeLists(@NotNull ArrayList<ContactModel> dataBaseContactList){
+        for (ContactModel dataBaseUser : dataBaseContactList){
             for(ContactModel phoneBookUser : mPhoneStorageContactList){
                 for(PhoneNumberModel dataBaseNumber : dataBaseUser.getPhoneNumberModelList()) {
                     for (PhoneNumberModel phoneBookNumber : phoneBookUser.getPhoneNumberModelList()) {
@@ -165,10 +167,9 @@ public class MainActivity extends BaseActivity {
             }
         }
         Set<ContactModel> userModelsSet = new LinkedHashSet<>();
-        userModelsSet.addAll(mDataBaseContactList);
+        userModelsSet.addAll(dataBaseContactList);
         userModelsSet.addAll(mPhoneStorageContactList);
         mMergedList = new ArrayList<>(userModelsSet);
         Collections.sort(mMergedList);
-        initAdapter();
     }
 }

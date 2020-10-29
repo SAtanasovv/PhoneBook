@@ -10,6 +10,11 @@ InsertPhone:
     INSERT INTO contactNumbers(contact_id,number,number_type)
     VALUES((SELECT value FROM storeContactID WHERE storedContact = 'contactID'),?,?);
 
+InsertPhoneByID:
+    INSERT INTO contactNumbers(contact_id,number,number_type)
+    VALUES(?,?,?);
+
+
 UpdatePhoneNumber:
     UPDATE contactNumbers
     SET number = ?, number_type = ?

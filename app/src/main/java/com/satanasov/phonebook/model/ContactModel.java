@@ -1,6 +1,7 @@
 package com.satanasov.phonebook.model;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -18,10 +19,9 @@ public class ContactModel implements Parcelable , Comparable<ContactModel>  {
     private boolean    mExpanded;
     private boolean    mDataBaseContact;
     private int        mDBOperationType;
-    private int        mContactPosition;
 
     private ArrayList  mPhoneNumberModelsList = new ArrayList();
-    private ArrayList  mEmailModelsList       = new ArrayList() ;
+    private ArrayList  mEmailModelsList       = new ArrayList();
 
     @Override
     public int hashCode() {
@@ -107,8 +107,6 @@ public class ContactModel implements Parcelable , Comparable<ContactModel>  {
         }
     };
 
-
-
     public boolean isExpanded() {
         return mExpanded;
     }
@@ -180,15 +178,6 @@ public class ContactModel implements Parcelable , Comparable<ContactModel>  {
     public void setDBOperationType(int dbOperationType) {
         this.mDBOperationType = dbOperationType;
     }
-
-    public Integer getContactPosition() {
-        return mContactPosition;
-    }
-
-    public void setContactPosition(int contactStored) {
-        this.mContactPosition = contactStored;
-    }
-
 
     @Override
     public int compareTo(ContactModel o) {
