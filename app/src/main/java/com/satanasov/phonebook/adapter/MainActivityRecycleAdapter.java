@@ -68,9 +68,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
             holder.mContactImageBorder.setBackgroundResource(R.drawable.circular_border);
         }
 
-        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, user.getId());
-        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(mContext.getContentResolver(), contactUri);
-        holder.mContactImage.setImageBitmap(BitmapFactory.decodeStream(inputStream));
+        holder.mContactImage.setImageBitmap(user.getImageId());
 
         for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){
 
@@ -136,7 +134,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public void goToContactsActivity(Utils.ChangeOptions option, int position){
         ContactModel user  = mDummyUserList.get(position);
         Intent intent      = new Intent(mContext, ContactsActivity.class);
-
+        user.setExpanded(false);
         intent.putExtra(Utils.INTENT_EXTRA_OPTION, option);
         intent.putExtra(Utils.INTENT_USER_DETAILS, user);
         ((Activity)mContext).startActivityForResult(intent,Utils.GO_TO_CONTACT_ACTIVITY_EDIT);

@@ -44,6 +44,13 @@ public class ContactModel implements Parcelable , Comparable<ContactModel>  {
         this.mDataBaseContact = false;
     }
 
+    public ContactModel(Long id, String firstName) {
+        this.mId              = id;
+        this.mFirstName       = firstName;
+        this.mExpanded        = false;
+        this.mDataBaseContact = false;
+    }
+
     public ContactModel(Long id, String firstName, String lastName) {
         this.mId              = id;
         this.mFirstName       = firstName;

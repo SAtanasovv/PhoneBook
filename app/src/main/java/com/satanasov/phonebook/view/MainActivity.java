@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -26,9 +25,7 @@ import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.globalData.Utils;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -39,12 +36,12 @@ public class MainActivity extends BaseActivity {
     private ArrayList<ContactModel>  mPhoneStorageContactList = new ArrayList<>();
     private ArrayList<ContactModel>  mMergedList              = new ArrayList<>();
 
-    private ContactsData          mContactsData               = new ContactsData(this);
+    private ContactsData             mContactsData            = new ContactsData(this);
 
-    private RecyclerView          mRecyclerView;
+    private RecyclerView             mRecyclerView;
+    private FloatingActionButton     mFloatingButton;
+
     private MainActivityRecycleAdapter  mAdapter;
-    private FloatingActionButton  mFloatingButton;
-    private ProgressBar           mLoadingBar;
 
     public static final int       mPERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
@@ -62,7 +59,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void init(){
-        mLoadingBar     = findViewById(R.id.loading_bar);
         mFloatingButton = findViewById(R.id.add_floating_button_main_activity_id);
 
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
@@ -133,18 +129,19 @@ public class MainActivity extends BaseActivity {
             else
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, mPERMISSIONS_REQUEST_READ_CONTACTS);
         }
-        else{
+        else
            mPhoneStorageContactList.addAll(mContactsData.getContactsModelListFromPhoneStorage());
-        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        mLoadingBar.setVisibility(View.VISIBLE);
         if (requestCode == mPERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
                 mPhoneStorageContactList.addAll(mContactsData.getContactsModelListFromPhoneStorage());
-                initAdapter();
+                Collections.sort(mPhoneStorageContactList);
+                mAdapter.updateAdapterData(mPhoneStorageContactList);
+                mAdapter.notifyDataSetChanged();
             }
             else
                 Toast.makeText(this, R.string.permission_unsuccessful, Toast.LENGTH_LONG).show();
