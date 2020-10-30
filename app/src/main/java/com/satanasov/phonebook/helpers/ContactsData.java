@@ -78,7 +78,6 @@ public class ContactsData {
 
         String[] projection  = new String[]{
                 ContactsContract.Data.MIMETYPE,
-                ContactsContract.Data.PHOTO_URI,
                 ContactsContract.Data.CONTACT_ID,
                 ContactsContract.Contacts.DISPLAY_NAME,
                 ContactsContract.CommonDataKinds.Contactables.DATA,

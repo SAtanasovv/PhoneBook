@@ -5,7 +5,6 @@ CREATE TABLE contactNumbers(
     number_type INTEGER,
     FOREIGN KEY(contact_id) REFERENCES contact(id));
 
-
 InsertPhone:
     INSERT INTO contactNumbers(contact_id,number,number_type)
     VALUES((SELECT value FROM storeContactID WHERE storedContact = 'contactID'),?,?);
@@ -13,7 +12,6 @@ InsertPhone:
 InsertPhoneByID:
     INSERT INTO contactNumbers(contact_id,number,number_type)
     VALUES(?,?,?);
-
 
 UpdatePhoneNumber:
     UPDATE contactNumbers

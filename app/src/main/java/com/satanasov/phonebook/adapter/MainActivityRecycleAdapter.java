@@ -69,8 +69,8 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         }
 
         Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, user.getId());
-        InputStream is = ContactsContract.Contacts.openContactPhotoInputStream(mContext.getContentResolver(), contactUri);
-        holder.mContactImage.setImageBitmap(BitmapFactory.decodeStream(is));
+        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(mContext.getContentResolver(), contactUri);
+        holder.mContactImage.setImageBitmap(BitmapFactory.decodeStream(inputStream));
 
         for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){
 

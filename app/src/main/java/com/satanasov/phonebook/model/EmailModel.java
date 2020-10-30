@@ -16,8 +16,8 @@ public class EmailModel implements Serializable {
     }
 
     public EmailModel(String email, Long emailType, int dbOperationType) {
-        this.mEmail = email;
-        this.mEmailType = emailType;
+        this.mEmail           = email;
+        this.mEmailType       = emailType;
         this.mDBOperationType = dbOperationType;
     }
 
