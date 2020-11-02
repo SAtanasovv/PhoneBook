@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,6 +27,8 @@ import com.satanasov.phonebook.model.ContactModel;
 import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.R;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ContactsActivity extends BaseActivity implements View.OnClickListener {
 
@@ -42,6 +45,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
     private TextInputLayout    mFirstNameTextInputLayout;
     private TextInputLayout    mLastNameTextInputLayout;
+    private TextInputLayout    mEmailTextInputLayout;
     private LinearLayout       mPhoneNumberLayout;
     private LinearLayout       mEmailLayout;
 
@@ -54,6 +58,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
     private ContactModel       mContact;
     private ChangeOptions      mOption;
+
+    private boolean            mErrorInFirstName;
+    private boolean            mErrorInLastName;
 
     ArrayList<PhoneNumberModel> mPhoneNumbersList = new ArrayList<>();
     ArrayList<EmailModel>       mEmailList        = new ArrayList<>();
@@ -96,8 +103,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
         @Override
         public void afterTextChanged(Editable editable) {
-            checkIfFieldsAreEmpty();
+
             checkErrorsInFields(editable);
+            disableSaveButtonIfErrorsFound();
         }
     };
 
@@ -112,6 +120,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
         mEmailTypeSpinner           = findViewById(R.id.email_type_spinner);
         mEmailEditText              = findViewById(R.id.email_field_edit_text);
+        mEmailTextInputLayout       = findViewById(R.id.email_type_field_layout);
         mInsertEmailRow             = findViewById(R.id.insert_email_row);
 
         mPhoneNumberLayout          = findViewById(R.id.phone_number_layout);
@@ -136,6 +145,8 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
         mFirstNameEditText.addTextChangedListener(watcher);
         mLastNameEditText.addTextChangedListener(watcher);
+        mPhoneNumberEditText.addTextChangedListener(watcher);
+        mEmailEditText.addTextChangedListener(watcher);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null){
@@ -177,39 +188,93 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private void checkIfFieldsAreEmpty(){
-        if (mFirstNameEditText.getText().toString().equalsIgnoreCase(" ")){
-            mSaveBtn.setEnabled(false);
-        }
+    private boolean areFieldsEmpty(){
+        if  (!mFirstNameEditText.getText().toString().equalsIgnoreCase("") )
+            return false;
         else
-            mSaveBtn.setEnabled(true);
+            return true;
     }
 
     private void checkErrorsInFields(Editable editable){
-        if (editable.length()>mFirstNameTextInputLayout.getCounterMaxLength()   &&
-            mFirstNameEditText.hasFocus()){
+        if (editable.length() > mFirstNameTextInputLayout.getCounterMaxLength() && mFirstNameEditText.hasFocus()){
 
-            mFirstNameTextInputLayout.setError( getString(R.string.input_text_error_message)   +
-            mFirstNameTextInputLayout.getCounterMaxLength());
+            mFirstNameTextInputLayout.setError(getString(R.string.input_text_error_message) + mFirstNameTextInputLayout.getCounterMaxLength());
+            mErrorInFirstName = true;
         }
-        else
+        else{
             mFirstNameTextInputLayout.setError(null);
+            mErrorInFirstName = false;
+        }
 
-        if (editable.length()>mLastNameTextInputLayout.getCounterMaxLength()    &&
-            mLastNameEditText.hasFocus()){
+        if (editable.length() > mLastNameTextInputLayout.getCounterMaxLength() && mLastNameEditText.hasFocus()){
 
-            mLastNameTextInputLayout.setError( getString(R.string.input_text_error_message)    +
-            mLastNameTextInputLayout.getCounterMaxLength());
+            mLastNameTextInputLayout.setError( getString(R.string.input_text_error_message) + mLastNameTextInputLayout.getCounterMaxLength());
+            mErrorInLastName = true;
+        }
+        else{
+            mLastNameTextInputLayout.setError(null);
+            mErrorInLastName = false;
+        }
+    }
+
+    private boolean isEmailValid(){
+         String  regEx     = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+         Pattern pattern   = Pattern.compile(regEx);
+
+        if (!mEmailEditText.getText().toString().equalsIgnoreCase(" ") && !mEmailEditText.getText().toString().equalsIgnoreCase("")) {
+
+            Matcher matcher = pattern.matcher(mEmailEditText.getText().toString());
+
+            if (!matcher.matches()) {
+                mEmailTextInputLayout.setError(getString(R.string.input_text_email_error_message));
+                return false;
+            } else
+                mEmailTextInputLayout.setError(null);
+        }
+
+        if (mEmailLayout.getChildCount() > 0){
+            for (int i = 1; i < mEmailLayout.getChildCount(); i++){
+
+                View emailView = mEmailLayout.getChildAt(i);
+
+                TextInputEditText emailText       = emailView.findViewById(R.id.type_field_edit_text);
+                TextInputLayout   emailTextLayout = emailView.findViewById(R.id.type_field_layout);
+
+                Matcher matcherChild              = pattern.matcher(emailText.getText());
+
+                if (!mEmailEditText.getText().toString().equalsIgnoreCase("")) {
+
+                    if (!matcherChild.matches()){
+
+                        emailTextLayout.setError(getString(R.string.input_text_email_error_message));
+                        return false;
+                    }
+                    else
+                    emailTextLayout.setError(null);
+                }
+            }
+        }
+        mEmailTextInputLayout.setError(null);
+        return true;
+    }
+
+
+    private void disableSaveButtonIfErrorsFound(){
+        if (!areFieldsEmpty() && !mErrorInFirstName && !mErrorInLastName && isEmailValid()){
+            mSaveBtn.setEnabled(true);
         }
         else
-            mLastNameTextInputLayout.setError(null);
+            mSaveBtn.setEnabled(false);
     }
 
     private void insertPhoneNumberRow(){
        LayoutInflater rowInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
        View phoneNumberRow        = rowInflater.inflate(R.layout.activity_contact_row,null);
 
-       mDeletePhoneNumberRow = phoneNumberRow.findViewById(R.id.remove_view);
+       TextInputEditText textField = phoneNumberRow.findViewById(R.id.type_field_edit_text);
+       mDeletePhoneNumberRow       = phoneNumberRow.findViewById(R.id.remove_view);
+
+       textField.setInputType(InputType.TYPE_CLASS_NUMBER);
        mDeletePhoneNumberRow.setOnClickListener(new View.OnClickListener() {
 
            @Override
@@ -224,11 +289,17 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         LayoutInflater rowInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View phoneNumberRow        = rowInflater.inflate(R.layout.activity_contact_row,null);
 
+        final TextInputEditText emailView = phoneNumberRow.findViewById(R.id.type_field_edit_text);
+        emailView.addTextChangedListener(watcher);
         mDeleteEmailRow = phoneNumberRow.findViewById(R.id.remove_view);
+
+        emailView.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         mDeleteEmailRow.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                TextInputEditText editText = emailView.findViewById(R.id.type_field_edit_text);
+                editText.setText(R.string.dummy_email);
                 mEmailLayout.removeView((LinearLayout)v.getParent());
             }
         });
@@ -306,6 +377,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                 TextInputEditText textField = phoneNumberRow.findViewById(R.id.type_field_edit_text);
                 ImageButton removeRow       = phoneNumberRow.findViewById(R.id.remove_view);
 
+                textField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 typeSpinner.setSelection(Math.toIntExact(phoneNumberModel.getPhoneNumberType()));
                 textField.setText(phoneNumberModel.getPhoneNumber());
                 removeRow.setTag(phoneNumberModel);
@@ -345,9 +417,11 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                 View emailRow               = rowInflater.inflate(R.layout.activity_contact_row,null);
 
                 Spinner typeSpinner         = emailRow.findViewById(R.id.type_spinner);
-                TextInputEditText textField = emailRow.findViewById(R.id.type_field_edit_text);
+                final TextInputEditText textField = emailRow.findViewById(R.id.type_field_edit_text);
                 ImageButton removeRow       = emailRow.findViewById(R.id.remove_view);
 
+                textField.addTextChangedListener(watcher);
+                textField.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 typeSpinner.setSelection(Math.toIntExact(emailModel.getEmailType()));
                 textField.setText(emailModel.getEmail());
                 removeRow.setTag(emailModel);
@@ -356,6 +430,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void onClick(View v) {
 
+                        textField.setText(R.string.dummy_email);
                         EmailModel email = (EmailModel) v.getTag();
                         email.setDBOperationType(Utils.DELETE);
                         mEmailList.add(email);
