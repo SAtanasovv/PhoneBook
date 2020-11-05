@@ -354,9 +354,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
         dataBaseQueries.storeContact(this, contactModel);
 
-        Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_OK,returnIntent);
-        finish();
+        onBackPressed();
     }
 
     private void setPhoneNumbersAndEmails(){
@@ -477,9 +475,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         mContact.setEmailModelList(defineDBOperationsForEmails());
         dataBaseQueries.updateContact(this,mContact);
 
-        Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_OK,returnIntent);
-        finish();
+          onBackPressed();
     }
 
     private ArrayList<PhoneNumberModel> defineDBOperationsForPhoneNumbers(){
