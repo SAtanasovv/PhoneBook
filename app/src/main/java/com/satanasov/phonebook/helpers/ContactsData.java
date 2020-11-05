@@ -54,15 +54,15 @@ public class ContactsData {
             SqlCursor cursorNumbers = mDataBaseQueries.getContactPhoneNumbers(mContext, user.getId());
             while (cursorNumbers.next()){
 
-                phoneNumberModel = new PhoneNumberModel(cursorNumbers.getLong(CONTACT_NUMBER_ID),cursorNumbers.getString(CONTACT_NUMBER),cursorNumbers.getLong(CONTACT_NUMBER_TYPE));
+                phoneNumberModel    = new PhoneNumberModel(cursorNumbers.getLong(CONTACT_NUMBER_ID),cursorNumbers.getString(CONTACT_NUMBER),cursorNumbers.getLong(CONTACT_NUMBER_TYPE));
                 phoneNumberList.add(phoneNumberModel);
             }
             user.setPhoneNumberModelList(phoneNumberList);
 
-            SqlCursor cursorEmails = mDataBaseQueries.getContactEmails(mContext,user.getId());
+            SqlCursor cursorEmails  = mDataBaseQueries.getContactEmails(mContext,user.getId());
             while (cursorEmails.next()){
 
-                contactEmailModel = new EmailModel(cursorEmails.getLong(CONTACT_EMAIL_ID),cursorEmails.getString(CONTACT_EMAIL),cursorEmails.getLong(CONTACT_EMAIL_TYPE));
+                contactEmailModel   = new EmailModel(cursorEmails.getLong(CONTACT_EMAIL_ID),cursorEmails.getString(CONTACT_EMAIL),cursorEmails.getLong(CONTACT_EMAIL_TYPE));
                 emailList.add(contactEmailModel);
             }
             user.setEmailModelList(emailList);
@@ -99,7 +99,7 @@ public class ContactsData {
 
         String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " ASC " ;
 
-        Cursor cursor    = mContext.getContentResolver().query(uri,projection,selection,selectionArgs, sortOrder);
+        Cursor cursor    = mContext.getContentResolver().query(uri,projection,selection,selectionArgs,sortOrder);
 
         final int mimeTypeIndex = cursor.getColumnIndex(ContactsContract.Data.MIMETYPE);
         final int idIndex       = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID);

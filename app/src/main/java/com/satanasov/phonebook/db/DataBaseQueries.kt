@@ -4,11 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import com.satanasov.phonebook.R
 import com.satanasov.phonebook.globalData.Utils
-import com.satanasov.phonebook.model.EmailModel
 import com.satanasov.phonebook.model.ContactModel
-import com.satanasov.phonebook.model.PhoneNumberModel
 import com.squareup.sqldelight.db.SqlCursor
-import sqlligtmodel.GetAllContacts
 
 class DataBaseQueries {
 
@@ -18,7 +15,6 @@ class DataBaseQueries {
 
                      afterCommit { }
                      afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
-                     // add contact photo contactQueries
 
                      database.contactQueries.InsertUser(contact.firstName,contact.lastName)
                      database.storeContactIDQueries.StoreID()

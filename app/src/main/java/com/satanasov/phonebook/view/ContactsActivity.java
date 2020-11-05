@@ -1,6 +1,4 @@
 package com.satanasov.phonebook.view;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -19,21 +17,24 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.satanasov.phonebook.helpers.ContactsData;
 import com.satanasov.phonebook.databinding.ActivityContactsBinding;
-import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.Utils;
 import com.satanasov.phonebook.globalData.Utils.ChangeOptions;
 import com.satanasov.phonebook.model.EmailModel;
 import com.satanasov.phonebook.model.ContactModel;
 import com.satanasov.phonebook.model.PhoneNumberModel;
 import com.satanasov.phonebook.R;
+import com.satanasov.phonebook.presenter.ContactActivityPresenter;
+import com.satanasov.phonebook.presenter.ContactActivityView;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ContactsActivity extends BaseActivity implements View.OnClickListener {
+public class ContactsActivity extends BaseActivity implements View.OnClickListener , ContactActivityView {
 
     private ContactsData             mContactsData  = new ContactsData(this);
     private ActivityContactsBinding  mContactsBinding;
+    private ContactActivityPresenter mPresenter;
 
     private ImageView                mContactImage;
     private TextInputEditText        mFirstNameEditText;
@@ -69,7 +70,26 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContactsBinding = DataBindingUtil.setContentView(this,R.layout.activity_contacts);
+        mPresenter       = new ContactActivityPresenter(this);
         init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.subscribe();
+    }
+
+    @Override
+    protected void onPause() {
+        mPresenter.unSubscribe();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mPresenter.detachView();
+        super.onDestroy();
     }
 
     @Override
@@ -160,31 +180,12 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         switch(option){
 
             case ADD_CONTACT:
-                mSaveBtn.setEnabled(false);
-                mSaveBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        saveContactToDB();
-                    }
-                });
-
-                getSupportActionBar().setTitle(R.string.add_contact);
+                mPresenter.mIsContactForEdit = false;
             break;
 
             case EDIT_CONTACT:
-                mContactsBinding.setUser(mContact);
-                mContactImage.setImageBitmap(mContact.getImageId());
-                mSaveBtn.setText(R.string.edit_contact);
-                mSaveBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        updateContact();
-                    }
-                });
-
-                setPhoneNumbersAndEmails();
-                getSupportActionBar().setTitle(R.string.edit_contact);
-             break;
+                mPresenter.mIsContactForEdit = true;
+            break;
         }
     }
 
@@ -349,12 +350,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void saveContactToDB(){
-        DataBaseQueries dataBaseQueries = new DataBaseQueries();
-        ContactModel contactModel       = new ContactModel(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),getAllPhoneNumbers(),getAllEmails(),true);
 
-        dataBaseQueries.storeContact(this, contactModel);
-
-        onBackPressed();
+        ContactModel contactModel  = new ContactModel(mFirstNameEditText.getText().toString(),mLastNameEditText.getText().toString(),getAllPhoneNumbers(),getAllEmails(),true);
+        mPresenter.saveContactToDB(contactModel);
     }
 
     private void setPhoneNumbersAndEmails(){
@@ -441,7 +439,6 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void updateContact(){
-        DataBaseQueries dataBaseQueries = new DataBaseQueries();
 
         if (!mFirstNameEditText.getText().toString().equals(mContact.getFirstName()) && !mFirstNameEditText.getText().toString().equals("")){
 
@@ -473,9 +470,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
         mContact.setPhoneNumberModelList(defineDBOperationsForPhoneNumbers());
         mContact.setEmailModelList(defineDBOperationsForEmails());
-        dataBaseQueries.updateContact(this,mContact);
 
-          onBackPressed();
+        mPresenter.updateContactInDB(mContact);
+
     }
 
     private ArrayList<PhoneNumberModel> defineDBOperationsForPhoneNumbers(){
@@ -535,5 +532,38 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             }
         }
         return mEmailList;
+    }
+
+    @Override
+    public void returnToMainActivity() {
+        onBackPressed();
+    }
+
+    @Override
+    public void setContactDetailsForInsert() {
+        mSaveBtn.setEnabled(false);
+        mSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveContactToDB();
+            }
+        });
+
+        getSupportActionBar().setTitle(R.string.add_contact);
+    }
+
+    @Override
+    public void setContactDetailsForEdit() {
+        mContactsBinding.setUser(mContact);
+        mContactImage.setImageBitmap(mContact.getImageId());
+        mSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateContact();
+            }
+        });
+
+        setPhoneNumbersAndEmails();
+        getSupportActionBar().setTitle(R.string.edit_contact);
     }
 }

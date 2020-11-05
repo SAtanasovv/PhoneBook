@@ -44,7 +44,6 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mPresenter  = new MainActivityPresenter(this);
         getPermissionToReadContactsFromInternalStorage();
         init();
-        initAdapter();
     }
 
     @Override
@@ -84,9 +83,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         Toolbar toolbar  = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-    }
 
-    private void initAdapter(){
         ArrayList<ContactModel> mergedList   = new ArrayList<>();
 
         mAdapter      = new MainActivityRecycleAdapter(mergedList,(Context) this);
@@ -96,6 +93,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
     }
+
 
     private void goToContactsActivity(ChangeOptions option){
         Intent intent = new Intent(MainActivity.this,ContactsActivity.class);
