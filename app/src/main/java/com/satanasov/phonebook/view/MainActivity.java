@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
             }
         });
 
-        Toolbar toolbar  = findViewById(R.id.main_toolbar);
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
         ArrayList<ContactModel> mergedList   = new ArrayList<>();

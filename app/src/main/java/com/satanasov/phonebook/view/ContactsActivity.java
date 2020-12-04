@@ -566,4 +566,5 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         setPhoneNumbersAndEmails();
         getSupportActionBar().setTitle(R.string.edit_contact);
     }
+
 }
