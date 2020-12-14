@@ -6,7 +6,7 @@
     <data>
         <variable
         name ="user"
-        type ="com.satanasov.phonebook.model.ContactModel" />
+        type ="com.satanasov.phonebook.kotlinPhoneBook.model.ContactModel" />
     </data>
 
     <LinearLayout
@@ -17,7 +17,7 @@
         android:orientation     ="vertical">
 
      <LinearLayout
-         android:id               ="@+id/main_contact_info"
+         android:id               ="@+id/mainContactInfo"
          android:layout_width     ="match_parent"
          android:layout_height    ="wrap_content"
          android:background       ="@color/colorWhite"
@@ -25,7 +25,7 @@
          android:orientation      ="horizontal">
 
          <RelativeLayout
-             android:id                  ="@+id/image_border"
+             android:id                  ="@+id/imageBorder"
              android:layout_width        ="49dp"
              android:layout_height       ="49dp"
              android:elevation           ="10dp"
@@ -33,7 +33,7 @@
              android:layout_marginTop    ="2dp"
              android:layout_marginBottom ="2dp">
          <androidx.cardview.widget.CardView
-             android:id                         ="@+id/card_view_phone_book_row"
+             android:id                         ="@+id/cardViewPhoneBookRow"
              android:layout_width               ="45dp"
              android:layout_height              ="45dp"
              android:innerRadius                ="0dp"
@@ -44,7 +44,7 @@
              android:layout_centerHorizontal    ="true">
 
              <ImageView
-                 android:id                      ="@+id/image_view_phone_book_row_id"
+                 android:id                      ="@+id/imageViewPhoneBookRow"
                  android:layout_width            ="match_parent"
                  android:layout_height           ="match_parent"
                  android:layout_alignParentTop   ="true"
@@ -54,7 +54,7 @@
          </RelativeLayout>
 
          <TextView
-              android:id                  ="@+id/first_name_text_view_phone_book_row_id"
+              android:id                  ="@+id/firstNameTextViewPhoneBookRow"
               android:layout_height       ="wrap_content"
               android:layout_width        ="0dp"
               android:layout_marginTop    ="16dp"
@@ -64,7 +64,7 @@
               android:layout_weight       ="1"/>
 
          <ImageButton
-              android:id                  ="@+id/contact_settings_button_phone_book_row_id"
+              android:id                  ="@+id/expandLayoutButton"
               android:layout_width        ="35dp"
               android:layout_height       ="35dp"
               android:layout_marginTop    ="14dp"
@@ -76,17 +76,17 @@
      </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id                              ="@+id/hidden_layout"
+            android:id                              ="@+id/hiddenLayout"
             android:layout_width                    ="match_parent"
             android:layout_height                   ="wrap_content"
             android:visibility                      ="gone"
-            app:layout_constraintTop_toBottomOf     ="@id/contact_settings_button_phone_book_row_id"
+            app:layout_constraintTop_toBottomOf     ="@id/expandLayoutButton"
             app:layout_constraintStart_toStartOf    ="parent"
             app:layout_constraintEnd_toEndOf        ="parent"
             app:layout_constraintBottom_toBottomOf  ="parent">
 
             <View
-                android:id                              ="@+id/first_separator"
+                android:id                              ="@+id/firstSeparator"
                 android:layout_width                    ="match_parent"
                 android:layout_height                   ="1dp"
                 android:background                      ="@color/colorPrimaryDark"
@@ -99,12 +99,12 @@
                 android:layout_marginTop             ="32dp"
                 android:layout_marginStart           ="16dp"
                 android:textSize                     ="16sp"
-                app:layout_constraintTop_toBottomOf  ="@id/first_separator"
+                app:layout_constraintTop_toBottomOf  ="@id/firstSeparator"
                 app:layout_constraintStart_toStartOf ="parent"
-                app:layout_constraintBottom_toTopOf  ="@id/expandable_area_phone_numbers"/>
+                app:layout_constraintBottom_toTopOf  ="@id/expandableAreaPhoneNumbers"/>
 
             <LinearLayout
-                android:id                           ="@+id/expandable_area_phone_numbers"
+                android:id                           ="@+id/expandableAreaPhoneNumbers"
                 android:layout_width                 ="match_parent"
                 android:layout_height                ="wrap_content"
                 android:orientation                  ="vertical"
@@ -115,31 +115,31 @@
             </LinearLayout>
 
             <View
-                android:id                              ="@+id/second_separator"
+                android:id                              ="@+id/secondSeparator"
                 android:layout_width                    ="match_parent"
                 android:layout_height                   ="1dp"
                 android:background                      ="@color/colorPrimaryDark"
                 android:layout_marginTop                ="8dp"
-                app:layout_constraintTop_toBottomOf     ="@id/expandable_area_phone_numbers"
+                app:layout_constraintTop_toBottomOf     ="@id/expandableAreaPhoneNumbers"
                 app:layout_constraintStart_toStartOf    ="parent"/>
 
             <TextView
-                android:id                           ="@+id/email_label"
+                android:id                           ="@+id/emailLabel"
                 android:layout_width                 ="wrap_content"
                 android:layout_height                ="wrap_content"
                 android:text                         ="@string/email"
                 android:layout_marginTop             ="32dp"
                 android:layout_marginStart           ="16dp"
                 android:textSize                     ="16sp"
-                app:layout_constraintTop_toBottomOf  ="@id/second_separator"
+                app:layout_constraintTop_toBottomOf  ="@id/secondSeparator"
                 app:layout_constraintStart_toStartOf ="parent" />
 
             <LinearLayout
-                android:id                           ="@+id/expandable_area_emails"
+                android:id                           ="@+id/expandableAreaEmails"
                 android:layout_width                 ="match_parent"
                 android:layout_height                ="wrap_content"
                 android:orientation                  ="vertical"
-                app:layout_constraintTop_toBottomOf  ="@id/email_label"
+                app:layout_constraintTop_toBottomOf  ="@id/emailLabel"
                 app:layout_constraintStart_toStartOf ="parent"
                 app:layout_constraintEnd_toEndOf     ="parent">
             </LinearLayout>
@@ -149,28 +149,28 @@
                 android:layout_height                   ="1dp"
                 android:background                      ="@color/colorPrimaryDark"
                 android:layout_marginTop                ="8dp"
-                app:layout_constraintTop_toBottomOf     ="@id/expandable_area_emails"
+                app:layout_constraintTop_toBottomOf     ="@id/expandableAreaEmails"
                 app:layout_constraintStart_toStartOf    ="parent"/>
 
             <Button
-                android:id                             ="@+id/delete_contact"
+                android:id                             ="@+id/deleteContact"
                 android:layout_width                   ="wrap_content"
                 android:layout_height                  ="wrap_content"
                 android:text                           ="@string/delete_contact"
                 android:layout_marginTop               ="8dp"
                 android:layout_marginEnd               ="8dp"
-                app:layout_constraintEnd_toStartOf     ="@id/edit_contact"
+                app:layout_constraintEnd_toStartOf     ="@id/editContact"
                 app:layout_constraintBottom_toBottomOf ="parent">
             </Button>
 
             <Button
-                android:id                              ="@+id/edit_contact"
+                android:id                              ="@+id/editContact"
                 android:layout_width                    ="wrap_content"
                 android:layout_height                   ="wrap_content"
                 android:text                            ="@string/edit_contact"
                 android:layout_marginTop                ="8dp"
                 android:layout_marginEnd                ="8dp"
-                app:layout_constraintTop_toBottomOf     ="@id/expandable_area_emails"
+                app:layout_constraintTop_toBottomOf     ="@id/expandableAreaEmails"
                 app:layout_constraintBottom_toBottomOf  ="parent"
                 app:layout_constraintEnd_toEndOf        ="parent">
             </Button>

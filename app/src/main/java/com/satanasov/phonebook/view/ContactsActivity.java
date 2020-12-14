@@ -102,15 +102,15 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.insert_phone_number_row:
+            case R.id.insertPhoneNumberRow:
                 insertPhoneNumberRow();
             break;
 
-            case R.id.insert_email_row:
+            case R.id.insertEmailRow:
                 insertEmailRow();
             break;
 
-            case R.id.cancel_button_contacts_id:
+            case R.id.cancelButton:
                 onBackPressed();
             break;
         }
@@ -123,35 +123,34 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
         @Override
         public void afterTextChanged(Editable editable) {
-
             checkErrorsInFields(editable);
             disableSaveButtonIfErrorsFound();
         }
     };
 
     private void init(){
-        mContactImage               = findViewById(R.id.contact_image_view);
-        mFirstNameEditText          = findViewById(R.id.first_name_edit_text_contacts_id);
-        mLastNameEditText           = findViewById(R.id.last_name_edit_text_contacts_id);
+        mContactImage               = findViewById(R.id.contactImageView);
+        mFirstNameEditText          = findViewById(R.id.firstNameEditText);
+        mLastNameEditText           = findViewById(R.id.lastNameEditText);
 
-        mPhoneNumberTypeSpinner     = findViewById(R.id.phone_number_type_spinner);
-        mPhoneNumberEditText        = findViewById(R.id.phone_number_field_edit_text);
-        mInsertPhoneNumberRow       = findViewById(R.id.insert_phone_number_row);
+        mPhoneNumberTypeSpinner     = findViewById(R.id.phoneNumberTypeSpinner);
+        mPhoneNumberEditText        = findViewById(R.id.phoneNumberFieldEditText);
+        mInsertPhoneNumberRow       = findViewById(R.id.insertPhoneNumberRow);
 
-        mEmailTypeSpinner           = findViewById(R.id.email_type_spinner);
-        mEmailEditText              = findViewById(R.id.email_field_edit_text);
-        mEmailTextInputLayout       = findViewById(R.id.email_type_field_layout);
-        mInsertEmailRow             = findViewById(R.id.insert_email_row);
+        mEmailTypeSpinner           = findViewById(R.id.emailTypeSpinner);
+        mEmailEditText              = findViewById(R.id.emailFieldEditText);
+        mEmailTextInputLayout       = findViewById(R.id.emailTypeFieldLayout);
+        mInsertEmailRow             = findViewById(R.id.insertEmailRow);
 
-        mPhoneNumberLayout          = findViewById(R.id.phone_number_layout);
-        mEmailLayout                = findViewById(R.id.email_layout);
-        mFirstNameTextInputLayout   = findViewById(R.id.input_layout_first_name_contacts_id);
-        mLastNameTextInputLayout    = findViewById(R.id.input_layout_last_name_contacts_id);
+        mPhoneNumberLayout          = findViewById(R.id.phoneNumberLayout);
+        mEmailLayout                = findViewById(R.id.emailLayout);
+        mFirstNameTextInputLayout   = findViewById(R.id.inputLayoutFirstName);
+        mLastNameTextInputLayout    = findViewById(R.id.inputLayoutLastName);
 
-        mSaveBtn                    = findViewById(R.id.save_button_contacts_id);
-        mCancelBtn                  = findViewById(R.id.cancel_button_contacts_id);
+        mSaveBtn                    = findViewById(R.id.saveButton);
+        mCancelBtn                  = findViewById(R.id.cancelButton);
 
-        Toolbar toolbar             = findViewById(R.id.contacts_toolbar);
+        Toolbar toolbar             = findViewById(R.id.contactsToolbar);
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
@@ -238,8 +237,8 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
 
                 View emailView = mEmailLayout.getChildAt(i);
 
-                TextInputEditText emailText       = emailView.findViewById(R.id.type_field_edit_text);
-                TextInputLayout   emailTextLayout = emailView.findViewById(R.id.type_field_layout);
+                TextInputEditText emailText       = emailView.findViewById(R.id.fieldEditText);
+                TextInputLayout   emailTextLayout = emailView.findViewById(R.id.typeFieldLayout);
 
                 Matcher matcherChild              = pattern.matcher(emailText.getText());
 
@@ -269,11 +268,11 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void insertPhoneNumberRow(){
-       LayoutInflater rowInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-       View phoneNumberRow        = rowInflater.inflate(R.layout.activity_contact_row,null);
+       LayoutInflater rowInflater  = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+       View phoneNumberRow         = rowInflater.inflate(R.layout.activity_contact_row,null);
 
-       TextInputEditText textField = phoneNumberRow.findViewById(R.id.type_field_edit_text);
-       mDeletePhoneNumberRow       = phoneNumberRow.findViewById(R.id.remove_view);
+       TextInputEditText textField = phoneNumberRow.findViewById(R.id.fieldEditText);
+       mDeletePhoneNumberRow       = phoneNumberRow.findViewById(R.id.removeChildView);
 
        textField.setInputType(InputType.TYPE_CLASS_NUMBER);
        mDeletePhoneNumberRow.setOnClickListener(new View.OnClickListener() {
@@ -290,16 +289,16 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         LayoutInflater rowInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View phoneNumberRow        = rowInflater.inflate(R.layout.activity_contact_row,null);
 
-        final TextInputEditText emailView = phoneNumberRow.findViewById(R.id.type_field_edit_text);
-        emailView.addTextChangedListener(watcher);
-        mDeleteEmailRow = phoneNumberRow.findViewById(R.id.remove_view);
+        final TextInputEditText emailEditText = phoneNumberRow.findViewById(R.id.fieldEditText);
+        emailEditText.addTextChangedListener(watcher);
+        mDeleteEmailRow = phoneNumberRow.findViewById(R.id.removeChildView);
 
-        emailView.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        emailEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         mDeleteEmailRow.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                TextInputEditText editText = emailView.findViewById(R.id.type_field_edit_text);
+                TextInputEditText editText = emailEditText.findViewById(R.id.fieldEditText);
                 editText.setText(R.string.dummy_email);
                 mEmailLayout.removeView((LinearLayout)v.getParent());
             }
@@ -316,8 +315,8 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             for (int i = 1; i < mPhoneNumberLayout.getChildCount(); i++){
                 View phoneView = mPhoneNumberLayout.getChildAt(i);
 
-                Spinner typeSpinner         = phoneView.findViewById(R.id.type_spinner);
-                TextInputEditText phoneText = phoneView.findViewById(R.id.type_field_edit_text);
+                Spinner typeSpinner         = phoneView.findViewById(R.id.typeSpinner);
+                TextInputEditText phoneText = phoneView.findViewById(R.id.fieldEditText);
 
                 if (!phoneText.getText().toString().isEmpty()){
 
@@ -337,8 +336,8 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
             for (int i = 1; i < mEmailLayout.getChildCount(); i++){
                 View emailView = mEmailLayout.getChildAt(i);
 
-                Spinner typeSpinner         = emailView.findViewById(R.id.type_spinner);
-                TextInputEditText emailText = emailView.findViewById(R.id.type_field_edit_text);
+                Spinner typeSpinner         = emailView.findViewById(R.id.typeSpinner);
+                TextInputEditText emailText = emailView.findViewById(R.id.fieldEditText);
 
                 if (!emailText.getText().toString().isEmpty()){
 
@@ -369,9 +368,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                 LayoutInflater rowInflater  = this.getLayoutInflater();
                 View phoneNumberRow         = rowInflater.inflate(R.layout.activity_contact_row,null);
 
-                Spinner typeSpinner         = phoneNumberRow.findViewById(R.id.type_spinner);
-                TextInputEditText textField = phoneNumberRow.findViewById(R.id.type_field_edit_text);
-                ImageButton removeRow       = phoneNumberRow.findViewById(R.id.remove_view);
+                Spinner typeSpinner         = phoneNumberRow.findViewById(R.id.typeSpinner);
+                TextInputEditText textField = phoneNumberRow.findViewById(R.id.fieldEditText);
+                ImageButton removeRow       = phoneNumberRow.findViewById(R.id.removeChildView);
 
                 textField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 typeSpinner.setSelection(Math.toIntExact(phoneNumberModel.getPhoneNumberType()));
@@ -412,9 +411,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                 LayoutInflater rowInflater  = this.getLayoutInflater();
                 View emailRow               = rowInflater.inflate(R.layout.activity_contact_row,null);
 
-                Spinner typeSpinner         = emailRow.findViewById(R.id.type_spinner);
-                final TextInputEditText textField = emailRow.findViewById(R.id.type_field_edit_text);
-                ImageButton removeRow       = emailRow.findViewById(R.id.remove_view);
+                Spinner typeSpinner         = emailRow.findViewById(R.id.typeSpinner);
+                final TextInputEditText textField = emailRow.findViewById(R.id.fieldEditText);
+                ImageButton removeRow       = emailRow.findViewById(R.id.removeChildView);
 
                 textField.addTextChangedListener(watcher);
                 textField.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
@@ -479,9 +478,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         for (int i = 1; i < mPhoneNumberLayout.getChildCount(); i++){
             View phoneView = mPhoneNumberLayout.getChildAt(i);
 
-            TextInputEditText phoneEditText = phoneView.findViewById(R.id.type_field_edit_text);
-            Spinner typeSpinner             = phoneView.findViewById(R.id.type_spinner);
-            ImageButton removeRow           = phoneView.findViewById(R.id.remove_view);
+            TextInputEditText phoneEditText = phoneView.findViewById(R.id.fieldEditText);
+            Spinner typeSpinner             = phoneView.findViewById(R.id.typeSpinner);
+            ImageButton removeRow           = phoneView.findViewById(R.id.removeChildView);
 
             if (removeRow.getTag() == null){
                 if (!phoneEditText.getText().toString().equals("")){
@@ -509,9 +508,9 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
         for (int i = 1; i < mEmailLayout.getChildCount(); i++){
             View emailView = mEmailLayout.getChildAt(i);
 
-            TextInputEditText emailEditText = emailView.findViewById(R.id.type_field_edit_text);
-            Spinner typeSpinner             = emailView.findViewById(R.id.type_spinner);
-            ImageButton removeRow           = emailView.findViewById(R.id.remove_view);
+            TextInputEditText emailEditText = emailView.findViewById(R.id.fieldEditText);
+            Spinner typeSpinner             = emailView.findViewById(R.id.typeSpinner);
+            ImageButton removeRow           = emailView.findViewById(R.id.removeChildView);
 
             if (removeRow.getTag() == null){
                 if (!emailEditText.getText().toString().equals("")){
@@ -548,13 +547,12 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                 saveContactToDB();
             }
         });
-
         getSupportActionBar().setTitle(R.string.add_contact);
     }
 
     @Override
     public void setContactDetailsForEdit() {
-        mContactsBinding.setUser(mContact);
+        //mContactsBinding.setUser(mContact);
         mContactImage.setImageBitmap(mContact.getImageId());
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -562,9 +560,7 @@ public class ContactsActivity extends BaseActivity implements View.OnClickListen
                 updateContact();
             }
         });
-
         setPhoneNumbersAndEmails();
         getSupportActionBar().setTitle(R.string.edit_contact);
     }
-
 }

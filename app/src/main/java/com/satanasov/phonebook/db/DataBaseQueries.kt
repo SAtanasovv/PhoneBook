@@ -4,13 +4,14 @@ import android.content.Context
 import android.widget.Toast
 import com.satanasov.phonebook.R
 import com.satanasov.phonebook.globalData.Utils
-import com.satanasov.phonebook.model.ContactModel
+import com.satanasov.phonebook.kotlinPhoneBook.db.DataBaseCommunication
+import com.satanasov.phonebook.kotlinPhoneBook.model.ContactModel
 import com.squareup.sqldelight.db.SqlCursor
 
 class DataBaseQueries {
 
          fun storeContact(context: Context,contact: ContactModel) {
-             val database = DataBaseCommunication.getInstance(context).database
+             val database = DataBaseCommunication.getDataBase(context)
                  database.contactQueries.transaction {
 
                      afterCommit { }
@@ -28,32 +29,32 @@ class DataBaseQueries {
          }
 
         fun getContacts(context: Context): SqlCursor{
-            val database = DataBaseCommunication.getInstance(context).database
+            val database = DataBaseCommunication.getDataBase(context)
 
             return database.contactQueries.GetAllContacts().execute()
         }
 
         fun getContactPhoneNumbers (context: Context, id: Long): SqlCursor{
-            val database = DataBaseCommunication.getInstance(context).database
+            val database = DataBaseCommunication.getDataBase(context)
 
             return database.contactNumbersQueries.GetAllNumbers(id).execute()
         }
 
         fun getContactEmails(context: Context, id: Long): SqlCursor{
-            val database = DataBaseCommunication.getInstance(context).database
+            val database = DataBaseCommunication.getDataBase(context)
 
             return database.contactEmailQueries.GetAllEmails(id).execute()
         }
 
         fun updateContact(context: Context, contact: ContactModel){
-            val database = DataBaseCommunication.getInstance(context).database
+            val database = DataBaseCommunication.getDataBase(context)
                 database.contactQueries.transaction {
 
                     afterCommit {}
                     afterRollback { Toast.makeText(context, R.string.insert_failed, Toast.LENGTH_SHORT).show() }
 
                     if (contact.dbOperationType == Utils.UPDATE)
-                    database.contactQueries.UpdateUserName(contact.firstName,contact.lastName,contact.id)
+                    database.contactQueries.UpdateUserName(contact.firstName,contact.lastName,contact.id!!)
 
                     if  (contact.phoneNumberModelList.isNotEmpty()){
 
@@ -61,8 +62,8 @@ class DataBaseQueries {
 
                             when (number.dbOperationType){
                                 Utils.INSERT -> database.contactNumbersQueries.InsertPhoneByID(contact.id,number.phoneNumber,number.phoneNumberType)
-                                Utils.UPDATE -> database.contactNumbersQueries.UpdatePhoneNumber(number.phoneNumber,number.phoneNumberType,number.id)
-                                Utils.DELETE -> database.contactNumbersQueries.DeletePhoneNumberById(number.id)
+                                Utils.UPDATE -> database.contactNumbersQueries.UpdatePhoneNumber(number.phoneNumber,number.phoneNumberType,number.id!!)
+                                Utils.DELETE -> database.contactNumbersQueries.DeletePhoneNumberById(number.id!!)
                             }
                         }
                     }
@@ -72,8 +73,8 @@ class DataBaseQueries {
 
                             when (email.dbOperationType){
                                 Utils.INSERT -> database.contactEmailQueries.InsertEmailByID(contact.id,email.email,email.emailType)
-                                Utils.UPDATE -> database.contactEmailQueries.UpdateEmail(email.email,email.emailType,email.id)
-                                Utils.DELETE -> database.contactEmailQueries.DeleteEmailByID(email.id)
+                                Utils.UPDATE -> database.contactEmailQueries.UpdateEmail(email.email,email.emailType,email.id!!)
+                                Utils.DELETE -> database.contactEmailQueries.DeleteEmailByID(email.id!!)
                             }
                         }
                     }
@@ -81,9 +82,8 @@ class DataBaseQueries {
         }
 
         fun deleteContactById(context: Context, id: Long){
-            val database = DataBaseCommunication.getInstance(context).database
+            val database = DataBaseCommunication.getDataBase(context)
                 database.contactQueries.transaction {
-
                     afterCommit {}
                     afterRollback { Toast.makeText(context, R.string.delete_failed, Toast.LENGTH_SHORT).show() }
 

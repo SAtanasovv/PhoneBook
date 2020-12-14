@@ -1,7 +1,5 @@
 package com.satanasov.phonebook.presenter;
-
 import android.content.Context;
-
 import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.model.ContactModel;
 
@@ -29,12 +27,12 @@ public class ContactActivityPresenter extends BasePresenter<ContactActivityView>
 
     public void saveContactToDB(ContactModel contactModel){
 
-       mDataBaseQueries.storeContact((Context)mContactActivityView,contactModel);
+       //mDataBaseQueries.storeContact((Context)mContactActivityView,contactModel);
        view.returnToMainActivity();
     }
 
     public void updateContactInDB(ContactModel contactModel){
-       mDataBaseQueries.updateContact((Context)mContactActivityView,contactModel);
+       //mDataBaseQueries.updateContact((Context)mContactActivityView,contactModel);
        view.returnToMainActivity();
     }
 }

@@ -40,7 +40,7 @@ public class ContactsData {
         EmailModel       contactEmailModel;
         PhoneNumberModel phoneNumberModel;
 
-        ArrayList<ContactModel>  mDataBaseContactList   = new ArrayList<>();
+        ArrayList<ContactModel>  dataBaseContactList   = new ArrayList<>();
 
         SqlCursor cursorContact                         = mDataBaseQueries.getContacts(mContext);
 
@@ -67,9 +67,9 @@ public class ContactsData {
             }
             user.setEmailModelList(emailList);
 
-            mDataBaseContactList.add(user);
+            dataBaseContactList.add(user);
         }
-        return mDataBaseContactList;
+        return dataBaseContactList;
     }
 
     public ArrayList<ContactModel> getContactsModelListFromPhoneStorage(){

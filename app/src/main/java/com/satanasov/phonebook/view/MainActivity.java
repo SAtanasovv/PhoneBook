@@ -71,33 +71,32 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     }
 
     private void init(){
-        mNoContactsTextView = findViewById(R.id.no_contacts_available);
-        mFloatingButton     = findViewById(R.id.add_floating_button_main_activity_id);
+        mNoContactsTextView = findViewById(R.id.noContactsAvailable);
+        mFloatingButton     = findViewById(R.id.addFloatingButtonMainActivity);
 
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToContactsActivity(ChangeOptions.ADD_CONTACT);
+                goToContactsActivity();
             }
         });
 
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        Toolbar toolbar = findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
 
         ArrayList<ContactModel> mergedList   = new ArrayList<>();
 
-        mAdapter      = new MainActivityRecycleAdapter(mergedList,(Context) this);
-        mRecyclerView = mBinding.recyclerViewMainActivityId;
+        //mAdapter      = new MainActivityRecycleAdapter(mergedList,(Context) this);
+        mRecyclerView = mBinding.recyclerViewMainActivity;
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
     }
 
-
-    private void goToContactsActivity(ChangeOptions option){
+    private void goToContactsActivity(){
         Intent intent = new Intent(MainActivity.this,ContactsActivity.class);
-        intent.putExtra(Utils.INTENT_EXTRA_OPTION,option);
+        intent.putExtra(Utils.INTENT_EXTRA_OPTION,ChangeOptions.ADD_CONTACT);
         startActivity(intent);
     }
 
@@ -137,7 +136,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     @Override
     public void setContactListInRecyclerView(ArrayList<ContactModel> contactModelList) {
-        mAdapter.updateAdapterData(contactModelList);
+        //mAdapter.updateAdapterData(contactModelList);
         mAdapter.notifyDataSetChanged();
     }
 }

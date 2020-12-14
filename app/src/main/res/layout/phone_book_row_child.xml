@@ -8,12 +8,11 @@
 
 <LinearLayout
     xmlns:android           ="http://schemas.android.com/apk/res/android"
-    android:id              ="@+id/child_layout"
+    android:id              ="@+id/childLayout"
     android:layout_width    ="match_parent"
     android:layout_height   ="wrap_content">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id                 ="@+id/type_field_layout"
         android:layout_height      ="wrap_content"
         android:layout_width       ="0dp"
         android:layout_marginTop   ="16dp"
@@ -22,7 +21,7 @@
         style                      ="@style/Rounded">
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id             ="@+id/type_field_text_view"
+        android:id             ="@+id/typeFieldTextView"
         android:layout_height  ="wrap_content"
         android:layout_width   ="wrap_content"
         android:textAlignment  ="center"
@@ -32,7 +31,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id                 ="@+id/text_field_layout"
+        android:id                 ="@+id/textFieldLayout"
         android:layout_height      ="wrap_content"
         android:layout_width       ="0dp"
         android:layout_marginTop   ="16dp"
@@ -42,7 +41,7 @@
         style                      ="@style/Rounded">
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id             ="@+id/text_field_text_view"
+        android:id             ="@+id/textFieldTextView"
         android:layout_height  ="wrap_content"
         android:layout_width   ="wrap_content"
         android:textSize       ="12sp"

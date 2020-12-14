@@ -33,8 +33,10 @@
     <string name="update_failed">Update Failed </string>
     <string name="phone_numbers">Phone Numbers: </string>
     <string name="email">Emails: </string>
+    <string name="valid_name">Enter a valid name </string>
     <string name="dummy_email">dummy@abv.bg</string>
     <string name="no_contacts_available">No contacts. \n Enable contact permissions!</string>
+
 
 
     <string-array name="different_number_types">

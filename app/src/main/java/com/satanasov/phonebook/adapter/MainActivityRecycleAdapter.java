@@ -2,6 +2,7 @@ package com.satanasov.phonebook.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +16,15 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.TransitionManager;
 import com.satanasov.phonebook.helpers.ContactsData;
 import com.satanasov.phonebook.databinding.PhoneBookRowBinding;
 import com.satanasov.phonebook.db.DataBaseQueries;
 import com.satanasov.phonebook.globalData.Utils;
-import com.satanasov.phonebook.model.ContactModel;
+import com.satanasov.phonebook.kotlinPhoneBook.view.ContactActivity;
+import com.satanasov.phonebook.kotlinPhoneBook.model.ContactModel;
 import com.satanasov.phonebook.R;
-import com.satanasov.phonebook.model.EmailModel;
-import com.satanasov.phonebook.model.PhoneNumberModel;
-import com.satanasov.phonebook.view.ContactsActivity;
+import com.satanasov.phonebook.kotlinPhoneBook.model.EmailModel;
+import com.satanasov.phonebook.kotlinPhoneBook.model.PhoneNumberModel;
 
 import java.util.ArrayList;
 
@@ -43,7 +43,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         LayoutInflater layoutInflater           = LayoutInflater.from(mContext);
         PhoneBookRowBinding phoneBookRowBinding = PhoneBookRowBinding.inflate(layoutInflater,parent,false);
-        return  new MyViewHolder(phoneBookRowBinding,mContext, mContactNumberList,this);
+        return  new MyViewHolder(phoneBookRowBinding, mContactNumberList,this);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         ContactModel user          = mContactNumberList.get(position);
         ContactsData contactsData  = new ContactsData(mContext);
 
-        if (!user.isDataBaseContact()){
+        if (!user.getDataBaseContact()){
             holder.mDeleteButton.setVisibility(View.GONE);
             holder.mEditButton.setVisibility(View.GONE);
             holder.mContactImageBorder.setBackgroundResource(0);
@@ -62,13 +62,13 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
             holder.mContactImageBorder.setBackgroundResource(R.drawable.circular_border);
         }
 
-        holder.mContactImage.setImageBitmap(user.getImageId());
+        holder.mContactImage.setImageBitmap(user.getImageResource());
 
         for (PhoneNumberModel phoneNumber : user.getPhoneNumberModelList()){
 
             View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandablePhoneNumberLayout, false);
-            TextView text     = rowView.findViewById(R.id.text_field_text_view);
-            TextView textType = rowView.findViewById(R.id.type_field_text_view);
+            TextView text     = rowView.findViewById(R.id.textFieldTextView);
+            TextView textType = rowView.findViewById(R.id.typeFieldTextView);
 
             text.setText(phoneNumber.getPhoneNumber());
             textType.setText(contactsData.getSpinnerTypeText(phoneNumber.getPhoneNumberType()));
@@ -77,8 +77,8 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         for (EmailModel emailModel : user.getEmailModelList()){
 
             View rowView      = LayoutInflater.from(mContext).inflate(R.layout.phone_book_row_child, holder.mExpandableEmailLayout, false);
-            TextView text     = rowView.findViewById(R.id.text_field_text_view);
-            TextView textType = rowView.findViewById(R.id.type_field_text_view);
+            TextView text     = rowView.findViewById(R.id.textFieldTextView);
+            TextView textType = rowView.findViewById(R.id.typeFieldTextView);
 
             text.setText(emailModel.getEmail());
             textType.setText(contactsData.getSpinnerTypeText(emailModel.getEmailType()));
@@ -96,7 +96,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         if (holder.getAdapterPosition() >= 0) {
             ContactModel contact = mContactNumberList.get(holder.getAdapterPosition());
 
-            if (contact.isExpanded()) {
+            if (contact.getExpanded()) {
                 contact.setExpanded(false);
                 holder.mHiddenLayout.setVisibility(View.GONE);
                 holder.mExpandButton.setRotation(Utils.ROTATE_TO_0_DEGREES);
@@ -127,7 +127,7 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
 
     public void goToContactsActivity(Utils.ChangeOptions option, int position){
         ContactModel user  = mContactNumberList.get(position);
-        Intent intent      = new Intent(mContext, ContactsActivity.class);
+        Intent intent      = new Intent(mContext, ContactActivity.class);
         user.setExpanded(false);
         intent.putExtra(Utils.INTENT_EXTRA_OPTION, option);
         intent.putExtra(Utils.INTENT_USER_DETAILS, user);
@@ -151,14 +151,13 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
     public  Button                     mDeleteButton;
     private ArrayList<ContactModel>    mContactModelList;
 
-    private Context                    mContext;
     private PhoneBookRowBinding        mBinding;
 
-    public MyViewHolder(PhoneBookRowBinding binding, Context context, final ArrayList<ContactModel> contactModelArrayList,MainActivityRecycleAdapter adapter) {
+    public MyViewHolder(PhoneBookRowBinding binding, final ArrayList<ContactModel> contactModelArrayList,MainActivityRecycleAdapter adapter) {
         super(binding.getRoot());
 
         this.mBinding           = binding;
-        this.mContext           = context;
+
         this.mContactModelList  = contactModelArrayList;
         this.mAdapter           = adapter;
 
@@ -167,10 +166,10 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
         mExpandableEmailLayout       = binding.expandableAreaEmails;
         mHiddenLayout                = binding.hiddenLayout;
 
-        mContactImage       = binding.imageViewPhoneBookRowId;
+        mContactImage       = binding.imageViewPhoneBookRow;
         mContactImageFrame  = binding.cardViewPhoneBookRow;
         mContactImageBorder = binding.imageBorder;
-        mExpandButton       = binding.contactSettingsButtonPhoneBookRowId;
+        mExpandButton       = binding.expandLayoutButton;
         mEditButton         = binding.editContact;
         mDeleteButton       = binding.deleteContact;
 
@@ -178,9 +177,9 @@ public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolde
             @Override
             public void onClick(View view) {
                 ContactModel contact = MyViewHolder.this.mContactModelList.get(getAdapterPosition());
-                contact.setExpanded(!contact.isExpanded());
+                contact.setExpanded(!contact.getExpanded());
 
-                if (contact.isExpanded()){
+                if (contact.getExpanded()){
                     TransitionManager.beginDelayedTransition(mContactView);
                     mHiddenLayout.setVisibility(View.VISIBLE);
                     mExpandButton.setRotation(Utils.ROTATE_TO_180_DEGREES);
