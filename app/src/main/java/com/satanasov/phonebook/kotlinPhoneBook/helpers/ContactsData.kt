@@ -1,5 +1,4 @@
 package com.satanasov.phonebook.kotlinPhoneBook.helpers
-
 import android.content.Context
 import android.provider.ContactsContract
 import com.satanasov.phonebook.R
@@ -32,6 +31,7 @@ class ContactsData(context: Context) {
                     id          = cursorContact.getLong(CONTACT_ID),
                     firstName   = cursorContact.getString(CONTACT_FIRST_NAME),
                     lastName    = cursorContact.getString(CONTACT_LAST_NAME))
+
             contactModel.dataBaseContact = true
 
             val cursorNumbers    = mDataBaseQueries.getContactPhoneNumbers(mContext, contactModel.id!!)
@@ -40,6 +40,7 @@ class ContactsData(context: Context) {
                         id              = cursorNumbers.getLong(CONTACT_NUMBER_ID),
                         phoneNumber     = cursorNumbers.getString(CONTACT_NUMBER),
                         phoneNumberType = cursorNumbers.getLong(CONTACT_NUMBER_TYPE))
+
                 phoneNumberList.add(phoneNumberModel)
             }
             contactModel.phoneNumberModelList = phoneNumberList
@@ -56,7 +57,6 @@ class ContactsData(context: Context) {
             dataBaseContactList.add(contactModel)
         }
         return dataBaseContactList
-
     }
 
     fun getContactsModelListFromPhoneStorage(): ArrayList<ContactModel> {
@@ -72,7 +72,6 @@ class ContactsData(context: Context) {
                 ContactsContract.CommonDataKinds.Contactables.DATA,
                 ContactsContract.CommonDataKinds.Contactables.TYPE
         )
-
         val selection     = ContactsContract.Data.MIMETYPE + " in (?, ?, ?)"
 
         val selectionArgs = arrayOf(
@@ -116,7 +115,6 @@ class ContactsData(context: Context) {
             }
          cursor.close()
         }
-
         val contactModels: Collection<ContactModel> = contactById.values
         mPhoneStorageContactList                    = ArrayList(contactModels)
 

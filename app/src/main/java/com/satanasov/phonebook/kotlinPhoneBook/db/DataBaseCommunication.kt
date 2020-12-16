@@ -6,7 +6,6 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 
 
 object DataBaseCommunication {
-
     private const val mDB_NAME     = "phoneBookContacts8.db"
 
     fun getDataBase(context: Context): Database{

@@ -59,7 +59,6 @@ class DataBaseQueries {
                     if  (contact.phoneNumberModelList.isNotEmpty()){
 
                         for (number in contact.phoneNumberModelList){
-
                             when (number.dbOperationType){
                                 Utils.INSERT -> database.contactNumbersQueries.InsertPhoneByID(contact.id,number.phoneNumber,number.phoneNumberType)
                                 Utils.UPDATE -> database.contactNumbersQueries.UpdatePhoneNumber(number.phoneNumber,number.phoneNumberType,number.id!!)
@@ -70,7 +69,6 @@ class DataBaseQueries {
                     if (contact.emailModelList.isNotEmpty()){
 
                         for (email in contact.emailModelList){
-
                             when (email.dbOperationType){
                                 Utils.INSERT -> database.contactEmailQueries.InsertEmailByID(contact.id,email.email,email.emailType)
                                 Utils.UPDATE -> database.contactEmailQueries.UpdateEmail(email.email,email.emailType,email.id!!)

@@ -22,7 +22,7 @@ import com.satanasov.phonebook.kotlinPhoneBook.presenter.MainActivityView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(), MainActivityView  {
-    private lateinit var mAdapter:    MainActivityRecycleAdapter //JavaClass
+    private lateinit var mAdapter:    MainActivityRecycleAdapter
     private lateinit var mBinding:    ActivityMainBinding
     private lateinit var mPresenter:  MainActivityPresenter
 
@@ -35,15 +35,11 @@ class MainActivity : BaseActivity(), MainActivityView  {
         init()
     }
    private fun init() {
-        with(mBinding){
-            bindingMainActivity     = MainActivity()
-            setSupportActionBar(mainToolbar as Toolbar)
-        }
-       val mergedList  = ArrayList<ContactModel>()
-
-       mAdapter        = MainActivityRecycleAdapter(mergedList, this)
+       mBinding.bindingMainActivity = MainActivity()
+       setSupportActionBar(mainToolbar as Toolbar)
        addFloatingButtonMainActivity.setOnClickListener { goToContactsActivity() }
 
+       mAdapter  =  MainActivityRecycleAdapter(this)
        recyclerViewMainActivity.setHasFixedSize(true)
        recyclerViewMainActivity.layoutManager = LinearLayoutManager(this)
        recyclerViewMainActivity.adapter       = mAdapter
@@ -100,8 +96,7 @@ class MainActivity : BaseActivity(), MainActivityView  {
     }
 
     override fun setContactListInRecyclerView(contactModel: ArrayList<ContactModel>) {
-        mAdapter.updateAdapterData(contactModel)
-        mAdapter.notifyDataSetChanged()
+       mAdapter.submitList(contactModel)
     }
 
     companion object {

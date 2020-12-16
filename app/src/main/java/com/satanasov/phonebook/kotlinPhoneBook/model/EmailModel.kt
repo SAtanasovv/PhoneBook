@@ -7,5 +7,4 @@ data class EmailModel(
         val contactID:       Long?   = null,
         var email:           String? = null,
         var emailType:       Long?   = null,
-        var dbOperationType: Int?    = null
-): Serializable
+        var dbOperationType: Int?    = null ): Serializable

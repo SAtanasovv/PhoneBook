@@ -35,8 +35,8 @@ class ContactActivity : BaseActivity(), ContactActivityView{
     private var mErrorInFirstName = false
     private var mErrorInLastName  = false
 
-    var mPhoneNumbersList   = ArrayList<PhoneNumberModel>()
-    var mEmailList          = ArrayList<EmailModel>()
+    private var mPhoneNumbersList   = ArrayList<PhoneNumberModel>()
+    private var mEmailList          = ArrayList<EmailModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,17 +137,17 @@ class ContactActivity : BaseActivity(), ContactActivityView{
                 return false
         } else
             emailTypeFieldLayout.error = null
-    }
 
-        if (emailLayout.childCount > 0){
-            for (i in 1 until emailLayout.childCount){
-                val emailView: View = emailLayout.getChildAt(i)
+            if (emailLayout.childCount > 0){
+                for (i in 1 until emailLayout.childCount){
+                    val emailView: View = emailLayout.getChildAt(i)
 
-                if (!isValidEmail(emailView.fieldEditText.text.toString())){
-                    emailView.typeFieldLayout.error = getString(R.string.input_text_email_error_message)
-                    return false
-                }else
-                    emailView.typeFieldLayout.error = null
+                    if (!isValidEmail(emailView.fieldEditText.text.toString())){
+                        emailView.typeFieldLayout.error = getString(R.string.input_text_email_error_message)
+                        return false
+                    }else
+                        emailView.typeFieldLayout.error = null
+                }
             }
         }
         emailTypeFieldLayout.error = null
@@ -172,22 +172,25 @@ class ContactActivity : BaseActivity(), ContactActivityView{
         fieldEditText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         removeChildView.setOnClickListener {
             fieldEditText.setText(R.string.dummy_email)
-            emailLayout.removeView(it.parent as LinearLayout)
-            }
+            emailLayout.removeView(it.parent as LinearLayout) }
         }
         emailLayout.addView(phoneRow)
     }
 
     private fun getAllPhoneNumbers(): ArrayList<PhoneNumberModel>{
         val contactPhoneNumberModelList: ArrayList<PhoneNumberModel> = ArrayList()
-        var phoneNumberModel = PhoneNumberModel(phoneNumber = phoneNumberFieldEditText.text.toString(),phoneNumberType =  mContactsData.getSpinnerTypeID(phoneNumberTypeSpinner.selectedItem.toString()))
+        var phoneNumberModel = PhoneNumberModel(
+                phoneNumber     = phoneNumberFieldEditText.text.toString(),
+                phoneNumberType = mContactsData.getSpinnerTypeID(phoneNumberTypeSpinner.selectedItem.toString()))
         contactPhoneNumberModelList.add(phoneNumberModel)
 
         for(i in 1 until phoneNumberLayout.childCount){
             val phoneView: View  = phoneNumberLayout.getChildAt(i)
 
             if (!phoneView.fieldEditText.text.isNullOrEmpty()){
-                phoneNumberModel = PhoneNumberModel(phoneNumber = phoneView.fieldEditText.text.toString(),phoneNumberType =  mContactsData.getSpinnerTypeID(phoneView.typeSpinner.selectedItem.toString()))
+                phoneNumberModel = PhoneNumberModel(
+                        phoneNumber     = phoneView.fieldEditText.text.toString(),
+                        phoneNumberType = mContactsData.getSpinnerTypeID(phoneView.typeSpinner.selectedItem.toString()))
                 contactPhoneNumberModelList.add(phoneNumberModel)
             }
         }
@@ -196,14 +199,18 @@ class ContactActivity : BaseActivity(), ContactActivityView{
 
     private fun getAllEmails(): ArrayList<EmailModel>{
         val contactEmailModelList: ArrayList<EmailModel> = ArrayList()
-        var emailModel = EmailModel(email = emailFieldEditText.text.toString(),emailType = mContactsData.getSpinnerTypeID(emailTypeSpinner.selectedItem.toString()))
+        var emailModel = EmailModel(
+                email     = emailFieldEditText.text.toString(),
+                emailType = mContactsData.getSpinnerTypeID(emailTypeSpinner.selectedItem.toString()))
         contactEmailModelList.add(emailModel)
 
         for (i in 1 until emailLayout.childCount){
             val emailView: View = emailLayout.getChildAt(i)
 
             if (!emailView.fieldEditText.text.isNullOrEmpty()){
-                emailModel = EmailModel(email = emailView.fieldEditText.text.toString(), emailType = mContactsData.getSpinnerTypeID(emailView.typeSpinner.selectedItem.toString()))
+                emailModel = EmailModel(
+                        email     = emailView.fieldEditText.text.toString(),
+                        emailType = mContactsData.getSpinnerTypeID(emailView.typeSpinner.selectedItem.toString()))
                 contactEmailModelList.add(emailModel)
             }
         }
@@ -221,7 +228,6 @@ class ContactActivity : BaseActivity(), ContactActivityView{
                     dataBaseContact      = true))
         }
     }
-
     private fun setPhoneNumbersAndEmails(){
         val phoneNumberModelList: ArrayList<PhoneNumberModel> = mContact!!.phoneNumberModelList
         val emailModelList: ArrayList<EmailModel>             = mContact!!.emailModelList
@@ -318,7 +324,10 @@ class ContactActivity : BaseActivity(), ContactActivityView{
 
             if (phoneView.removeChildView.tag == null){
                 if (phoneView.fieldEditText.text.toString() != "")
-                    mPhoneNumbersList.add(PhoneNumberModel(phoneNumber = phoneView.fieldEditText.text.toString(),phoneNumberType =  mContactsData.getSpinnerTypeID(phoneView.typeSpinner.selectedItem.toString()),dbOperationType =  Utils.INSERT))
+                    mPhoneNumbersList.add(PhoneNumberModel(
+                            phoneNumber     = phoneView.fieldEditText.text.toString(),
+                            phoneNumberType =  mContactsData.getSpinnerTypeID(phoneView.typeSpinner.selectedItem.toString()),
+                            dbOperationType =  Utils.INSERT))
             }
             else{
                 val phoneNumberModel                 = phoneView.removeChildView.tag as PhoneNumberModel
@@ -338,7 +347,10 @@ class ContactActivity : BaseActivity(), ContactActivityView{
 
             if (emailView.removeChildView.tag == null){
                 if (emailView.fieldEditText.text.toString() != "")
-                    mEmailList.add(EmailModel(email = emailView.fieldEditText.text.toString(),emailType =  mContactsData.getSpinnerTypeID(emailView.typeSpinner.selectedItem.toString()),dbOperationType =  Utils.INSERT))
+                    mEmailList.add(EmailModel(
+                            email           =  emailView.fieldEditText.text.toString(),
+                            emailType       =  mContactsData.getSpinnerTypeID(emailView.typeSpinner.selectedItem.toString()),
+                            dbOperationType =  Utils.INSERT))
             }
             else{
                 val emailModel                  = emailView.removeChildView.tag as EmailModel

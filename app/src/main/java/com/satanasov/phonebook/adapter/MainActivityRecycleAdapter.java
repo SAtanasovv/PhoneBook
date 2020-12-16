@@ -25,7 +25,6 @@ import com.satanasov.phonebook.kotlinPhoneBook.model.ContactModel;
 import com.satanasov.phonebook.R;
 import com.satanasov.phonebook.kotlinPhoneBook.model.EmailModel;
 import com.satanasov.phonebook.kotlinPhoneBook.model.PhoneNumberModel;
-
 import java.util.ArrayList;
 
 public class MainActivityRecycleAdapter extends RecyclerView.Adapter<MyViewHolder> {

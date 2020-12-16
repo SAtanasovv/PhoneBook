@@ -7,5 +7,4 @@ data class PhoneNumberModel(
         val contactID:       Long?   = null,
         var phoneNumber:     String? = null,
         var phoneNumberType: Long?   = null,
-        var dbOperationType: Int?    = null
-): Serializable
+        var dbOperationType: Int?    = null ): Serializable

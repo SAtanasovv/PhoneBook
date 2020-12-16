@@ -14,8 +14,7 @@ data class ContactModel(
         var dbOperationType:      Int?    = null,
 
         var phoneNumberModelList: ArrayList<PhoneNumberModel> = ArrayList(),
-        var emailModelList:       ArrayList<EmailModel>       = ArrayList()
-        ): Parcelable {
+        var emailModelList:       ArrayList<EmailModel>       = ArrayList() ): Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readValue(Long::class.java.classLoader) as? Long,
@@ -43,15 +42,12 @@ data class ContactModel(
         }
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int { return 0 }
 
     companion object CREATOR : Parcelable.Creator<ContactModel> {
         override fun createFromParcel(parcel: Parcel): ContactModel {
             return ContactModel(parcel)
         }
-
         override fun newArray(size: Int): Array<ContactModel?> {
             return arrayOfNulls(size)
         }
